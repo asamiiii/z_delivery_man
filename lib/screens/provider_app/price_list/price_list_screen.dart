@@ -1,0 +1,233 @@
+// import 'package:conditional_builder/conditional_builder.dart';
+
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../../shared/widgets/components.dart';
+import '../../../styles/color.dart';
+import '../../order_details/cubit.dart';
+import '../../order_details/order_details_state.dart';
+import '../prefernces/customize_special_prefernces.dart';
+import 'clothes_list.dart';
+import 'clothes_type_list.dart';
+
+class PriceListScreen extends StatefulWidget {
+  const PriceListScreen({Key? key, this.orderId}) : super(key: key);
+  final int? orderId;
+
+  @override
+  State<PriceListScreen> createState() => _PriceListScreenState();
+}
+
+class _PriceListScreenState extends State<PriceListScreen> {
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) =>
+          OrderDetailsCubit()..getPriceList(orderId: widget.orderId),
+      child: BlocConsumer<OrderDetailsCubit, OrderDetailsState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          final orderDetailsCubit = OrderDetailsCubit.get(context);
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: primaryColor,
+              title: Text('كود الاوردر: ${widget.orderId}'),
+              centerTitle: true,
+            ),
+            body: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Container(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(25)),
+                      height: 40,
+                      child: ConditionalBuilder(
+                        condition: state is! PriceListLoading,
+                        fallback: (context) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        builder: (context) => ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: orderDetailsCubit.priceList.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                orderDetailsCubit.setSelectedServicesId(
+                                    orderDetailsCubit.priceList[index].id);
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                decoration: BoxDecoration(
+                                    color: orderDetailsCubit
+                                                .priceList[index].id ==
+                                            orderDetailsCubit.selectedServicesId
+                                        ? primaryColor
+                                        : Colors.grey.shade100,
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: Center(
+                                  child: Text(
+                                    '${orderDetailsCubit.priceList[index].name}',
+                                    style: TextStyle(
+                                        color: orderDetailsCubit
+                                                    .priceList[index].id ==
+                                                orderDetailsCubit
+                                                    .selectedServicesId
+                                            ? Colors.white
+                                            : Colors.grey.shade500),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) => const SizedBox(
+                            width: 10,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 4.h,
+                    ),
+                    ConditionalBuilder(
+                        condition: state is! PriceListLoading,
+                        fallback: (context) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                        builder: (context) => const ClothesTypeList()),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    SearchInput(
+                      hintText: 'ابحث عن الصنف',
+                      searchController: searchController,
+                      onChanged: orderDetailsCubit.onSearchTextChanged,
+                    ),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    ConditionalBuilder(
+                        condition: state is! PriceListLoading,
+                        fallback: (context) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                        builder: (context) => ClothesListWithPrice(
+                              isSearch:
+                                  orderDetailsCubit.searchPriceList!.isNotEmpty,
+                            )),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // orderDetailsCubit.formKey.currentState.save();
+                        List<int> itemsInt = [];
+                        for (var item in orderDetailsCubit.selectedItems) {
+                          itemsInt.add(item.id!);
+                        }
+                        navigateTo(
+                            context,
+                            CustomizeSpecalPreferences(
+                                items: itemsInt,
+                                selectedItems: orderDetailsCubit.selectedItems,
+                                orderId: widget.orderId));
+                      },
+                      style: ElevatedButton.styleFrom(
+                          primary: primaryColor,
+                          padding: EdgeInsets.symmetric(horizontal: 15.w)),
+                      child: const Text(
+                        'متابعة',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class SearchInput extends StatelessWidget {
+  final TextEditingController searchController;
+  final String hintText;
+  final Function(String)? onChanged;
+
+  const SearchInput(
+      {required this.searchController,
+      required this.hintText,
+      Key? key,
+      this.onChanged})
+      : super(
+          key: key,
+        );
+
+  final accentColor = const Color(0xffffffff);
+  final backgroundColor = const Color(0xffffffff);
+  final errorColor = const Color(0xffEF4444);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 45,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [primaryColor, primaryColor]),
+          borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+          boxShadow: [
+            BoxShadow(
+                offset: const Offset(12, 26),
+                blurRadius: 50,
+                spreadRadius: 0,
+                color: Colors.grey.withOpacity(.1)),
+          ]),
+      child: TextField(
+        controller: searchController,
+        textAlign: TextAlign.center,
+        onChanged: onChanged,
+        style: TextStyle(fontSize: 14, color: accentColor),
+        decoration: InputDecoration(
+          // prefixIcon: Icon(Icons.email),
+          prefixIcon: Icon(Icons.search, size: 20, color: accentColor),
+          filled: true,
+          fillColor: Colors.transparent,
+          hintText: hintText,
+          hintStyle: TextStyle(color: accentColor.withOpacity(.75)),
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 0.0),
+            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 0.0),
+            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+          ),
+        ),
+      ),
+    );
+  }
+}

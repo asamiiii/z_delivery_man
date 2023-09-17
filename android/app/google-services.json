@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "651189661928",
+    "project_id": "deliveryman-e8fa7",
+    "storage_bucket": "deliveryman-e8fa7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651189661928:android:54c5121cc6507d47fc595d",
+        "android_client_info": {
+          "package_name": "com.example.z_delivery_man"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "651189661928-nh0fqrmhvpqt2d2o7v7qman9kcsj6596.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLgvfvdeECWK9csyldZhg8enL-i27JmPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "651189661928-nh0fqrmhvpqt2d2o7v7qman9kcsj6596.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "651189661928-kk6s4fevi9up6a105i8ed86cafnc7i95.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mercadoegypt.deliveryman"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651189661928:android:2e42c3ea1020a4e1fc595d",
+        "android_client_info": {
+          "package_name": "com.mercadoegypt.deliveryman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "651189661928-nh0fqrmhvpqt2d2o7v7qman9kcsj6596.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLgvfvdeECWK9csyldZhg8enL-i27JmPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "651189661928-nh0fqrmhvpqt2d2o7v7qman9kcsj6596.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "651189661928-kk6s4fevi9up6a105i8ed86cafnc7i95.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mercadoegypt.deliveryman"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
