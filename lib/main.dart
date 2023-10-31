@@ -3,12 +3,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:z_delivery_man/core/constants/app_bloc_providers.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
 import 'features/auth/presentation/view/login_screen.dart';
-import '/../screens/home/cubit.dart';
 import '/../screens/home/home_screen.dart';
-import '/../screens/order_details/cubit.dart';
 import '/../screens/order_details/order_details_screen.dart';
-import '/../screens/provider_app/orders_list/cubit/orderslist_cubit.dart';
-import '/../screens/status_orders/cubit.dart';
 import '/../shared/widgets/components.dart';
 import '/../shared/widgets/constants.dart';
 // import 'package:firebase_core/firebase_core.dart';
@@ -17,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import 'bloc_observer.dart';
-import 'features/auth/presentation/view_model/cubit.dart';
+import 'firebase_options.dart';
 import 'network/local/cache_helper.dart';
 import 'network/remote/dio_helper.dart';
 
@@ -40,7 +36,8 @@ void main() async {
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
   await CacheHelper.init();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: 
+   DefaultFirebaseOptions.currentPlatform);
   // debugPrint('x : $x');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   token = CacheHelper.getData(key: 'token');
