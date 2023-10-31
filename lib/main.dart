@@ -1,8 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:z_delivery_man/core/config/app_theme.dart';
 import 'package:z_delivery_man/core/constants/app_bloc_providers.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
-import 'features/auth/presentation/view/login_screen.dart';
+import 'package:z_delivery_man/screens/login/login_screen.dart';
 import '/../screens/home/home_screen.dart';
 import '/../screens/order_details/order_details_screen.dart';
 import '/../shared/widgets/components.dart';
@@ -36,8 +37,7 @@ void main() async {
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
   await CacheHelper.init();
-  await Firebase.initializeApp(options: 
-   DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // debugPrint('x : $x');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   token = CacheHelper.getData(key: 'token');
@@ -118,9 +118,7 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           navigatorKey: navState,
           title: AppStrings.appName,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+          theme: AppTheme.them,
           home: widget.startWidget,
         ),
       );

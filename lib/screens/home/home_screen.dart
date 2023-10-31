@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
 
 import '../../models/index_model.dart';
 import '../../models/time_slots_model.dart';
@@ -51,8 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Scaffold(
                     drawer: isDeliveryMan ? const BuildDrawer() : null,
                     appBar: AppBar(
-                        backgroundColor: primaryColor,
-                        title: const Text('الرئيسية'),
+                        title: const Text(AppStrings.appName),
                         centerTitle: true,
                         actions: [
                           InkWell(
@@ -61,8 +61,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .then((value) => signOut(context)),
                             child: const Row(
                               children: [
-                                Text('تسجيل الخروج'),
-                                Icon(Icons.exit_to_app)
+                                SizedBox(width: 20),
+                                Text(AppStrings.logOut),
+                                SizedBox(width: 10),
+                                Icon(Icons.exit_to_app),
+                                SizedBox(width: 10),
                               ],
                             ),
                           ),
@@ -137,12 +140,12 @@ class BuildCard extends StatelessWidget {
             children: [
               item?.type == 1
                   ? Text(
-                      "استلام",
+                      AppStrings.receive,
                       style: TextStyle(
                           fontSize: 14.sp, fontWeight: FontWeight.bold),
                     )
                   : Text(
-                      "تسليم",
+                      AppStrings.deliver,
                       style: TextStyle(
                           fontSize: 14.sp, fontWeight: FontWeight.bold),
                     ),
@@ -150,19 +153,19 @@ class BuildCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    "من ${item?.from}",
+                    "${AppStrings.from} ${item?.from}",
                     style:
                         TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "الي ${item?.to}",
+                    "${AppStrings.to} ${item?.to}",
                     style:
                         TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               Text(
-                'مجموع الاوردرات: ${item?.count}',
+                '${AppStrings.ordersTotal} ${item?.count}',
                 style: TextStyle(
                     color: primaryColor,
                     fontSize: 12.sp,
@@ -211,7 +214,7 @@ class BuildProviderCard extends StatelessWidget {
                 height: 1.h,
               ),
               Text(
-                'مجموع الاوردرات: ${item?.count}',
+                '${AppStrings.ordersTotal} ${item?.count}',
                 style: TextStyle(
                     color: primaryColor,
                     fontSize: 12.sp,

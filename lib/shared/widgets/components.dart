@@ -39,7 +39,7 @@ Widget defaultFormField({
         validate;
         return null;
       },
-      // style: TextStyle(color: defaultColor),
+      style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
@@ -73,7 +73,8 @@ Widget defaultFormField({
               const EdgeInsets.only(left: 20, bottom: 11, top: 25, right: 15),
           disabledBorder:
               OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          hintText: hintText));
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.grey)));
 }
 
 Future navigateTo(BuildContext context, Widget widget) => Navigator.push(

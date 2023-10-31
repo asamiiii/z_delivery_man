@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../network/local/cache_helper.dart';
-import '../../features/auth/presentation/view/login_screen.dart';
+import '../../screens/login/login_screen.dart';
 import 'components.dart';
 
 void signOut(BuildContext context) {
