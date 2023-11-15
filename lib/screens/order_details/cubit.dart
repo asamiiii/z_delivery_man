@@ -6,7 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../models/order_details_model.dart';
 import '../../models/perferences_model.dart';
 import '../../models/provider_order_details.dart';
@@ -21,7 +20,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
 
   static OrderDetailsCubit get(context) => BlocProvider.of(context);
 
-  OrderDetailsModel? orderDetailsModel;
+   OrderDetailsModel? orderDetailsModel;
 
   Future<void> getOrderDetails({required int? orderId}) {
     emit(OrderDetailsLoadingState());
@@ -105,6 +104,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     DioHelper.getData(
             url: "$Get_STATUS_PROVIDER/$orderId/priceList", token: token)
         .then((value) {
+          debugPrint('PriceList : ${value.data}');
       priceList = pricelist.priceListFromJson(value.data);
       setInitServicesAndCat(priceList.first.id);
       getItemList();
@@ -139,112 +139,189 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     emit(SetterSuccess());
   }
 
-  PreferencesModel? preferencesModel;
-  void getPreferences({
-    required List<int>? itemsId,
-  }) {
+  PreferenceModel? preferencesModel;
+  Future<void> getPreferences({
+    required List<Map<String, dynamic>> data,
+  }) async{
+    _listData.clear();
     emit(PreferencesLoading());
-    DioHelper.postData(
+    await DioHelper.postData(
         url: Get_PREFERENCSE,
         token: token,
-        data: {"items": itemsId}).then((value) {
-      preferencesModel = PreferencesModel.fromJson(value.data);
-      for (var ele in preferencesModel!.data!) {
-        _listData.add(ele);
-      }
+        data: {"items": data}).then((value) {
+          debugPrint('pref resp : ${value.data}');
+          List responseData = value.data;
+      // preferencesModel = PreferenceModel.fromJson(value.data);
+      debugPrint('getPreferences');
+      _listData = responseData.map((e) => PreferenceModel.fromJson(e)).toList();
       emit(PreferencesSuccess());
     }).catchError((e) {
-      print(e);
+      debugPrint(e);
       emit(PreferencesFailed());
     });
   }
 
-  final List<Data> _listData = [];
-  List<Data> get listData => _listData;
+  List<PreferenceModel> _listData = [];
+  List<PreferenceModel> get listData => _listData;
 
-  List<Map<String, int>> _prefereceList = [];
-  List<Map<String, int>> get prefereceList => _prefereceList;
+  List<Map<String, int>>? _prefereceList = [] ;
+  List<Map<String, int>>? get prefereceList => _prefereceList;
 
-  removePrefereceList() {
-    _prefereceList = [];
-    emit(RemovePrefereceList());
-  }
+  // removePrefereceList() {
+  //   _prefereceList = [];
+  //   emit(RemovePrefereceList());
+  // }
 
   void setItemIsEnabled({
-    required Data? preferenceModel,
-    required int? itemId,
+    required PreferenceModel preferenceModel,
+    required int itemId,
+    required int catSerItemId,
     bool all = false,
   }) {
-    int indexLocal = _prefereceList.indexWhere((item) =>
+    
+    debugPrint('_prefereceList');
+    int indexLocal = _prefereceList!.indexWhere((item) =>
         item['item_id'] == itemId &&
-        item['preference_id'] == preferenceModel?.id);
+        item['preference_id'] == preferenceModel.id &&
+        item['category_item_service_id'] == catSerItemId);
 
     if (all) {
-      int prefLength = _prefereceList
-          .where((element) => element['preference_id'] == preferenceModel?.id)
+      int prefLength = _prefereceList!
+          .where((element) => element['preference_id'] == preferenceModel.id)
           .toList()
           .length;
-      int _index =
-          _listData.indexWhere((element) => element.id == preferenceModel?.id);
-      int listLength = _listData[_index].items!.length;
+      int index =
+          _listData.indexWhere((element) => element.id == preferenceModel.id);
+      int listLength = _listData[index].items.length;
       if (prefLength != listLength) {
-        _prefereceList.removeWhere(
-            (element) => element['preference_id'] == preferenceModel?.id);
-        for (var element in preferenceModel!.items!) {
-          _prefereceList.add(
-              {'preference_id': preferenceModel.id!, 'item_id': element.id!});
+        _prefereceList!.removeWhere(
+            (element) => element['preference_id'] == preferenceModel.id);
+        for (var element in preferenceModel.items) {
+          _prefereceList!.add({
+            'preference_id': preferenceModel.id,
+            'item_id': element.id ?? 0,
+            'category_item_service_id': element.categoryItemServiceId ?? 0
+          });
+          // notifyListeners();
           emit(NotifyListeners());
         }
       } else {
-        _prefereceList.removeWhere(
-            (element) => element['preference_id'] == preferenceModel?.id);
+        _prefereceList!.removeWhere(
+            (element) => element['preference_id'] == preferenceModel.id);
+        // notifyListeners();
         emit(NotifyListeners());
       }
     } else {
       if (indexLocal == -1) {
-        _prefereceList
-            .add({'preference_id': preferenceModel!.id!, 'item_id': itemId!});
-        emit(NotifyListeners());
+        debugPrint('Pref : $prefereceList');
+        _prefereceList!.add({
+          'preference_id': preferenceModel.id,
+          'item_id': itemId,
+          'category_item_service_id': catSerItemId
+        });
+        // notifyListeners();
+        // emit(NotifyListeners());
 
-        for (var map in _prefereceList) {
+        for (var map in _prefereceList!) {
           if (map.containsKey('preference_id')) {
             if (map['preference_id'] != preferenceModel.id &&
-                map['item_id'] == itemId) {
-              _prefereceList.remove(map);
+                map['item_id'] == itemId &&
+                map['category_item_service_id'] == catSerItemId) {
+              _prefereceList!.remove(map);
+              // notifyListeners();
               emit(NotifyListeners());
             }
-
-            // _prefereceList.removeWhere((element) => element["item_id"] == itemId &&element['preference_id'] ==preferenceModel.id);
-            //          notifyListeners();
+            // notifyListeners();
+            // emit(NotifyListeners());
           }
         }
-        // _prefereceList
-        //     .add({'preference_id': preferenceModel.id, 'item_id': itemId});
-        // notifyListeners();
       } else {
-        _prefereceList.removeAt(indexLocal);
+        _prefereceList!.removeAt(indexLocal);
+        // notifyListeners();
         emit(NotifyListeners());
       }
+      // notifyListeners();
       emit(NotifyListeners());
     }
-  }
+    debugPrint('Pref List : $prefereceList');
+    }
 
-  bool checkIfEnable({
-    required Data? preferenceModel,
-    required int? itemId,
-  }) {
-    int indexLocal = _prefereceList.indexWhere((item) =>
+  // void setItemIsEnabled({
+  //   required Item? preferenceModel,
+  //   required int? itemId,
+  //   bool all = false,
+  // }) {
+  //   int indexLocal = _prefereceList.indexWhere((item) =>
+  //       item['item_id'] == itemId &&
+  //       item['preference_id'] == preferenceModel?.id);
+
+  //   if (all) {
+  //     int prefLength = _prefereceList
+  //         .where((element) => element['preference_id'] == preferenceModel?.id)
+  //         .toList()
+  //         .length;
+  //     int _index =
+  //         _listData.indexWhere((element) => element.id == preferenceModel?.id);
+  //     int listLength = _listData[_index].items!.length;
+  //     if (prefLength != listLength) {
+  //       _prefereceList.removeWhere(
+  //           (element) => element['preference_id'] == preferenceModel?.id);
+  //       for (var element in preferenceModel!.items!) {
+  //         _prefereceList.add(
+  //             {'preference_id': preferenceModel.id!, 'item_id': element.id!});
+  //         emit(NotifyListeners());
+  //       }
+  //     } else {
+  //       _prefereceList.removeWhere(
+  //           (element) => element['preference_id'] == preferenceModel?.id);
+  //       emit(NotifyListeners());
+  //     }
+  //   } else {
+  //     if (indexLocal == -1) {
+  //       _prefereceList
+  //           .add({'preference_id': preferenceModel!.id!, 'item_id': itemId!});
+  //       emit(NotifyListeners());
+
+  //       for (var map in _prefereceList) {
+  //         if (map.containsKey('preference_id')) {
+  //           if (map['preference_id'] != preferenceModel.id &&
+  //               map['item_id'] == itemId) {
+  //             _prefereceList.remove(map);
+  //             emit(NotifyListeners());
+  //           }
+
+  //           // _prefereceList.removeWhere((element) => element["item_id"] == itemId &&element['preference_id'] ==preferenceModel.id);
+  //           //          notifyListeners();
+  //         }
+  //       }
+  //       // _prefereceList
+  //       //     .add({'preference_id': preferenceModel.id, 'item_id': itemId});
+  //       // notifyListeners();
+  //     } else {
+  //       _prefereceList.removeAt(indexLocal);
+  //       emit(NotifyListeners());
+  //     }
+  //     emit(NotifyListeners());
+  //   }
+  // }
+
+  bool checkIfEnable(
+      {required PreferenceModel preferenceModel,
+      required int itemId,
+      required int catItemSerId}) {
+    int indexLocal = _prefereceList!.indexWhere((item) =>
         item['item_id'] == itemId &&
-        item['preference_id'] == preferenceModel?.id);
+        item['preference_id'] == preferenceModel.id &&
+        item['category_item_service_id'] == catItemSerId);
 
     if (itemId == 0) {
-      int prefLength = _prefereceList
-          .where((element) => element['preference_id'] == preferenceModel?.id)
+      int prefLength = _prefereceList!
+          .where((element) => element['preference_id'] == preferenceModel.id)
           .toList()
           .length;
-      int _index =
-          _listData.indexWhere((element) => element.id == preferenceModel?.id);
-      int listLength = _listData[_index].items!.length;
+      int index =
+          _listData.indexWhere((element) => element.id == preferenceModel.id);
+      int listLength = _listData[index].items.length;
       return prefLength == listLength;
     } else {
       if (indexLocal == -1) {
@@ -265,9 +342,10 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     emit(AssociateItemsPostLoading());
     print(itemList);
     print(prefernces);
+    debugPrint('associateItems : ${{"item_list": itemList, "preferences": prefernces}}');
     DioHelper.postData(
             url: "$POST_ASSOCIATE_ITEMS/$orderId/associateItems",
-            data: {"item_list": itemList, "preferences": prefernces},
+            data: {"item_list": itemList, "preferences": _prefereceList},
             token: token)
         .then((value) {
       print(value.data);

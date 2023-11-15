@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+import 'package:z_delivery_man/screens/home/home_screen.dart';
 
 import '../../../models/order_per_status_provider.dart';
 import '../../../shared/widgets/components.dart';
@@ -23,6 +24,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
   ScrollController? _controller;
   @override
   void initState() {
+    debugPrint('statusName : ${widget.statusName}');
     super.initState();
     _controller = ScrollController()..addListener(_scrollListeners);
     BlocProvider.of<OrderslistCubit>(context, listen: false)
@@ -84,20 +86,26 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
               ),
               backgroundColor: primaryColor,
             ),
-            body: ScrollConfiguration(
+            body: state is OrdersListLoading ? const Center(child: CircularProgressIndicator()):ScrollConfiguration(
               behavior: const ScrollBehavior(),
               child: GlowingOverscrollIndicator(
                 showLeading: false,
                 color: primaryColor,
                 axisDirection: AxisDirection.down,
-                child: ListView.builder(
+                child: cubit.orders!.isNotEmpty ? ListView.builder(
                     controller: _controller,
                     shrinkWrap: true,
                     itemCount: cubit.orders?.length,
                     itemBuilder: (context, index) => OrdersSection(
                         order: cubit.orders![index],
                         state: state,
-                        cubit: cubit)),
+                        cubit: cubit)):const Center(child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('No Oredrs',style: TextStyle(fontSize: 30),),
+                            Icon(Icons.breakfast_dining,size: 33,)
+                          ],
+                        )),
               ),
             ),
           ),
@@ -207,7 +215,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                               onPressed: () {
                                 showCupertinoDialog(
                                     context: context,
-                                    builder: (context) => CupertinoAlertDialog(
+                                    builder: (contextt) => CupertinoAlertDialog(
                                           title: const Text('!تاكيد'),
                                           content: Card(
                                             color: Colors.transparent,
@@ -244,7 +252,8 @@ class _OrdersSectionState extends State<OrdersSection> {
                                             CupertinoDialogAction(
                                               child: const Text('نعم'),
                                               onPressed: () {
-                                                widget.cubit?.goToNextStatus(
+                                                Navigator.of(context).pop();
+                                                  widget.cubit?.goToNextStatus(
                                                     isDeliveryMan: false,
                                                     orderId: widget.order?.id,
                                                     itemCount: int.tryParse(
@@ -252,7 +261,13 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                             .text),
                                                     comment:
                                                         commentController.text);
-                                                Navigator.of(context).pop();
+                                                        debugPrint('goToNextStatus');
+                                                // Future.delayed(const Duration(seconds: 2), () async{
+                                                  // print('delayed execution');
+          //  Navigator.push(contextt, MaterialPageRoute(builder: (contextt) => const HomeScreen(),));
+      // });
+                                               
+                                                
                                                 // widget.cubit.deleteCustomer(id: widget.item.id);
                                                 // if (BlocProvider.of<OrderDetailsCubit>(
                                                 //                 context,

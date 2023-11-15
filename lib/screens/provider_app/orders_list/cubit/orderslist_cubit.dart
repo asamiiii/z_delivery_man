@@ -63,17 +63,21 @@ class OrderslistCubit extends Cubit<OrderslistState> {
       String? comment,
       required bool isDeliveryMan}) {
     emit(OrderNextStatusLoadingState());
-    DioHelper.postData(
+     DioHelper.postData(
         url: isDeliveryMan
             ? "$POST_ORDERS_NEXT_STATUS/$orderId/nextStatus"
             : "$POST_ORDERS_NEXT_STATUS_PROVIDER/$orderId/nextStatus",
         token: token,
-        data: {"item_count": itemCount ?? 0, "comment": comment}).then((value) {
-      print("Next status" + value.data);
+        data: {"item_count": itemCount ?? 0, "comment": comment?? ''}).then((value) {
+      debugPrint("Next status ${value.data}"  );
+
       try {
         successModel = SuccessModel.fromJson(value.data);
         emit(OrderNextStatusSuccessState(successModel: successModel));
-      } catch (e) {}
+      } catch (e) {
+        debugPrint('error : $e');
+        emit(OrderNextStatusFailedState());
+      }
     }).catchError((e) {
       print("$e error of next status");
       emit(OrderNextStatusFailedState());

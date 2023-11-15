@@ -76,8 +76,7 @@ class _MyAppState extends State<MyApp> {
       debugPrint('A new onMessageOpenedApp event was published!');
       // Navigator.pushNamed(context, '/message',
       //     arguments: MessageArguments(message, true));
-      debugPrint(
-          'message : ${message.data['order_id']} ${message.notification?.body}');
+      debugPrint('message : ${message.data['order_id']} ${message.notification?.body}');
       navigateAndReplace(
           navState.currentContext!,
           OrderDetailsScreen(
@@ -89,7 +88,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    // TODO: impleme nt initState
     super.initState();
     FirebaseMessaging.instance
         .getInitialMessage()

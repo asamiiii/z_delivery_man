@@ -37,7 +37,20 @@ class LoginScreen extends StatelessWidget {
                     key: 'token', value: state.loginModel?.token ?? '')
                 .then((value) {
               token = state.loginModel?.token ?? '';
-              navigateAndReplace(context, const HomeScreen());
+              // debugPrint('token = $token');
+              if(token!.isNotEmpty){
+                debugPrint('token 1 = $token');
+                navigateAndReplace(context, const HomeScreen());
+              }else{
+                ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                content:
+                                                    Text('من فضلك تأكد من بياناتك'),
+                                                backgroundColor: Colors.red,
+                                              ));
+                debugPrint('token 2 = $token');
+              }
+              
             });
           }
         },
@@ -89,7 +102,8 @@ class LoginScreen extends StatelessWidget {
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 18.sp,
-                                          fontWeight: FontWeight.w600),
+                                          fontWeight: FontWeight.w600
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -178,10 +192,18 @@ class LoginScreen extends StatelessWidget {
                                       onPressed: () {
                                         if (cubit.formKey.currentState!
                                             .validate()) {
-                                          FirebaseMessaging.instance
+                                              if(cubit.passwordController.text.isEmpty||cubit.emailController.text.isEmpty){
+                                     ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                content:
+                                                    Text('تأكد من ادخالك البريد الالكتروني وكلمه المرور'),
+                                                backgroundColor: Colors.red,
+                                              ));
+                                              }else{
+                         FirebaseMessaging.instance
                                               .getToken()
                                               .then((token) {
-                                            print('fcm token: $token');
+                                            debugPrint('fcm token: $token');
                                             cubit.login(
                                                 email: cubit
                                                     .emailController.text
@@ -192,6 +214,8 @@ class LoginScreen extends StatelessWidget {
                                                 deviceName: 'deviceName',
                                                 fcmToken: token);
                                           });
+                                              }
+                                          
                                         }
                                       },
                                       size: GFSize.LARGE,

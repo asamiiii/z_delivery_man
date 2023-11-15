@@ -141,14 +141,23 @@ class _PriceListScreenState extends State<PriceListScreen> {
                     ElevatedButton(
                       onPressed: () {
                         // orderDetailsCubit.formKey.currentState.save();
-                        List<int> itemsInt = [];
-                        for (var item in orderDetailsCubit.selectedItems) {
-                          itemsInt.add(item.id!);
+                        // List<int> itemsInt = [];
+                        // for (var item in orderDetailsCubit.selectedItems) {
+                        //   itemsInt.add(item.id!);
+                        // }
+                        List<Map<String, dynamic>> items = [];
+                        for (var element in orderDetailsCubit.selectedItems) {
+                          items.add({
+                            'item_id': element.id,
+                            'category_item_service_id':
+                                element.categoryItemServiceId
+                          });
                         }
+                        debugPrint('pref : $items');
                         navigateTo(
                             context,
                             CustomizeSpecalPreferences(
-                                items: itemsInt,
+                                items: items,
                                 selectedItems: orderDetailsCubit.selectedItems,
                                 orderId: widget.orderId));
                       },

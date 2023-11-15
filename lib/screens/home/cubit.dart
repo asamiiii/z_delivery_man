@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../models/index_model.dart';
@@ -59,9 +60,10 @@ class HomeCubit extends Cubit<HomeStates> {
     emit(HomeLoadingStatus());
     return DioHelper.getData(url: Get_STATUS_PROVIDER, token: token)
         .then((value) {
+      // debugPrint('resp $value');
       indexModel = IndexModel.fromJson(value.data);
-      print(value);
-      print(indexModel);
+      debugPrint('resp $value');
+      print('index model :$indexModel');
       emit(HomeuccessStatus());
     }).catchError((e) {
       print(e);
@@ -73,32 +75,40 @@ class HomeCubit extends Cubit<HomeStates> {
     switch (statusName) {
       case 'new':
         return 'عرض الاوردرات الجديدة';
-        break;
 
       case 'waiting_deliveryMan':
         return 'في انتظار تسليم الاوردر للمندوب';
-        break;
 
-      case 'finished':
+      case 'finished'||'finished_all':
         return 'تم الانتهاء من الطلب عند المغسلة';
-        break;
 
-      case 'check_up':
+      case 'check_up'||'check_up_all':
         return 'مطلوب فحص الاوردر';
-        break;
 
       case 'deliver_today':
         return 'اوردرات يجب تسليمها اليوم';
-        break;
 
       case 'in_progress':
         return 'عرض الاوردرات الجارية';
-        break;
 
       case 'ended':
         return 'عرض الاوردرات المنتهية';
-        break;
 
+      case 'opened'||'opened_all':
+        return 'العدد الاجمالي';
+
+        case 'provider_assigned'||'provider_assigned_all':
+        return 'لم يتم استلامه';
+
+        case 'provider_received'||'provider_received_all':
+        return 'تم استلامه';
+
+
+        case 'remaining'||'remaining_all':
+        return 'المتبقي';
+
+        case 'from_provider'||'from_provider_all':
+        return 'تم التسليم للمندوب';
       default:
         return '';
     }

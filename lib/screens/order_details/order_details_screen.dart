@@ -115,21 +115,23 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             .then((value) => cubit.getProviderOrderDetails(
                                 orderId: widget.orderId));
                       },
-                      icon: SvgPicture.asset(
-                        'assets/images/price_list.svg',
-                        color: Colors.white,
-                      ),
+                      icon: const Icon(Icons.list_alt)
+                      // SvgPicture.asset(
+                      //   'assets/images/price_list.svg',
+                      //   color: Colors.white,
+                        
+                      // ),
                     ),
-                  if (!isDeliveryMan)
-                    IconButton(
-                        onPressed: () {
-                          navigateTo(
-                              context,
-                              ImagesScreen(
-                                orderId: widget.orderId ?? 0,
-                              ));
-                        },
-                        icon: const Icon(Icons.image_outlined))
+                  // if (!isDeliveryMan)
+                  //   IconButton(
+                  //       onPressed: () {
+                  //         navigateTo(
+                  //             context,
+                  //             ImagesScreen(
+                  //               orderId: widget.orderId ?? 0,
+                  //             ));
+                  //       },
+                  //       icon: const Icon(Icons.image_outlined))
                 ],
               ),
               body: RefreshIndicator(
@@ -1228,6 +1230,9 @@ class ProviderSection extends StatelessWidget {
                                       CupertinoDialogAction(
                                         child: const Text('نعم'),
                                         onPressed: () {
+                                          debugPrint('hero ${cubit!
+                                                  .providerOrderDetails!
+                                                  .coreNextStatus}');
                                           // widget.cubit.deleteCustomer(id: widget.item.id);
                                           if (cubit?.providerOrderDetails
                                                   ?.coreNextStatus ==
@@ -1251,7 +1256,8 @@ class ProviderSection extends StatelessWidget {
                                                 backgroundColor: Colors.red,
                                               ));
                                             }
-                                          } else if (cubit!
+                                          } 
+                                           if (cubit!
                                                   .providerOrderDetails!
                                                   .coreNextStatus ==
                                               'check_up') {
@@ -1282,6 +1288,14 @@ class ProviderSection extends StatelessWidget {
                                                   comment:
                                                       commentController.text);
                                             }
+                                          }else{
+                                            cubit?.goToNextStatus(
+                                                  isDeliveryMan: false,
+                                                  orderId: orderId,
+                                                  itemCount: int.tryParse(
+                                                      itemCountController.text),
+                                                  comment:
+                                                      commentController.text);
                                           }
 
                                           Navigator.of(context).pop();

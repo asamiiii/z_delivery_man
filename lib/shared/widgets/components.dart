@@ -63,7 +63,7 @@ Widget defaultFormField({
               : IconButton(
                   icon: Icon(suffix),
                   onPressed: () {
-                    suffixPressed;
+                    suffixPressed!();
                   },
                   color: primaryColor,
                 ),

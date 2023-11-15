@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
+import 'package:z_delivery_man/screens/home/all.dart';
+import 'package:z_delivery_man/screens/home/today.dart';
 
 import '../../models/index_model.dart';
 import '../../models/time_slots_model.dart';
@@ -27,11 +29,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isDeliveryMan = false;
+  String name = '';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     isDeliveryMan = CacheHelper.getData(key: 'type');
+    name = CacheHelper.getData(key: 'name');
   }
 
   @override
@@ -52,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Scaffold(
                     drawer: isDeliveryMan ? const BuildDrawer() : null,
                     appBar: AppBar(
-                        title: const Text(AppStrings.appName),
+                        title:  Text(name),
                         centerTitle: true,
                         actions: [
                           InkWell(
@@ -79,27 +83,41 @@ class _HomeScreenState extends State<HomeScreen> {
                             state is! HomeLoadingStatus,
                         fallback: (context) =>
                             const Center(child: CircularProgressIndicator()),
-                        builder: (context) => ListView.separated(
+                        builder: (context) => isDeliveryMan ? ListView.separated(
+                          physics: const AlwaysScrollableScrollPhysics(),
                             shrinkWrap: true,
                             separatorBuilder: (context, index) => SizedBox(
                                   height: 2.h,
                                 ),
-                            itemCount: isDeliveryMan
-                                ? homeCubit.timeSlots?.length ?? 0
-                                : homeCubit.indexModel?.statusModel?.length ??
-                                    0,
+                            itemCount:homeCubit.timeSlots?.length ?? 0,
                             itemBuilder: (context, index) {
-                              if (isDeliveryMan) {
+                              // if (isDeliveryMan) {
                                 return BuildCard(
                                     item: homeCubit.timeSlots?[index]);
-                              } else {
-                                return BuildProviderCard(
-                                  item: homeCubit
-                                      .indexModel?.statusModel?[index]!,
-                                  cubit: homeCubit,
-                                );
-                              }
-                            }),
+                              // } else {
+                                // return BuildProviderCard(
+                                //   item: homeCubit
+                                //       .indexModel?.statusModel?[index]!,
+                                //   cubit: homeCubit,
+                                // );
+                                
+                              //   return TableAll(model: homeCubit.indexModel,);
+                              // }
+                            }) : Center(
+                              child: SingleChildScrollView(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 20),
+                                    TableToday(model: homeCubit.indexModel),
+                                    const SizedBox(height: 20),
+                                    TableAll(model: homeCubit.indexModel,),
+                                    const SizedBox(height: 20),
+                                  ],
+                                ),
+                              ),
+                            ),
                       ),
                     ),
                   ),
@@ -182,48 +200,48 @@ class BuildCard extends StatelessWidget {
   }
 }
 
-class BuildProviderCard extends StatelessWidget {
-  const BuildProviderCard({Key? key, this.item, this.cubit}) : super(key: key);
-  final StatusModel? item;
-  final HomeCubit? cubit;
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        navigateTo(
-            context,
-            OrdersListScreen(
-              statusName: item?.statusName,
-            ));
-      },
-      child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
-        shape: const RoundedRectangleBorder(),
-        color: Colors.grey.shade200,
-        child: SizedBox(
-          height: 13.h,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                '${cubit?.handleStatusName(item?.statusName)}',
-                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Text(
-                '${AppStrings.ordersTotal} ${item?.count}',
-                style: TextStyle(
-                    color: primaryColor,
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// class BuildProviderCard extends StatelessWidget {
+//   const BuildProviderCard({Key? key, this.item, this.cubit}) : super(key: key);
+//   final StatusModel? item;
+//   final HomeCubit? cubit;
+//   @override
+//   Widget build(BuildContext context) {
+//     return InkWell(
+//       onTap: () {
+//         navigateTo(
+//             context,
+//             OrdersListScreen(
+//               statusName: item?.statusName,
+//             ));
+//       },
+//       child: Card(
+//         margin: EdgeInsets.symmetric(horizontal: 2.h, vertical: 1.h),
+//         shape: const RoundedRectangleBorder(),
+//         color: Colors.grey.shade200,
+//         child: SizedBox(
+//           height: 13.h,
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             crossAxisAlignment: CrossAxisAlignment.center,
+//             children: [
+//               Text(
+//                 '${cubit?.handleStatusName(item?.statusName)}',
+//                 style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
+//               ),
+//               SizedBox(
+//                 height: 1.h,
+//               ),
+//               Text(
+//                 '${AppStrings.ordersTotal} ${item?.count}',
+//                 style: TextStyle(
+//                     color: primaryColor,
+//                     fontSize: 12.sp,
+//                     fontWeight: FontWeight.bold),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

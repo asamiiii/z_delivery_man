@@ -32,14 +32,17 @@ class LoginCubit extends Cubit<LoginStates> {
       'device_name': deviceName,
       'fcm_token': fcmToken
     }).then((value) async {
+      
       loginModel = LoginModel.fromJson(value.data);
+      debugPrint(' login resp : $value');
       isDeliveyMan = loginModel?.type == deliveryMan;
+      
       debugPrint('user token : ${loginModel?.token}');
-
+      await CacheHelper.saveData(key: 'name', value:loginModel?.name );
       await CacheHelper.saveData(
               key: 'type', value: (loginModel?.type == 'delivery_man'))
           .then((value) {
-        print(value);
+        
       });
       emit(LoginSuccessState(loginModel: loginModel));
     }).catchError((e) {
@@ -54,11 +57,10 @@ class LoginCubit extends Cubit<LoginStates> {
 
   void changePasswordVisibility() {
     isPassword = !isPassword;
-
     suffix = isPassword
         ? Icons.remove_red_eye_outlined
         : Icons.visibility_off_outlined;
-
     emit(ChangePasswordVisibilityState());
+    debugPrint('isPassword : $isPassword');
   }
 }

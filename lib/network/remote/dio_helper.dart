@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-// const String URL = 'http://zdev.z-laundry.com/public/api/v1/'; // for dev
-const String URL = 'http://app.z-laundry.com/public/api/v1/'; // for production
+const String URL = 'http://zdev.z-laundry.com/public/api/v1/'; // for dev
+// const String URL = 'http://app.z-laundry.com/public/api/v1/'; // for production
 
 class DioHelper {
   static Dio? dio;
