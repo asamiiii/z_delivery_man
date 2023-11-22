@@ -1,5 +1,9 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'dart:math';
+
+// import 'package:fluttertoast/fluttertoast_web.dart';
+import 'package:z_delivery_man/screens/provider_app/price_list/widget.dart';
 import 'package:z_delivery_man/styles/color.dart';
 
 import '/../models/price_list_model.dart';
@@ -14,6 +18,7 @@ class PriceListSystemOrder extends StatefulWidget {
   final int? index;
   final int? indexList;
   final bool fromShoppingCard;
+  final bool isMetersView;
   final Function? increase;
   final Function? decrease;
   // final CartsModel cartsModel;
@@ -25,6 +30,7 @@ class PriceListSystemOrder extends StatefulWidget {
       this.index,
       this.indexList,
       this.fromShoppingCard = false,
+      this.isMetersView = false,
       this.increase,
       this.decrease})
       : super(key: key);
@@ -55,9 +61,10 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
           children: [
             Expanded(
               child: Row(
-                
                 children: [
-                  const SizedBox(width: 20,),
+                  const SizedBox(
+                    width: 20,
+                  ),
                   ImageAsIcon(
                     image: widget.item?.icon,
                     height: 29.4,
@@ -82,7 +89,6 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
                       ],
                     ),
                   ),
-                  
                 ],
               ),
             ),
@@ -92,11 +98,14 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
             Container(
                 alignment: Alignment.bottomRight,
                 child: OrderItemSystem(
+                    isMetersView: widget.isMetersView,
                     item: widget.item,
                     index: widget.index,
                     // cartsViewModel: cartsViewModel,
                     cubit: cubit)),
-                    const SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
           ],
         ));
       },
@@ -105,11 +114,12 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
 }
 
 class OrderItemSystem extends StatefulWidget {
-  const OrderItemSystem({Key? key, this.item, this.index, this.cubit})
+  const OrderItemSystem(
+      {Key? key, this.item, this.index, this.cubit, this.isMetersView = false})
       : super(key: key);
   final Items? item;
   final int? index;
-
+  final bool isMetersView;
   final OrderDetailsCubit? cubit;
 
   @override
@@ -123,59 +133,63 @@ class _OrderItemSystemState extends State<OrderItemSystem> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-            height: 32,
+            // height: 32,
             // width: 50,
             decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.grey.shade200),
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(16),
+            ),
             child: Center(
-              child: 
-              orderItemSystem(index: widget.index,cubit: widget.cubit,item: widget.item,)
-              // Form(
-              //   child: TextFormField(
-              //     controller: widget.item?.txtController,
-              //     textAlignVertical: TextAlignVertical.center,
-              //     keyboardType:
-              //         const TextInputType.numberWithOptions(decimal: true),
-              //     textAlign: TextAlign.center,
-              //     // initialValue: widget.item.selectedQuantity.toString(),
-              //     decoration: const InputDecoration(
-              //       hintText: "0",
-              //       border: InputBorder.none,
-              //       isCollapsed: true,
-              //       contentPadding: EdgeInsets.zero,
-              //     ),
-              //     // onSaved: (newValue) {
-              //     //   if (int.tryParse(newValue) == 0) {
-              //     //     widget.item.selectedQuantity = int.tryParse(newValue);
-              //     //   } else {
-              //     //     setState(() {
-              //     //       widget.cubit.selectedItems.add(widget.item);
-              //     //       widget.item.selectedQuantity = int.tryParse(newValue);
-              //     //       // item.selectedQuantity =
-              //     //       //     int.tryParse(textEditingController.text);
-              //     //     });
-              //     //   }
-              //     // },
-              //     onFieldSubmitted: (newValue) {
-              //       if (int.tryParse(newValue) == 0) {
-              //         widget.item?.selectedQuantity = int.tryParse(newValue);
-              //       } else {
-              //         if (widget.item?.txtController?.text != null) {
-              //           setState(() {
-              //             widget.cubit?.selectedItems.add(widget.item!);
-              //             widget.item?.selectedQuantity =
-              //                 int.tryParse(newValue);
-              //             // item.selectedQuantity =
-              //             //     int.tryParse(textEditingController.text);
-              //           });
-              //         }
-              //       }
-              //     },
-              //   ),
-              // ),
+                child: orderItemSystem(
+              index: widget.index,
+              cubit: widget.cubit,
+              item: widget.item,
+              isMetersView: widget.isMetersView,
             )
+                // Form(
+                //   child: TextFormField(
+                //     controller: widget.item?.txtController,
+                //     textAlignVertical: TextAlignVertical.center,
+                //     keyboardType:
+                //         const TextInputType.numberWithOptions(decimal: true),
+                //     textAlign: TextAlign.center,
+                //     // initialValue: widget.item.selectedQuantity.toString(),
+                //     decoration: const InputDecoration(
+                //       hintText: "0",
+                //       border: InputBorder.none,
+                //       isCollapsed: true,
+                //       contentPadding: EdgeInsets.zero,
+                //     ),
+                //     // onSaved: (newValue) {
+                //     //   if (int.tryParse(newValue) == 0) {
+                //     //     widget.item.selectedQuantity = int.tryParse(newValue);
+                //     //   } else {
+                //     //     setState(() {
+                //     //       widget.cubit.selectedItems.add(widget.item);
+                //     //       widget.item.selectedQuantity = int.tryParse(newValue);
+                //     //       // item.selectedQuantity =
+                //     //       //     int.tryParse(textEditingController.text);
+                //     //     });
+                //     //   }
+                //     // },
+                //     onFieldSubmitted: (newValue) {
+                //       if (int.tryParse(newValue) == 0) {
+                //         widget.item?.selectedQuantity = int.tryParse(newValue);
+                //       } else {
+                //         if (widget.item?.txtController?.text != null) {
+                //           setState(() {
+                //             widget.cubit?.selectedItems.add(widget.item!);
+                //             widget.item?.selectedQuantity =
+                //                 int.tryParse(newValue);
+                //             // item.selectedQuantity =
+                //             //     int.tryParse(textEditingController.text);
+                //           });
+                //         }
+                //       }
+                //     },
+                //   ),
+                // ),
+                )
             //  Center(
             //     child: Text(
             //   item.selectedQuantity.toString(),
@@ -208,10 +222,13 @@ class _OrderItemSystemState extends State<OrderItemSystem> {
 }
 
 class orderItemSystem extends StatefulWidget {
-     Items? item;
-   int? index;
-   OrderDetailsCubit? cubit;
-   orderItemSystem({Key? key,this.index,this.item,this.cubit}) : super(key: key);
+  Items? item;
+  int? index;
+  OrderDetailsCubit? cubit;
+  bool isMetersView;
+  orderItemSystem(
+      {Key? key, this.index, this.item, this.cubit, this.isMetersView = false})
+      : super(key: key);
 
   @override
   _orderItemSystemState createState() => _orderItemSystemState();
@@ -219,181 +236,247 @@ class orderItemSystem extends StatefulWidget {
 
 class _orderItemSystemState extends State<orderItemSystem> {
   
+
   @override
   Widget build(BuildContext context) {
-    return  Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+    TextEditingController hightController = TextEditingController(text:widget.item?.lenght.toString()=='0'?'':widget.item?.lenght.toString());
+  TextEditingController widthController = TextEditingController(text:widget.item?.width.toString()=='0'?'':widget.item?.width.toString());
+  widthController.selection = TextSelection.fromPosition(
+        TextPosition(offset: widthController.text.length));
+    hightController.selection = TextSelection.fromPosition(
+        TextPosition(offset: hightController.text.length));
+    return widget.isMetersView == false
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                  borderRadius: BorderRadius.circular(32),
+                  onTap: () async {
+                    decreaseQuantity(item: widget.item!, cubit: widget.cubit);
+                    setState(() {});
+                  },
+                  child: Container(
+                      height: 32,
+                      width: 32,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(32),
+                          color: BLUE_RGPO),
+                      child: const Icon(
+                        Icons.remove,
+                        size: 21,
+                        color: Colors.blue,
+                      ))),
+              Container(
+                  height: 32,
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 25,
+                  ),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(16),
+                      color: Colors.white),
+                  child: Center(
+                      child: Text(
+                    '${widget.item?.selectedQuantity}',
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600),
+                  ))),
+              InkWell(
+                  borderRadius: BorderRadius.circular(32),
+                  onTap: () async {
+                    increaseQuantity(item: widget.item!,cubit: widget.cubit);
+                    setState(() {});
+                  },
+                  child: Container(
+                      height: 32,
+                      width: 32,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(32),
+                          color: BLUE_RGPO),
+                      child: const Icon(
+                        Icons.add,
+                        size: 21,
+                        color: Colors.blue,
+                      ))),
+            ],
+          )
+        : Form(
+            // key: context.read<MetersViewModel>().formKey,
+            child: Row(
               children: [
-                InkWell(
-                    borderRadius: BorderRadius.circular(32),
-                    onTap: () async{
-                      debugPrint('minus');
-                      if(widget.item!.selectedQuantity! != 0){
-                      //  widget.cubit?.selectedItems.add(widget.item!);
-                          widget.item?.selectedQuantity =(widget.item?.selectedQuantity)! -1;
-                          if(widget.item!.selectedQuantity! < 1){
-                          // widget.item?.selectedQuantity =0;
-                        widget.cubit?.selectedItems.removeWhere((element) => element.categoryItemServiceId == widget.item?.categoryItemServiceId );
-                        }
-                        
-                        
-                      }
-                      setState(() {
-                          
-                          // item.selectedQuantity =
-                          //     int.tryParse(textEditingController.text);
-                        });
-                        debugPrint('selectedItems : ${widget.cubit?.selectedItems}');
-                     
-                    },
-                    child: Container(
-                        height: 32,
-                        width: 32,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(32),
-                            color: BLUE_RGPO),
-                        child: const Icon(
-                          Icons.remove,
-                          size: 21,
-                          color: Colors.blue,
-                        ))),
-                Container(
-                    height: 32,
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 25,
+                const SizedBox(
+                  width: 5,
+                ),
+                Column(
+                  children: [
+                    const Text(
+                      "الطول",
+                      style: TextStyle(fontSize: 10),
                     ),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(16),
-                        color: Colors.white),
-                    child:  Center(
-                        child: Text(
-                       '${widget.item?.selectedQuantity}' ,
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                    ))),
-                InkWell(
-                    borderRadius: BorderRadius.circular(32),
-                    onTap: () async {
-                      debugPrint('Add');
-                      // if (widget.item?.txtController?.text != null) {
-                        if(widget.item?.selectedQuantity == 0){
-                         widget.cubit?.selectedItems.add(widget.item!);
-                          widget.item?.selectedQuantity =(widget.item?.selectedQuantity)! +1;
-                        }else{
-                          widget.item?.selectedQuantity =(widget.item?.selectedQuantity)! +1;
-                        }
-                        
-                        setState(() {
-                          
-                          // item.selectedQuantity =
-                          //     int.tryParse(textEditingController.text);
-                        });
-                        debugPrint('selectedItems : ${widget.cubit?.selectedItems}');
-                      // }
-                    
-                    },
-                    child: Container(
-                        height: 32,
-                        width: 32,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(32),
-                            color: BLUE_RGPO),
-                        child: const Icon(
-                          Icons.add,
-                          size: 21,
-                          color: Colors.blue,
-                        ))),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.14,
+                        // height: ,
+                        child: CustomTextField(
+                          onTap: () {},
+                          isMetersHW: true,
+                          keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true, signed: true),
+                          onChange: (value) {
+                            widget.item?.lenght = value;
+                            debugPrint(
+                                'widget.item.localId : ${widget.item?.localId}');
+                            setState(() {});
+                          },
+                          controller: hightController,
+                        )),
+                  ],
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text('X'),
+                  ],
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Column(
+                  children: [
+                    const Text(
+                      'العرض',
+                      style: TextStyle(fontSize: 10),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.14,
+                        child: CustomTextField(
+                          keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true, signed: true),
+                          isMetersHW: true,
+                          onChange: (value) {
+                            widget.item?.width = value;
+                            debugPrint(
+                                'widget.item.localId : ${widget.item?.localId}');
+                            setState(() {});
+                            debugPrint(value);
+                          },
+                          controller: widthController,
+                        )),
+                  ],
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
               ],
-            );
+            ),
+          );
   }
 }
 
 
-  //! Order Item with Price
-  // Widget _orderItemSystem() {
+//!-------------------------------Functions-------------------
 
-   
-  //   // double total = 0;
-    
-    
-  //   // cartsViewModel.updateItemLengthWidth(itemIndex: serIndexOrder, lengthOrWidth: widget.cartsModel?.lenght ??'0', isWidth: false);
-  //   // cartsViewModel.updateItemLengthWidth(itemIndex: serIndexOrder, lengthOrWidth: widget.cartsModel?.width ??'0', isWidth: true);
+decreaseQuantity({required Items item, required OrderDetailsCubit? cubit}) {
+  debugPrint('minus');
+  if (item.withDimension == false) {
+    if (item.selectedQuantity! == 0) {
+    } else {
+      if (item.selectedQuantity! != 1) {
+        item.selectedQuantity = (item.selectedQuantity)! - 1;
+      } else {
+        item.selectedQuantity = (item.selectedQuantity)! - 1;
+        cubit?.selectedItems?.remove(item);
+      }
+    }
+  } else {
+    if (item.selectedQuantity == 0) {
+    } else {
+      if (item.selectedQuantity! <= 1) {
+        debugPrint('herrrr');
+        item.lenght = null;
+        item.width = null;
+      }
+      item.selectedQuantity = (item.selectedQuantity)! - 1;
+      Items? itemm =
+          cubit?.selectedItems?.firstWhere((element) => element.localId != null);
+      cubit?.selectedItems?.remove(itemm);
+    }
+  }
+  debugPrint('widget.item.localId : ${item.localId}');
+  debugPrint('selectedItems : ${cubit?.selectedItems}');
+}
 
-  //   // var cartsList = await Hive.openBox<CartsModel>('cartsList');
-  //   //! get Key Of item , related to the Item
-  //   // dynamic key = cartsList.keyAt(serIndexOrder);
-  //   // CartsModel editedData = cartsList.values.toList()[serIndexOrder];
-
-  //   return  Row(
-  //             mainAxisAlignment: MainAxisAlignment.end,
-  //             children: [
-  //               InkWell(
-  //                   borderRadius: BorderRadius.circular(32),
-  //                   onTap: () {
-                     
-  //                   },
-  //                   child: Container(
-  //                       height: 32,
-  //                       width: 32,
-  //                       decoration: BoxDecoration(
-  //                           borderRadius: BorderRadius.circular(32),
-  //                           color: BLUE_RGPO),
-  //                       child: const Icon(
-  //                         Icons.remove,
-  //                         size: 21,
-  //                         color: Colors.blue,
-  //                       ))),
-  //               Container(
-  //                   height: 32,
-  //                   margin: const EdgeInsets.symmetric(horizontal: 8),
-  //                   padding: const EdgeInsets.symmetric(
-  //                     horizontal: 25,
-  //                   ),
-  //                   decoration: BoxDecoration(
-  //                       shape: BoxShape.rectangle,
-  //                       borderRadius: BorderRadius.circular(16),
-  //                       color: Colors.grey),
-  //                   child: const Center(
-  //                       child: Text(
-  //                      '0' ,
-  //                     style: TextStyle(
-  //                         color: Colors.black,
-  //                         fontSize: 16,
-  //                         fontWeight: FontWeight.w600),
-  //                   ))),
-  //               InkWell(
-  //                   borderRadius: BorderRadius.circular(32),
-  //                   onTap: () async {
-  //                     if (int.tryParse(newValue) == 0) {
-  //                     widget.item?.selectedQuantity = int.tryParse(newValue);
-  //                   } else {
-  //                     if (widget.item?.txtController?.text != null) {
-  //                       setState(() {
-  //                         widget.cubit?.selectedItems.add(widget.item!);
-  //                         widget.item?.selectedQuantity =
-  //                             int.tryParse(newValue);
-  //                         // item.selectedQuantity =
-  //                         //     int.tryParse(textEditingController.text);
-  //                       });
-  //                     }
-  //                   }
-  //                   },
-  //                   child: Container(
-  //                       height: 32,
-  //                       width: 32,
-  //                       decoration: BoxDecoration(
-  //                           borderRadius: BorderRadius.circular(32),
-  //                           color: BLUE_RGPO),
-  //                       child: const Icon(
-  //                         Icons.add,
-  //                         size: 21,
-  //                         color: Colors.blue,
-  //                       ))),
-  //             ],
-  //           );
-          
-  // }
+increaseQuantity({required Items item, required OrderDetailsCubit? cubit}){
+  int localId = 0;
+                    debugPrint('Add');
+                    Random random = Random();
+                    localId = random.nextInt(10000000);
+                    if (item.withDimension == true) {
+                      if (item.selectedQuantity! == 0) {
+                        debugPrint(
+                            'her selectedQuantity : ${item.selectedQuantity!}');
+                        cubit?.selectedItems.add(Items(
+                          categoryItemServiceId:
+                              item.categoryItemServiceId,
+                          icon: item.icon,
+                          id: item.id,
+                          lenght: '0',
+                          width: '0',
+                          localId: 0,
+                          name: item.name,
+                          price: item.price,
+                          selectedQuantity: 1,
+                          txtController: item.txtController,
+                          withDimension: item.withDimension,
+                        ));
+                      } else {
+                        cubit?.selectedItems?.add(Items(
+                          categoryItemServiceId:
+                              item.categoryItemServiceId,
+                          icon: item.icon,
+                          id: item.id,
+                          lenght: '0',
+                          width: '0',
+                          localId: localId,
+                          name: item.name,
+                          price: item.price,
+                          selectedQuantity: 1,
+                          txtController: item.txtController,
+                          withDimension: item.withDimension,
+                        ));
+                      }
+                      item.selectedQuantity =
+                          (item.selectedQuantity)! + 1;
+                    } else {
+                      if (item.selectedQuantity == 0) {
+                        debugPrint(
+                            'her selectedQuantity : ${item.selectedQuantity!}');
+                        cubit?.selectedItems?.add(item);
+                        item.selectedQuantity =
+                            (item.selectedQuantity)! + 1;
+                      } else {
+                        item.selectedQuantity =
+                            (item.selectedQuantity)! + 1;
+                      }
+                    }
+                    debugPrint('widget.item.localId : ${item.localId}');
+                    debugPrint(
+                        'selectedItems : ${cubit?.selectedItems}');
+}

@@ -31,6 +31,8 @@ class Orders {
   String? currentStatus;
   String? coreNextStatus;
   String? nextStatus;
+  String? pickDeliveryMan;
+  String? deliverDeliveryMan;
 
   Orders(
       {this.id,
@@ -38,7 +40,10 @@ class Orders {
       this.deliver,
       this.currentStatus,
       this.coreNextStatus,
-      this.nextStatus});
+      this.nextStatus,
+      this.deliverDeliveryMan,
+      this.pickDeliveryMan
+      });
 
   Orders.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -47,6 +52,8 @@ class Orders {
     currentStatus = json['currentStatus'];
     coreNextStatus = json['core_nextStatus'];
     nextStatus = json['nextStatus'];
+    deliverDeliveryMan = json['pick_delivery_man'];
+    pickDeliveryMan = json['deliver_delivery_man'];
   }
 
   get customer => null;

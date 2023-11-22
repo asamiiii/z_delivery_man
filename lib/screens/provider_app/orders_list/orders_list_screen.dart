@@ -145,12 +145,20 @@ class _OrdersSectionState extends State<OrdersSection> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        navigateTo(
+        debugPrint('the current :${widget.order?.currentStatus} ');
+        if(widget.order?.currentStatus =='تم اسنادة الي المغسلة'||
+        widget.order?.currentStatus =='في الطريق الي المغسلة'
+        ){
+
+        }else{
+          navigateTo(
             context,
             OrderDetailsScreen(
               fromNotification: false,
               orderId: widget.order?.id,
             ));
+        }
+        
       },
       child: Stack(
         children: [
@@ -203,6 +211,20 @@ class _OrdersSectionState extends State<OrdersSection> {
                       Text('${widget.order?.deliver?.to}')
                     ],
                   ),
+                 widget.order?.pickDeliveryMan!=null? Row(
+                    children: [
+                      const Text('مندوب الاستلام : '),
+                      Text('${widget.order?.pickDeliveryMan}'),
+                      
+                    ],
+                  ):const SizedBox(),
+                  widget.order?.deliverDeliveryMan!=null? Row(
+                    children: [
+                      const Text('مندوب التوصيل : '),
+                      Text('${widget.order?.deliverDeliveryMan}'),
+                      
+                    ],
+                  ):const SizedBox(),
                   ConditionalBuilder(
                     condition: widget.state is! OrderNextStatusLoadingState,
                     fallback: (context) => const CupertinoActivityIndicator(),

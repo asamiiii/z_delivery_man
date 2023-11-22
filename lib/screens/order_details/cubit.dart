@@ -27,16 +27,18 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
 
     return DioHelper.getData(url: "$GET_ORDER_DETAILS/$orderId", token: token)
         .then((value) {
-      print(value.data);
+      debugPrint(value.data);
       orderDetailsModel = OrderDetailsModel.fromJson(value.data);
-      print("$orderDetailsModel  order datails model");
+      debugPrint("$orderDetailsModel  order datails model");
 
       emit(OrderDetailsSuccessState());
     }).catchError((e) {
-      print('details filed $e');
+      debugPrint('details filed $e');
       emit(OrderDetailsFailedState());
     });
   }
+
+  
 
   ProviderOrderDetails? providerOrderDetails;
   Future<void> getProviderOrderDetails({required int? orderId}) {
@@ -45,6 +47,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     return DioHelper.getData(
             url: "$GET_PROVIDER_ORDER_DETAILS/$orderId", token: token)
         .then((value) {
+          debugPrint('getProviderOrderDetails : ${value.data}');
       providerOrderDetails = ProviderOrderDetails.fromJson(value.data);
       checkedItemsNumber();
       emit(OrderProviderDetailsSuccessState());
@@ -55,7 +58,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
         emit(OrderProviderDetailsSuccessState());
       }
     }).catchError((e) {
-      print('details filed $e');
+      debugPrint('details filed $e');
       emit(OrderProviderDetailsFailedState());
     });
   }
@@ -72,10 +75,10 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
             : "$POST_ORDERS_NEXT_STATUS_PROVIDER/$orderId/nextStatus",
         token: token,
         data: {"item_count": itemCount, "comment": comment}).then((value) {
-      print(value.data);
+      debugPrint('Go to next : ${value.data}');
       emit(OrderDetailsNextStatusSuccessState());
     }).catchError((e) {
-      print("$e error of next status");
+      debugPrint("$e error of next status");
       emit(OrderDetailsNextStatusFailedState());
     });
   }
@@ -91,10 +94,14 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
         data: {'collect_method': collectMethod}).then((value) {
       emit(OrderDetailsCollectOrderStatusSuccessState());
     }).catchError((e) {
-      print('$e collect error');
+      debugPrint('$e collect error');
       emit(OrderDetailsCollectOrderStatusFailedState());
     });
   }
+
+  
+
+  
 
   List<pricelist.PriceList> priceList = [];
   void getPriceList({
@@ -104,13 +111,14 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     DioHelper.getData(
             url: "$Get_STATUS_PROVIDER/$orderId/priceList", token: token)
         .then((value) {
-          debugPrint('PriceList : ${value.data}');
+          debugPrint('price list : $value');
       priceList = pricelist.priceListFromJson(value.data);
+      debugPrint('PriceList : ${priceList[0].categories![0].items![0]?.withDimension}');
       setInitServicesAndCat(priceList.first.id);
       getItemList();
       emit(PriceListSuccess());
     }).catchError((e) {
-      print(e);
+      debugPrint(e);
       emit(PriceListFailed());
     });
   }
@@ -340,35 +348,42 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
       required List<Map<String, dynamic>>? itemList,
       required List<Map<String, dynamic>>? prefernces}) {
     emit(AssociateItemsPostLoading());
-    print(itemList);
-    print(prefernces);
+    debugPrint('$itemList');
+    debugPrint('$prefernces');
     debugPrint('associateItems : ${{"item_list": itemList, "preferences": prefernces}}');
     DioHelper.postData(
             url: "$POST_ASSOCIATE_ITEMS/$orderId/associateItems",
             data: {"item_list": itemList, "preferences": _prefereceList},
             token: token)
         .then((value) {
-      print(value.data);
+      debugPrint('associateItems response${value.data}');
       successModel = SuccessModel.fromJson(value.data);
       emit(AssociateItemsPostSuccess(successModel: successModel));
     }).catchError((e) {
-      print(e);
+      debugPrint('$e');
       emit(AssociateItemsPostFailed());
     });
   }
 
   Future<void> updateAssociateItems(
-      {required int? orderId, required int? itemId, required int? quantity}) {
+      {required int? orderId, required int? itemId, required int? quantity,Map<String, dynamic>? data,bool? meter=false}) {
     emit(AssociateItemsUpdateLoading());
     return DioHelper.updateData(
             url: "$POST_ASSOCIATE_ITEMS/$orderId/items/$itemId",
-            data: {'quantity': quantity},
+            data: {'quantity': quantity,'width':meter==true ?data!['width']:null,'length':meter==true? data!['length']:null,'item_details':meter==true? data!['item_details']:null},
             token: token)
         .then((value) {
+          try{
+                debugPrint('updateAssociateItems: ${value.data}');
       successModel = SuccessModel.fromJson(value.data);
       emit(AssociateItemsUpdateSuccess(successModel: successModel));
+          }catch(e){
+          debugPrint('error$e');
+           emit(AssociateItemsUpdateFailed());
+          }
+       
     }).catchError((e) {
-      print(e);
+      debugPrint('$e');
       emit(AssociateItemsUpdateFailed());
     });
   }
@@ -382,7 +397,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
       successModel = SuccessModel.fromJson(value.data);
       emit(AssociateItemsDeleteSuccess(successModel: successModel));
     }).catchError((e) {
-      print(e);
+      debugPrint(e);
       emit(AssociateItemsDeleteFailed());
     });
   }
@@ -400,7 +415,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
       emit(ImagePickedStateSuccess());
       return file;
     } else {
-      print("No Image Selected");
+      debugPrint("No Image Selected");
       emit(ImagePickedStateFailed());
 
       return null;
@@ -436,15 +451,15 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     //     }
     //   ]
     // );
-    print(formData.files[0].key);
-    print(formData.files[0].value.filename);
+    debugPrint(formData.files[0].key);
+    debugPrint(formData.files[0].value.filename);
 
     DioHelper.postDataMultipart(
             url: "$POST_ASSOCIATE_ITEMS/$orderId/associateImages",
             token: token,
             data: formData)
         .then((value) {
-      print(value.data);
+      debugPrint(value.data);
       // successModel = SuccessModel.fromJson(value.data);
       // if (value.data.toString() == "{'status':true}") {
       emit(PostAssociateImagesSuccess());
@@ -452,7 +467,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
       //   emit(PostAssociateImagesFailed());
       // }
     }).catchError((e) {
-      print(e.toString());
+      debugPrint(e.toString());
       emit(PostAssociateImagesFailed());
     });
   }
@@ -468,7 +483,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
       networkImages.removeWhere((item) => item.id == imageId);
       emit(AssociateItemsDeleteSuccess(successModel: successModel));
     }).catchError((e) {
-      print(e);
+      debugPrint(e);
       emit(AssociateItemsDeleteFailed());
     });
   }

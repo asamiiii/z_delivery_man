@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_unnecessary_containers, prefer_is_empty
 
+import 'dart:convert';
+
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:fdottedline_nullsafety/fdottedline__nullsafety.dart';
 import 'package:z_delivery_man/models/order_details_model.dart';
@@ -176,19 +178,114 @@ class _CustomizeSpecalPreferencesState
               // var cubit = OrderDetailsCubit.get(context);
               return ElevatedButton(
                 onPressed: () {
+                  final cubit = OrderDetailsCubit.get(context);
+                                      List<Map<String, dynamic>> dataApi = [];
+                                      List<Map<String, dynamic>> details = [];
+                                      // List<Map<String, dynamic>> itemDetails =
+                                      //     [];
+                                      for (var element in 
+                                          cubit.selectedItems!) {
+                                        if (element.withDimension == true) {
+                                          details.add({
+                                            'category_item_service_id':
+                                                element.categoryItemServiceId!,
+                                            'quantity': 1,
+                                            'width': element.width,
+                                            'length': element.lenght,
+                                          });
+
+                                          dataApi.add({
+                                            'category_item_service_id':
+                                                element.categoryItemServiceId!,
+                                            'quantity': 1,
+                                            'width': element.width,
+                                            'length': element.lenght,
+                                            'item_details':
+                                                jsonEncode([details.last]),
+                                          });
+                                        } else {
+                                          dataApi.add({
+                                            'category_item_service_id':
+                                                element.categoryItemServiceId!,
+                                            'quantity': element.selectedQuantity!,
+                                            'width': element.width,
+                                            'length': element.lenght,
+                                            'item_details': null,
+                                          });
+                                        }
+                                      }
+
+                                      for (int i = 0;
+                                          i < dataApi.length - 1;
+                                          i++) {
+                                        for (int j = i + 1;
+                                            j < dataApi.length;
+                                            j++) {
+                                          if (dataApi[j][
+                                                  'category_item_service_id'] ==
+                                              dataApi[i][
+                                                  'category_item_service_id']) {
+                                            dataApi[i]
+                                                ['length'] = (double.parse(
+                                                        dataApi[i]['length']) +
+                                                    double.parse(
+                                                        dataApi[j]['length']))
+                                                .toString();
+                                            dataApi[i]['width'] = (double.parse(
+                                                        dataApi[i]['width']) +
+                                                    double.parse(
+                                                        dataApi[j]['width']))
+                                                .toString();
+                                            dataApi[i]['quantity'] +=
+                                                dataApi[j]['quantity'];
+
+                                            if (dataApi[i]['item_details'] !=
+                                                null) {
+                                              List<Map<String, dynamic>>
+                                                  currentDetails = List<
+                                                          Map<String,
+                                                              dynamic>>.from(
+                                                      jsonDecode(dataApi[i]
+                                                          ['item_details']));
+                                              currentDetails.addAll(List<
+                                                  Map<String,
+                                                      dynamic>>.from(jsonDecode(
+                                                  dataApi[j]['item_details'])));
+                                              dataApi[i]['item_details'] =
+                                                  jsonEncode(currentDetails);
+                                            } else {
+                                              dataApi[i]['item_details'] =
+                                                  jsonEncode(details);
+                                            }
+
+                                            dataApi.removeAt(j);
+                                            j--;
+                                          }
+                                        }
+                                      }
                   // print('Pref List ${cubit.prefereceList}');
                   //  OrderDetailsCubit.get(context);
-                  List<Map<String, dynamic>> itemsList = [];
-                  // widget.selectedItems.forEach((element) {
-                  //   print(
-                  //       " listData: ${element.categoryItemServiceId} + ${element.selectedQuantity}");
-                  // });
-                  for (var ele in widget.selectedItems!) {
-                    itemsList.add({
-                      "category_item_service_id": ele.categoryItemServiceId,
-                      "quantity": ele.selectedQuantity
-                    });
-                  }
+                  // List<Map<String, dynamic>> itemsList = [];
+                  // // widget.selectedItems.forEach((element) {
+                  // //   print(
+                  // //       " listData: ${element.categoryItemServiceId} + ${element.selectedQuantity}");
+                  // // });
+                  // for (var ele in widget.selectedItems!) {
+                  //   if(ele.withDimension == false){
+                  //     itemsList.add({
+                  //     "category_item_service_id": ele.categoryItemServiceId,
+                  //     "quantity": ele.selectedQuantity,
+                  //   });
+                  //   }else{
+                  //     itemsList.add({
+                  //     "category_item_service_id": ele.categoryItemServiceId,
+                  //     "quantity": 1,
+                  //     "length":ele.lenght,
+                  //     "width":ele.width
+                  //   });
+                  //   }
+                    
+                  // }
                   // List<Map<String, dynamic>> prefList = [];
                   // for (var ele in cubit.prefereceList!) {
                   //   prefList.add({
@@ -197,11 +294,11 @@ class _CustomizeSpecalPreferencesState
                   //     "category_item_service_id":ele.
                   //   });
                   // }
-                  print('items List $itemsList');
+                  print('items List $dataApi');
                   BlocProvider.of<OrderDetailsCubit>(context)
                       .postAssociateItems(
                           orderId: widget.orderId,
-                          itemList: itemsList,
+                          itemList: dataApi,
                           prefernces:
                               BlocProvider.of<OrderDetailsCubit>(context)
                                   .prefereceList);

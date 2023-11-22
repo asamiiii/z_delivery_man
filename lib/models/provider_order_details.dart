@@ -1,3 +1,5 @@
+import 'package:z_delivery_man/models/order_details_model.dart';
+
 class ProviderOrderDetails {
   int? id;
   int? customerCode;
@@ -16,6 +18,8 @@ class ProviderOrderDetails {
   bool? associateImages;
   List<Items>? items;
   List<Images>? images;
+  String? pickDeliveryMan;
+  String? deliverDeliveryMan;
 
   ProviderOrderDetails(
       {this.id,
@@ -33,7 +37,10 @@ class ProviderOrderDetails {
       this.pickComment,
       this.associateImages,
       this.associateItems,
-      this.items});
+      this.items,
+      this.deliverDeliveryMan,
+      this.pickDeliveryMan
+      });
 
   ProviderOrderDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -54,6 +61,8 @@ class ProviderOrderDetails {
     pickComment = json['pick_comment'] ?? 'لايوجد';
     associateItems = json['associateItems'];
     associateImages = json['associateImages'];
+    deliverDeliveryMan = json['pick_delivery_man'];
+    pickDeliveryMan = json['deliver_delivery_man'];
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
@@ -141,12 +150,20 @@ class Pick {
 }
 
 class Items {
+  //!
   int? id;
   String? name;
   String? category;
   String? service;
   String? preference;
+  int? categoryItemServiceId;
+  String? icon;
   int? quantity;
+  dynamic length;
+  dynamic width;
+  bool? withDimension;
+  List<Items>? itemDetailes;
+  dynamic totalMeters;
 
   Items(
       {this.id,
@@ -154,7 +171,13 @@ class Items {
       this.category,
       this.service,
       this.preference,
-      this.quantity});
+      this.quantity,
+      this.length,
+      this.width,
+      this.itemDetailes,
+      this.withDimension,
+      this.totalMeters
+      });
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -163,6 +186,21 @@ class Items {
     service = json['service'];
     preference = json['preference'];
     quantity = json['quantity'];
+    length = json ['length'];
+    width = json ['width'];
+    totalMeters = json['total_meters'] ;
+    withDimension = json ['with_dimension'] ?? false;
+    categoryItemServiceId =json['category_item_service_id'] ?? 0;
+    icon=json['icon'];
+    // itemDetailes = json ['item_details'] ?? [];
+    if (json['item_details'] != null) {
+      itemDetailes = <Items>[];
+      json['item_details'].forEach((v) {
+        itemDetailes?.add(Items.fromJson(v));
+      });
+    }else{
+      itemDetailes = [];
+    }
   }
 
   Map<String, dynamic> toJson() {

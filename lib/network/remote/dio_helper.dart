@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 const String URL = 'http://zdev.z-laundry.com/public/api/v1/'; // for dev
 // const String URL = 'http://app.z-laundry.com/public/api/v1/'; // for production
@@ -77,6 +78,7 @@ class DioHelper {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
     };
+    debugPrint('req : $data');
     return await dio!.put(url ?? '', data: data, queryParameters: query);
   }
 

@@ -145,7 +145,7 @@ class Customer {
 
 class Category {
   String? categoryName;
-  List<Items>? items;
+  List<Itemss>? items;
 
   List<Men>? men;
   List<Kids>? kids;
@@ -159,7 +159,7 @@ class Category {
     items = [];
     List<dynamic> jsonItems = json.value;
     for (var item in jsonItems) {
-      items?.add(Items.fromJson(item));
+      items?.add(Itemss.fromJson(item));
     }
   }
 
@@ -175,14 +175,14 @@ class Category {
   }
 }
 
-class Items {
+class Itemss {
   String? name;
   dynamic quantity;
   dynamic price;
 
-  Items({this.name, this.quantity, this.price});
+  Itemss({this.name, this.quantity, this.price});
 
-  Items.fromJson(Map<String, dynamic> json) {
+  Itemss.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     quantity = json['quantity'];
     price = json['price'];
