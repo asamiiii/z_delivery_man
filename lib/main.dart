@@ -88,7 +88,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // TODO: impleme nt initState
     super.initState();
     FirebaseMessaging.instance
         .getInitialMessage()
