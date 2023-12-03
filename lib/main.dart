@@ -41,6 +41,7 @@ void main() async {
   // debugPrint('x : $x');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   token = CacheHelper.getData(key: 'token');
+  debugPrint('token : $token');
   isDeliveryMan = CacheHelper.getData(key: 'type');
   // token = null;
   Widget widget;

@@ -30,6 +30,7 @@ class _PriceListScreenState extends State<PriceListScreen> {
     var cubit = context.read<OrderDetailsCubit>();
     cubit.getPriceList(orderId: widget.orderId);
     cubit.selectedItems.clear();
+    cubit.totalQuantity = 0;
     super.initState();
   }
 
@@ -172,83 +173,95 @@ class _PriceListScreenState extends State<PriceListScreen> {
                   SizedBox(
                     height: 1.h,
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // orderDetailsCubit.formKey.currentState.save();
-                      // List<int> itemsInt = [];
-                      // for (var item in orderDetailsCubit.selectedItems) {
-                      //   itemsInt.add(item.id!);
-                      // }
-                      List<Map<String, dynamic>> items = [];
-                      for (var element in orderDetailsCubit.selectedItems) {
-                        items.add({
-                          'item_id': element.id,
-                          'category_item_service_id':
-                              element.categoryItemServiceId
-                        });
-                      }
-
-                      debugPrint('pref : $items');
-                      bool validForm = true;
-                      for (var element in orderDetailsCubit.selectedItems) {
-                        debugPrint('Local Id : ${element.localId}');
-                        if (element.withDimension == true) {
-                          if (element.width == '0' ||
-                              element.lenght == '0' ||
-                              element.width == '' ||
-                              element.lenght == '' ||
-                              element.width == '0.0' ||
-                              element.lenght == '0.0' ||
-                              element.width == null ||
-                              element.lenght == null) {
-                            validForm = false;
-
-                            break;
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      BlocConsumer<OrderDetailsCubit,OrderDetailsState>(
+                        
+                        listener: (context, state) {},
+                        builder: (context, state) {
+                          var cubit = OrderDetailsCubit.get(context);
+                          return Text(' اجمالي القطع: ${cubit.totalQuantity}',style: const TextStyle(fontWeight: FontWeight.bold),);
+                        }),
+                      ElevatedButton(
+                        onPressed: () {
+                          // orderDetailsCubit.formKey.currentState.save();
+                          // List<int> itemsInt = [];
+                          // for (var item in orderDetailsCubit.selectedItems) {
+                          //   itemsInt.add(item.id!);
+                          // }
+                          List<Map<String, dynamic>> items = [];
+                          for (var element in orderDetailsCubit.selectedItems) {
+                            items.add({
+                              'item_id': element.id,
+                              'category_item_service_id':
+                                  element.categoryItemServiceId
+                            });
                           }
-                        }
-                      }
-                      if (validForm == false) {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) =>
-                        //           MetersView(
-                        //               areaid: widget
-                        //                   .areaId),
-                        //     ));
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) => Container(
-                            height: MediaQuery.of(context).size.height * 0.80,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(25.0),
-                                topRight: Radius.circular(25.0),
+
+                          debugPrint('pref : $items');
+                          bool validForm = true;
+                          for (var element in orderDetailsCubit.selectedItems) {
+                            debugPrint('Local Id : ${element.localId}');
+                            if (element.withDimension == true) {
+                              if (element.width == '0' ||
+                                  element.lenght == '0' ||
+                                  element.width == '' ||
+                                  element.lenght == '' ||
+                                  element.width == '0.0' ||
+                                  element.lenght == '0.0' ||
+                                  element.width == null ||
+                                  element.lenght == null) {
+                                validForm = false;
+
+                                break;
+                              }
+                            }
+                          }
+                          if (validForm == false) {
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (context) =>
+                            //           MetersView(
+                            //               areaid: widget
+                            //                   .areaId),
+                            //     ));
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) => Container(
+                                height: MediaQuery.of(context).size.height * 0.80,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(25.0),
+                                    topRight: Radius.circular(25.0),
+                                  ),
+                                ),
+                                child:  MetersView(),
                               ),
-                            ),
-                            child:  MetersView(),
-                          ),
-                        );
-                      } else {
-                        navigateTo(
-                            context,
-                            CustomizeSpecalPreferences(
-                                items: items,
-                                selectedItems: orderDetailsCubit.selectedItems,
-                                orderId: widget.orderId));
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                        primary: primaryColor,
-                        padding: EdgeInsets.symmetric(horizontal: 15.w)),
-                    child: const Text(
-                      'متابعة',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
+                            );
+                          } else {
+                            navigateTo(
+                                context,
+                                CustomizeSpecalPreferences(
+                                    items: items,
+                                    selectedItems: orderDetailsCubit.selectedItems,
+                                    orderId: widget.orderId));
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            primary: primaryColor,
+                            padding: EdgeInsets.symmetric(horizontal: 15.w)),
+                        child: const Text(
+                          'متابعة',
+                          style:
+                              TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),

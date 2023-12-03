@@ -47,7 +47,8 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     return DioHelper.getData(
             url: "$GET_PROVIDER_ORDER_DETAILS/$orderId", token: token)
         .then((value) {
-          debugPrint('getProviderOrderDetails : ${value.data}');
+          print('order id : $orderId');
+          print('getProviderOrderDetails : ${value.data['items']}');
       providerOrderDetails = ProviderOrderDetails.fromJson(value.data);
       checkedItemsNumber();
       emit(OrderProviderDetailsSuccessState());
@@ -341,6 +342,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   }
 
   List<pricelist.Items> selectedItems = [];
+  int? totalQuantity=0;
 
   SuccessModel? successModel;
   void postAssociateItems(
@@ -507,6 +509,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
       selectedItems.add(item);
     }
     item.selectedQuantity = item.selectedQuantity! + 1;
+    // getTotalQuantity();
     emit(NotifyListeners());
   }
 
@@ -517,8 +520,18 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     if (item.selectedQuantity == 0) {
       selectedItems.remove(item);
     }
+    // getTotalQuantity();
     emit(NotifyListeners());
   }
+  getTotalQuantity() {
+    totalQuantity = 0;
+  for (var element in selectedItems) {
+    totalQuantity = totalQuantity!+element.selectedQuantity!;
+   }
+   emit(NotifyListeners());
+}
+
+  
 
   List<pricelist.Items?>? itemList = [];
   getItemList() {

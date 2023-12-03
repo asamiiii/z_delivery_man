@@ -34,7 +34,7 @@ class LoginCubit extends Cubit<LoginStates> {
     }).then((value) async {
       
       loginModel = LoginModel.fromJson(value.data);
-      debugPrint(' login resp : $value');
+      debugPrint(' login resp : ${value.data}');
       isDeliveyMan = loginModel?.type == deliveryMan;
       
       debugPrint('user token : ${loginModel?.token}');

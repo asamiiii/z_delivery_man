@@ -185,7 +185,7 @@ class Items {
     category = json['category'];
     service = json['service'];
     preference = json['preference'];
-    quantity = json['quantity'];
+    quantity = json['quantity'] ?? 0;
     length = json ['length'];
     width = json ['width'];
     totalMeters = json['total_meters'] ;

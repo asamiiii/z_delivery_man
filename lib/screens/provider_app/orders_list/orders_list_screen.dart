@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/screens/home/home_screen.dart';
+import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
 
 import '../../../models/order_per_status_provider.dart';
 import '../../../shared/widgets/components.dart';
@@ -86,28 +87,39 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
               ),
               backgroundColor: primaryColor,
             ),
-            body: state is OrdersListLoading ? const Center(child: CircularProgressIndicator()):ScrollConfiguration(
-              behavior: const ScrollBehavior(),
-              child: GlowingOverscrollIndicator(
-                showLeading: false,
-                color: primaryColor,
-                axisDirection: AxisDirection.down,
-                child: cubit.orders!.isNotEmpty ? ListView.builder(
-                    controller: _controller,
-                    shrinkWrap: true,
-                    itemCount: cubit.orders?.length,
-                    itemBuilder: (context, index) => OrdersSection(
-                        order: cubit.orders![index],
-                        state: state,
-                        cubit: cubit)):const Center(child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('No Oredrs',style: TextStyle(fontSize: 30),),
-                            Icon(Icons.breakfast_dining,size: 33,)
-                          ],
-                        )),
-              ),
-            ),
+            body: state is OrdersListLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ScrollConfiguration(
+                    behavior: const ScrollBehavior(),
+                    child: GlowingOverscrollIndicator(
+                      showLeading: false,
+                      color: primaryColor,
+                      axisDirection: AxisDirection.down,
+                      child: cubit.orders!.isNotEmpty
+                          ? ListView.builder(
+                              controller: _controller,
+                              shrinkWrap: true,
+                              itemCount: cubit.orders?.length,
+                              itemBuilder: (context, index) => OrdersSection(
+                                  order: cubit.orders![index],
+                                  state: state,
+                                  cubit: cubit))
+                          : const Center(
+                              child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'No Oredrs',
+                                  style: TextStyle(fontSize: 30),
+                                ),
+                                Icon(
+                                  Icons.breakfast_dining,
+                                  size: 33,
+                                )
+                              ],
+                            )),
+                    ),
+                  ),
           ),
         );
       },
@@ -146,19 +158,16 @@ class _OrdersSectionState extends State<OrdersSection> {
     return InkWell(
       onTap: () {
         debugPrint('the current :${widget.order?.currentStatus} ');
-        if(widget.order?.currentStatus =='تم اسنادة الي المغسلة'||
-        widget.order?.currentStatus =='في الطريق الي المغسلة'
-        ){
-
-        }else{
+        if (widget.order?.currentStatus == 'تم اسنادة الي المغسلة' ||
+            widget.order?.currentStatus == 'في الطريق الي المغسلة') {
+        } else {
           navigateTo(
-            context,
-            OrderDetailsScreen(
-              fromNotification: false,
-              orderId: widget.order?.id,
-            ));
+              context,
+              OrderDetailsScreen(
+                fromNotification: false,
+                orderId: widget.order?.id,
+              ));
         }
-        
       },
       child: Stack(
         children: [
@@ -211,20 +220,22 @@ class _OrdersSectionState extends State<OrdersSection> {
                       Text('${widget.order?.deliver?.to}')
                     ],
                   ),
-                 widget.order?.pickDeliveryMan!=null? Row(
-                    children: [
-                      const Text('مندوب الاستلام : '),
-                      Text('${widget.order?.pickDeliveryMan}'),
-                      
-                    ],
-                  ):const SizedBox(),
-                  widget.order?.deliverDeliveryMan!=null? Row(
-                    children: [
-                      const Text('مندوب التوصيل : '),
-                      Text('${widget.order?.deliverDeliveryMan}'),
-                      
-                    ],
-                  ):const SizedBox(),
+                  widget.order?.pickDeliveryMan != null
+                      ? Row(
+                          children: [
+                            const Text('مندوب الاستلام : '),
+                            Text('${widget.order?.pickDeliveryMan}'),
+                          ],
+                        )
+                      : const SizedBox(),
+                  widget.order?.deliverDeliveryMan != null
+                      ? Row(
+                          children: [
+                            const Text('مندوب التوصيل : '),
+                            Text('${widget.order?.deliverDeliveryMan}'),
+                          ],
+                        )
+                      : const SizedBox(),
                   ConditionalBuilder(
                     condition: widget.state is! OrderNextStatusLoadingState,
                     fallback: (context) => const CupertinoActivityIndicator(),
@@ -275,7 +286,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                                               child: const Text('نعم'),
                                               onPressed: () {
                                                 Navigator.of(context).pop();
-                                                  widget.cubit?.goToNextStatus(
+                                                widget.cubit?.goToNextStatus(
                                                     isDeliveryMan: false,
                                                     orderId: widget.order?.id,
                                                     itemCount: int.tryParse(
@@ -283,13 +294,12 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                             .text),
                                                     comment:
                                                         commentController.text);
-                                                        debugPrint('goToNextStatus');
+                                                debugPrint('goToNextStatus');
                                                 // Future.delayed(const Duration(seconds: 2), () async{
-                                                  // print('delayed execution');
-          //  Navigator.push(contextt, MaterialPageRoute(builder: (contextt) => const HomeScreen(),));
-      // });
-                                               
-                                                
+                                                // print('delayed execution');
+                                                //  Navigator.push(contextt, MaterialPageRoute(builder: (contextt) => const HomeScreen(),));
+                                                // });
+
                                                 // widget.cubit.deleteCustomer(id: widget.item.id);
                                                 // if (BlocProvider.of<OrderDetailsCubit>(
                                                 //                 context,
@@ -374,6 +384,229 @@ class _OrdersSectionState extends State<OrdersSection> {
               ),
             ),
           ),
+          Positioned(
+              top: 20,
+              // bottom: 10,
+              left: 9,
+              child: ElevatedButton(
+                  onPressed: () {
+                    debugPrint('pref : ${widget.order?.prefrences}');
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Container(
+                          padding: const EdgeInsets.all(20),
+                          height: MediaQuery.of(context).size.height * 0.50,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25.0),
+                              topRight: Radius.circular(25.0),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                'تفضيلات الأوردر',
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              widget.order?.prefrences?.isEmpty ?? false
+                                  ? Center(
+                                      child: const Text(
+                                      'لا يوجد تفضيلات',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 30),
+                                    ))
+                                  : ListView.separated(
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        return Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                            ImageAsIcon(
+                                              image: widget.order
+                                                  ?.prefrences?[index].icon,
+                                              height: 29.4,
+                                              width: 32.4,
+                                              fromNetwork: true,
+                                              orignalColor: true,
+                                            ),
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${widget.order?.prefrences?[index].name}",
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              '${widget.order?.prefrences?[index].preference}',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          ],
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                      itemCount:
+                                          widget.order!.prefrences?.length ?? 0)
+                            ],
+                          )),
+                    );
+                  },
+                  child: const Row(
+                    children: [Text('التفضيلات'), Icon(Icons.arrow_drop_down)],
+                  ))),
+          Positioned(
+              // top: 20,
+              bottom: 20,
+              left: 9,
+              child: ElevatedButton(
+                  onPressed: () {
+                    debugPrint(
+                        'customer comment : ${widget.order?.comments?.customerComment}');
+                    debugPrint(
+                        'pick comment : ${widget.order?.comments?.pickComment}');
+                    debugPrint(
+                        'requests comment : ${widget.order?.comments?.requests}');
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Container(
+                          height: MediaQuery.of(context).size.height * 0.50,
+                          padding: const EdgeInsets.all(15),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25.0),
+                              topRight: Radius.circular(25.0),
+                            ),
+                          ),
+                          child: Column(children: [
+                            const Text(
+                              'تعليقات الأوردر',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                // const Expanded(child: SizedBox()),
+                                Text(
+                                  '${widget.order?.comments?.customerComment}',
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                                const SizedBox(width: 20,),
+                                const Text(
+                                  'تعليق العميل',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                // const Expanded(child: SizedBox()),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '${widget.order?.comments?.pickComment}',
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                                const SizedBox(width: 20,),
+                                const Text(
+                                  'تعليق الاستلام',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text(
+                              'الطلبات',
+                              style: TextStyle(fontSize: 15 ,),
+                              // textAlign: TextAlign.end,
+                            ),
+                            const Divider(
+                                  height: 1,
+                                  color: Colors.amber,
+                                  indent: 50,
+                                  endIndent: 50,
+                                ),
+                                const SizedBox(height: 10,),
+                                widget.order?.comments?.requests != null ?
+                            ListView.separated(
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) => Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.end,
+                                      children: [
+                                        
+                                        Text(
+                                          '${widget.order?.comments?.requests?[index].comment}',
+                                          style: const TextStyle(fontSize: 15),
+                                        ),
+                                        // const SizedBox(width: 20,),
+                                        widget.order?.comments?.requests?[index]
+                                                    .type ==
+                                                'Only'
+                                            ? const Text(
+                                                'الآوردر الحالي',
+                                                style: TextStyle(
+                                                    fontSize: 15),
+                                              )
+                                            : const Text(
+                                                'جميع لاوردرات',
+                                                style: TextStyle(
+                                                    fontSize: 15),
+                                              ),
+                                      ],
+                                    ),
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(height: 10),
+                                itemCount:
+                                    widget.order?.comments?.requests?.length ??
+                                        0):const Text('لا يوجد بيانات متوفره حاليا !')
+                          ])),
+                    );
+                  },
+                  child: const Row(
+                    children: [
+                      SizedBox(child: Text('التعليقات')),
+                      Icon(Icons.arrow_drop_down)
+                    ],
+                  ))),
         ],
       ),
     );

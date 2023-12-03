@@ -41,6 +41,7 @@ class OrderslistCubit extends Cubit<OrderslistState> {
         url: Get_OrdersPreStatus,
         token: token,
         query: {"status": status, "page": pageIndex}).then((value) {
+          debugPrint('orders list : ${value.data}');
       _orderPerStatusModel = OrderPerStatusProvider.fromJson(value.data);
       if (_orders!.isNotEmpty) {
         _orderlastPage = _orderPerStatusModel?.lastPage;

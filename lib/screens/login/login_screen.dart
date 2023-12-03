@@ -159,6 +159,7 @@ class LoginScreen extends StatelessWidget {
                                 Container(
                                   margin: EdgeInsets.symmetric(horizontal: 1.h),
                                   child: defaultFormField(
+                                    
                                     controller: cubit.passwordController,
                                     type: TextInputType.visiblePassword,
                                     isPassword: cubit.isPassword,

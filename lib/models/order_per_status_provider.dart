@@ -1,3 +1,5 @@
+import 'package:z_delivery_man/models/provider_order_details.dart';
+
 class OrderPerStatusProvider {
   int? lastPage;
   List<Orders>? orders;
@@ -33,6 +35,9 @@ class Orders {
   String? nextStatus;
   String? pickDeliveryMan;
   String? deliverDeliveryMan;
+  List<Items>? prefrences;
+  Comments? comments;
+
 
   Orders(
       {this.id,
@@ -42,7 +47,9 @@ class Orders {
       this.coreNextStatus,
       this.nextStatus,
       this.deliverDeliveryMan,
-      this.pickDeliveryMan
+      this.pickDeliveryMan,
+      this.prefrences,
+      this.comments
       });
 
   Orders.fromJson(Map<String, dynamic> json) {
@@ -54,6 +61,16 @@ class Orders {
     nextStatus = json['nextStatus'];
     deliverDeliveryMan = json['pick_delivery_man'];
     pickDeliveryMan = json['deliver_delivery_man'];
+   
+    if (json['items'] != null) {
+      prefrences = <Items>[];
+      json['items'].forEach((v) {
+        prefrences?.add(Items.fromJson(v));
+      });
+    }else{
+      prefrences = [];
+    }
+     comments =json['comments'] != null ? Comments.fromJson(json['comments']) : null;
   }
 
   get customer => null;
@@ -93,5 +110,36 @@ class Pick {
     data['from'] = from;
     data['to'] = to;
     return data;
+  }
+}
+
+class Comments {
+  String? customerComment;
+  String? pickComment;
+  List<Requests>? requests;
+
+  Comments({this.customerComment, this.pickComment, this.requests});
+
+  Comments.fromJson(Map<String, dynamic> json) {
+    customerComment = json['customer_comment']??'لا يوجد تعليق متاح';
+    pickComment = json['pick_comment']??'لا يوجد تعليق متاح';
+    if (json['requests'] != null) {
+      requests = <Requests>[];
+      json['requests'].forEach((v) {
+        requests!.add(Requests.fromJson(v));
+      });
+    }
+  }
+}
+
+class Requests {
+  String? type;
+  String? comment;
+
+  Requests({this.type, this.comment});
+
+  Requests.fromJson(Map<String, dynamic> json) {
+    type = json['type']??'لا يوجد بيانات متوفره حاليا';
+    comment = json['comment']??'لا يوجد بيانات متوفره حاليا';
   }
 }

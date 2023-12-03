@@ -39,6 +39,7 @@ class PriceListSystemOrder extends StatefulWidget {
 }
 
 class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
+  int? totaQuntity = 0;
   @override
   void initState() {
     super.initState();
@@ -231,17 +232,24 @@ class orderItemSystem extends StatefulWidget {
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _orderItemSystemState createState() => _orderItemSystemState();
 }
 
+// ignore: camel_case_types
 class _orderItemSystemState extends State<orderItemSystem> {
-  
-
+  // int? totalQuantity = 0;
   @override
   Widget build(BuildContext context) {
-    TextEditingController hightController = TextEditingController(text:widget.item?.lenght.toString()=='0'?'':widget.item?.lenght.toString());
-  TextEditingController widthController = TextEditingController(text:widget.item?.width.toString()=='0'?'':widget.item?.width.toString());
-  widthController.selection = TextSelection.fromPosition(
+    TextEditingController hightController = TextEditingController(
+        text: widget.item?.lenght.toString() == '0'
+            ? ''
+            : widget.item?.lenght.toString());
+    TextEditingController widthController = TextEditingController(
+        text: widget.item?.width.toString() == '0'
+            ? ''
+            : widget.item?.width.toString());
+    widthController.selection = TextSelection.fromPosition(
         TextPosition(offset: widthController.text.length));
     hightController.selection = TextSelection.fromPosition(
         TextPosition(offset: hightController.text.length));
@@ -253,6 +261,7 @@ class _orderItemSystemState extends State<orderItemSystem> {
                   borderRadius: BorderRadius.circular(32),
                   onTap: () async {
                     decreaseQuantity(item: widget.item!, cubit: widget.cubit);
+                    widget.cubit?.getTotalQuantity();
                     setState(() {});
                   },
                   child: Container(
@@ -287,7 +296,8 @@ class _orderItemSystemState extends State<orderItemSystem> {
               InkWell(
                   borderRadius: BorderRadius.circular(32),
                   onTap: () async {
-                    increaseQuantity(item: widget.item!,cubit: widget.cubit);
+                    increaseQuantity(item: widget.item!, cubit: widget.cubit);
+                    widget.cubit?.getTotalQuantity();
                     setState(() {});
                   },
                   child: Container(
@@ -390,7 +400,6 @@ class _orderItemSystemState extends State<orderItemSystem> {
   }
 }
 
-
 //!-------------------------------Functions-------------------
 
 decreaseQuantity({required Items item, required OrderDetailsCubit? cubit}) {
@@ -414,69 +423,68 @@ decreaseQuantity({required Items item, required OrderDetailsCubit? cubit}) {
         item.width = null;
       }
       item.selectedQuantity = (item.selectedQuantity)! - 1;
-      Items? itemm =
-          cubit?.selectedItems?.firstWhere((element) => element.localId != null);
+      Items? itemm = cubit?.selectedItems
+          ?.firstWhere((element) => element.localId != null);
       cubit?.selectedItems?.remove(itemm);
     }
   }
   debugPrint('widget.item.localId : ${item.localId}');
   debugPrint('selectedItems : ${cubit?.selectedItems}');
 }
+int? totalQuantity = 0;
 
-increaseQuantity({required Items item, required OrderDetailsCubit? cubit}){
+increaseQuantity({required Items item, required OrderDetailsCubit? cubit}) {
   int localId = 0;
-                    debugPrint('Add');
-                    Random random = Random();
-                    localId = random.nextInt(10000000);
-                    if (item.withDimension == true) {
-                      if (item.selectedQuantity! == 0) {
-                        debugPrint(
-                            'her selectedQuantity : ${item.selectedQuantity!}');
-                        cubit?.selectedItems.add(Items(
-                          categoryItemServiceId:
-                              item.categoryItemServiceId,
-                          icon: item.icon,
-                          id: item.id,
-                          lenght: '0',
-                          width: '0',
-                          localId: 0,
-                          name: item.name,
-                          price: item.price,
-                          selectedQuantity: 1,
-                          txtController: item.txtController,
-                          withDimension: item.withDimension,
-                        ));
-                      } else {
-                        cubit?.selectedItems?.add(Items(
-                          categoryItemServiceId:
-                              item.categoryItemServiceId,
-                          icon: item.icon,
-                          id: item.id,
-                          lenght: '0',
-                          width: '0',
-                          localId: localId,
-                          name: item.name,
-                          price: item.price,
-                          selectedQuantity: 1,
-                          txtController: item.txtController,
-                          withDimension: item.withDimension,
-                        ));
-                      }
-                      item.selectedQuantity =
-                          (item.selectedQuantity)! + 1;
-                    } else {
-                      if (item.selectedQuantity == 0) {
-                        debugPrint(
-                            'her selectedQuantity : ${item.selectedQuantity!}');
-                        cubit?.selectedItems?.add(item);
-                        item.selectedQuantity =
-                            (item.selectedQuantity)! + 1;
-                      } else {
-                        item.selectedQuantity =
-                            (item.selectedQuantity)! + 1;
-                      }
-                    }
-                    debugPrint('widget.item.localId : ${item.localId}');
-                    debugPrint(
-                        'selectedItems : ${cubit?.selectedItems}');
+  debugPrint('Add');
+  Random random = Random();
+  localId = random.nextInt(10000000);
+  if (item.withDimension == true) {
+    if (item.selectedQuantity! == 0) {
+      debugPrint('her selectedQuantity : ${item.selectedQuantity!}');
+      cubit?.selectedItems.add(Items(
+        categoryItemServiceId: item.categoryItemServiceId,
+        icon: item.icon,
+        id: item.id,
+        lenght: '0',
+        width: '0',
+        localId: 0,
+        name: item.name,
+        price: item.price,
+        selectedQuantity: 1,
+        txtController: item.txtController,
+        withDimension: item.withDimension,
+      ));
+    } else {
+      cubit?.selectedItems?.add(Items(
+        categoryItemServiceId: item.categoryItemServiceId,
+        icon: item.icon,
+        id: item.id,
+        lenght: '0',
+        width: '0',
+        localId: localId,
+        name: item.name,
+        price: item.price,
+        selectedQuantity: 1,
+        txtController: item.txtController,
+        withDimension: item.withDimension,
+      ));
+    }
+    item.selectedQuantity = (item.selectedQuantity)! + 1;
+  } else {
+    if (item.selectedQuantity == 0) {
+      debugPrint('her selectedQuantity : ${item.selectedQuantity!}');
+      cubit?.selectedItems?.add(item);
+      item.selectedQuantity = (item.selectedQuantity)! + 1;
+    } else {
+      item.selectedQuantity = (item.selectedQuantity)! + 1;
+    }
+  }
+  debugPrint('widget.item.localId : ${item.localId}');
+  debugPrint('selectedItems : ${cubit?.selectedItems}');
+}
+
+getTotalQuantity({required OrderDetailsCubit? cubit}) {
+  cubit?.selectedItems.forEach((element) {
+    totalQuantity = totalQuantity!+element.selectedQuantity!;
+   });
 }
