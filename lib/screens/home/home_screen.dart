@@ -5,8 +5,6 @@ import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
 import 'package:z_delivery_man/screens/home/all.dart';
 import 'package:z_delivery_man/screens/home/today.dart';
-
-import '../../models/index_model.dart';
 import '../../models/time_slots_model.dart';
 import '../../network/local/cache_helper.dart';
 import '../../shared/widgets/components.dart';
@@ -16,7 +14,6 @@ import '../../shared/widgets/with_safe_area.dart';
 import '../../styles/color.dart';
 import '../drawer/drawer.dart';
 import '../pickup_details/pickup_details_screen.dart';
-import '../provider_app/orders_list/orders_list_screen.dart';
 import 'cubit.dart';
 import 'home_sates.dart';
 

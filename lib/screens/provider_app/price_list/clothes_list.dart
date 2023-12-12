@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:z_delivery_man/models/price_list_model.dart';
 
 import '../../../shared/widgets/price_list_system_order.dart';
 import '../../order_details/cubit.dart';
@@ -8,7 +9,8 @@ import '../../order_details/order_details_state.dart';
 class ClothesListWithPrice extends StatefulWidget {
   final int? index;
   final bool? isSearch;
-  const ClothesListWithPrice({Key? key, this.index, this.isSearch})
+  final List<Items>? itemsInOrder;
+   ClothesListWithPrice({Key? key, this.index, this.isSearch,this.itemsInOrder})
       : super(key: key);
 
   @override

@@ -39,9 +39,36 @@ class PriceListSystemOrder extends StatefulWidget {
 }
 
 class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
-  int? totaQuntity = 0;
+  // int? initQuantity = 0;
   @override
   void initState() {
+    // var cubit = context.read<OrderDetailsCubit>();
+    // if (cubit.orderDetailsModel?.services != null) {
+    //   for (int i = 0; i < cubit.orderDetailsModel!.services!.length; i++) {
+    //     // var priceListItem = cubit.priceList[i];
+    //     if (cubit.orderDetailsModel!.services![i].categories != null) {
+    //       for (int j = 0;
+    //           j < cubit.orderDetailsModel!.services![i].categories!.length;
+    //           j++) {
+    //         if (cubit.orderDetailsModel!.services![i].categories![j].items !=
+    //             null) {
+    //           for (int k = 0;
+    //               k <
+    //                   cubit.orderDetailsModel!.services![i].categories![j]
+    //                       .items!.length;
+    //               k++) {
+    //             // if(cubit.orderDetailsModel?.services?[i].categories?[j].items?[k].name==widget.item?.name){
+    //             //  cubit.orderDetailsModel?.services?[i].categories?[j].items?[k].name;
+    //             //  debugPrint('initQuantity : ${cubit.orderDetailsModel?.services?[i].categories?[j].items?[k].name}');
+    //             //  break;
+    //             // }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+
     super.initState();
     // Provider.of<CartsViewModel>(context, listen: false).getCartList();
     // Provider.of<CartsViewModel>(context, listen: false).getShoppingCartsData();
@@ -116,12 +143,17 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
 
 class OrderItemSystem extends StatefulWidget {
   const OrderItemSystem(
-      {Key? key, this.item, this.index, this.cubit, this.isMetersView = false})
+      {Key? key,
+      this.item,
+      this.index,
+      this.cubit,
+      this.isMetersView = false,})
       : super(key: key);
   final Items? item;
   final int? index;
   final bool isMetersView;
   final OrderDetailsCubit? cubit;
+  // final int? initQuantity;
 
   @override
   State<OrderItemSystem> createState() => _OrderItemSystemState();
@@ -134,8 +166,6 @@ class _OrderItemSystemState extends State<OrderItemSystem> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-            // height: 32,
-            // width: 50,
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(16),
@@ -228,7 +258,11 @@ class orderItemSystem extends StatefulWidget {
   OrderDetailsCubit? cubit;
   bool isMetersView;
   orderItemSystem(
-      {Key? key, this.index, this.item, this.cubit, this.isMetersView = false})
+      {Key? key,
+      this.index,
+      this.item,
+      this.cubit,
+      this.isMetersView = false,})
       : super(key: key);
 
   @override
@@ -257,6 +291,10 @@ class _orderItemSystemState extends State<orderItemSystem> {
         ? Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              // widget.initQua != null? CircleAvatar():SizedBox(),
+              SizedBox(
+                width: 10,
+              ),
               InkWell(
                   borderRadius: BorderRadius.circular(32),
                   onTap: () async {
@@ -431,6 +469,7 @@ decreaseQuantity({required Items item, required OrderDetailsCubit? cubit}) {
   debugPrint('widget.item.localId : ${item.localId}');
   debugPrint('selectedItems : ${cubit?.selectedItems}');
 }
+
 int? totalQuantity = 0;
 
 increaseQuantity({required Items item, required OrderDetailsCubit? cubit}) {
@@ -485,6 +524,6 @@ increaseQuantity({required Items item, required OrderDetailsCubit? cubit}) {
 
 getTotalQuantity({required OrderDetailsCubit? cubit}) {
   cubit?.selectedItems.forEach((element) {
-    totalQuantity = totalQuantity!+element.selectedQuantity!;
-   });
+    totalQuantity = totalQuantity! + element.selectedQuantity!;
+  });
 }

@@ -20,16 +20,16 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
 
   static OrderDetailsCubit get(context) => BlocProvider.of(context);
 
-   OrderDetailsModel? orderDetailsModel;
+  OrderDetailsModel? orderDetailsModel;
 
   Future<void> getOrderDetails({required int? orderId}) {
     emit(OrderDetailsLoadingState());
 
     return DioHelper.getData(url: "$GET_ORDER_DETAILS/$orderId", token: token)
         .then((value) {
-      debugPrint(value.data);
+      // debugPrint(value.data);
       orderDetailsModel = OrderDetailsModel.fromJson(value.data);
-      debugPrint("$orderDetailsModel  order datails model");
+      // debugPrint("$orderDetailsModel  order datails model");
 
       emit(OrderDetailsSuccessState());
     }).catchError((e) {
@@ -38,17 +38,17 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     });
   }
 
-  
+  List<InitQuantityModel> initQuantityInPriceList = [];
 
   ProviderOrderDetails? providerOrderDetails;
   Future<void> getProviderOrderDetails({required int? orderId}) {
     emit(OrderProviderDetailsLoadingState());
-
+   initQuantityInPriceList=[];
     return DioHelper.getData(
             url: "$GET_PROVIDER_ORDER_DETAILS/$orderId", token: token)
         .then((value) {
-          print('order id : $orderId');
-          print('getProviderOrderDetails : ${value.data['items']}');
+      // print('order id : $orderId');
+      print('getProviderOrderDetails : ${value.data}');
       providerOrderDetails = ProviderOrderDetails.fromJson(value.data);
       checkedItemsNumber();
       emit(OrderProviderDetailsSuccessState());
@@ -58,6 +58,10 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
         }
         emit(OrderProviderDetailsSuccessState());
       }
+      for (var i in providerOrderDetails!.items!) {
+        initQuantityInPriceList.add(InitQuantityModel(initQuantity: i.quantity,catItemServiceId: i.id));
+      }
+      debugPrint('initQuantityInPriceList : ${initQuantityInPriceList.map((e) => e.catItemServiceId)}');
     }).catchError((e) {
       debugPrint('details filed $e');
       emit(OrderProviderDetailsFailedState());
@@ -100,21 +104,18 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     });
   }
 
-  
-
-  
-
   List<pricelist.PriceList> priceList = [];
-  void getPriceList({
+  Future<void> getPriceList({
     required int? orderId,
-  }) {
+  }) async {
     emit(PriceListLoading());
     DioHelper.getData(
             url: "$Get_STATUS_PROVIDER/$orderId/priceList", token: token)
         .then((value) {
-          debugPrint('price list : $value');
+      debugPrint('price list : $value');
       priceList = pricelist.priceListFromJson(value.data);
-      debugPrint('PriceList : ${priceList[0].categories![0].items![0]?.withDimension}');
+      debugPrint(
+          'PriceList : ${priceList[0].categories![0].items![0]?.withDimension}');
       setInitServicesAndCat(priceList.first.id);
       getItemList();
       emit(PriceListSuccess());
@@ -151,15 +152,15 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   PreferenceModel? preferencesModel;
   Future<void> getPreferences({
     required List<Map<String, dynamic>> data,
-  }) async{
+  }) async {
     _listData.clear();
     emit(PreferencesLoading());
     await DioHelper.postData(
         url: Get_PREFERENCSE,
         token: token,
         data: {"items": data}).then((value) {
-          debugPrint('pref resp : ${value.data}');
-          List responseData = value.data;
+      debugPrint('pref resp : ${value.data}');
+      List responseData = value.data;
       // preferencesModel = PreferenceModel.fromJson(value.data);
       debugPrint('getPreferences');
       _listData = responseData.map((e) => PreferenceModel.fromJson(e)).toList();
@@ -173,7 +174,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   List<PreferenceModel> _listData = [];
   List<PreferenceModel> get listData => _listData;
 
-  List<Map<String, int>>? _prefereceList = [] ;
+  List<Map<String, int>>? _prefereceList = [];
   List<Map<String, int>>? get prefereceList => _prefereceList;
 
   // removePrefereceList() {
@@ -187,7 +188,6 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     required int catSerItemId,
     bool all = false,
   }) {
-    
     debugPrint('_prefereceList');
     int indexLocal = _prefereceList!.indexWhere((item) =>
         item['item_id'] == itemId &&
@@ -253,7 +253,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
       emit(NotifyListeners());
     }
     debugPrint('Pref List : $prefereceList');
-    }
+  }
 
   // void setItemIsEnabled({
   //   required Item? preferenceModel,
@@ -342,7 +342,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   }
 
   List<pricelist.Items> selectedItems = [];
-  int? totalQuantity=0;
+  int? totalQuantity = 0;
 
   SuccessModel? successModel;
   void postAssociateItems(
@@ -352,7 +352,10 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     emit(AssociateItemsPostLoading());
     debugPrint('$itemList');
     debugPrint('$prefernces');
-    debugPrint('associateItems : ${{"item_list": itemList, "preferences": prefernces}}');
+    debugPrint('associateItems : ${{
+      "item_list": itemList,
+      "preferences": prefernces
+    }}');
     DioHelper.postData(
             url: "$POST_ASSOCIATE_ITEMS/$orderId/associateItems",
             data: {"item_list": itemList, "preferences": _prefereceList},
@@ -368,22 +371,30 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   }
 
   Future<void> updateAssociateItems(
-      {required int? orderId, required int? itemId, required int? quantity,Map<String, dynamic>? data,bool? meter=false}) {
+      {required int? orderId,
+      required int? itemId,
+      required int? quantity,
+      Map<String, dynamic>? data,
+      bool? meter = false}) {
     emit(AssociateItemsUpdateLoading());
     return DioHelper.updateData(
             url: "$POST_ASSOCIATE_ITEMS/$orderId/items/$itemId",
-            data: {'quantity': quantity,'width':meter==true ?data!['width']:null,'length':meter==true? data!['length']:null,'item_details':meter==true? data!['item_details']:null},
+            data: {
+              'quantity': quantity,
+              'width': meter == true ? data!['width'] : null,
+              'length': meter == true ? data!['length'] : null,
+              'item_details': meter == true ? data!['item_details'] : null
+            },
             token: token)
         .then((value) {
-          try{
-                debugPrint('updateAssociateItems: ${value.data}');
-      successModel = SuccessModel.fromJson(value.data);
-      emit(AssociateItemsUpdateSuccess(successModel: successModel));
-          }catch(e){
-          debugPrint('error$e');
-           emit(AssociateItemsUpdateFailed());
-          }
-       
+      try {
+        debugPrint('updateAssociateItems: ${value.data}');
+        successModel = SuccessModel.fromJson(value.data);
+        emit(AssociateItemsUpdateSuccess(successModel: successModel));
+      } catch (e) {
+        debugPrint('error$e');
+        emit(AssociateItemsUpdateFailed());
+      }
     }).catchError((e) {
       debugPrint('$e');
       emit(AssociateItemsUpdateFailed());
@@ -523,15 +534,14 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     // getTotalQuantity();
     emit(NotifyListeners());
   }
+
   getTotalQuantity() {
     totalQuantity = 0;
-  for (var element in selectedItems) {
-    totalQuantity = totalQuantity!+element.selectedQuantity!;
-   }
-   emit(NotifyListeners());
-}
-
-  
+    for (var element in selectedItems) {
+      totalQuantity = totalQuantity! + element.selectedQuantity!;
+    }
+    emit(NotifyListeners());
+  }
 
   List<pricelist.Items?>? itemList = [];
   getItemList() {
@@ -564,4 +574,11 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   }
 
   var formKey = GlobalKey<FormState>();
+}
+
+class InitQuantityModel{
+int? catItemServiceId;
+int? initQuantity;
+
+InitQuantityModel({this.catItemServiceId,this.initQuantity});
 }

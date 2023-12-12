@@ -78,6 +78,7 @@ class Items {
   String? icon;
   int? categoryItemServiceId;
   int? selectedQuantity = 0;
+  int? selectedQuantityFromOrder;
   bool? withDimension ;
   dynamic lenght;
   dynamic width;
@@ -92,6 +93,7 @@ class Items {
       this.categoryItemServiceId,
       this.txtController,
       this.selectedQuantity,
+      this.selectedQuantityFromOrder,
       this.withDimension,
       this.localId,
       this.lenght,

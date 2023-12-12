@@ -4,6 +4,8 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
+import 'package:z_delivery_man/models/order_per_status_provider.dart';
+import 'package:z_delivery_man/models/provider_order_details.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/meters_view.dart';
 
 import '../../../shared/widgets/components.dart';
@@ -14,8 +16,10 @@ import '../prefernces/customize_special_prefernces.dart';
 import 'clothes_list.dart';
 import 'clothes_type_list.dart';
 
+// ignore: must_be_immutable
 class PriceListScreen extends StatefulWidget {
-  const PriceListScreen({Key? key, this.orderId}) : super(key: key);
+  PriceListScreen({Key? key, this.orderId, this.orderItems}) : super(key: key);
+  List<Items>? orderItems = [];
   final int? orderId;
 
   @override
@@ -28,9 +32,16 @@ class _PriceListScreenState extends State<PriceListScreen> {
   @override
   void initState() {
     var cubit = context.read<OrderDetailsCubit>();
-    cubit.getPriceList(orderId: widget.orderId);
-    cubit.selectedItems.clear();
+    // WidgetsBinding.instance
+    //     .addPostFrameCallback((_) async{
+             cubit.getPriceList(orderId: widget.orderId);
+           cubit.selectedItems.clear();
     cubit.totalQuantity = 0;
+    // cubit.priceList[0].categories?[0].items;
+    
+        // });
+    
+    
     super.initState();
   }
 
@@ -51,27 +62,30 @@ class _PriceListScreenState extends State<PriceListScreen> {
             backgroundColor: primaryColor,
             title: Text('كود الاوردر: ${widget.orderId}'),
             centerTitle: true,
-            actions: [ElevatedButton(
-                style:ButtonStyle(backgroundColor:MaterialStateProperty.all(primaryColor) ) ,
-                onPressed: () {
-                  showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) => Container(
-                            height: MediaQuery.of(context).size.height * 0.80,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(25.0),
-                                topRight: Radius.circular(25.0),
-                              ),
-                            ),
-                            child:  MetersView(),
+            actions: [
+              ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(primaryColor)),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Container(
+                        height: MediaQuery.of(context).size.height * 0.80,
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25.0),
+                            topRight: Radius.circular(25.0),
                           ),
-                        );
-                },
-                child: const Text('تعديل الامتار'))],
+                        ),
+                        child: MetersView(),
+                      ),
+                    );
+                  },
+                  child: const Text('تعديل الامتار'))
+            ],
           ),
           body: Directionality(
             textDirection: TextDirection.rtl,
@@ -95,7 +109,6 @@ class _PriceListScreenState extends State<PriceListScreen> {
                       ),
                       builder: (context) => Column(
                         children: [
-                          
                           Expanded(
                             child: ListView.separated(
                               shrinkWrap: true,
@@ -108,15 +121,17 @@ class _PriceListScreenState extends State<PriceListScreen> {
                                         orderDetailsCubit.priceList[index].id);
                                   },
                                   child: Container(
-                                    padding:
-                                        const EdgeInsets.symmetric(horizontal: 15),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15),
                                     decoration: BoxDecoration(
                                         color: orderDetailsCubit
                                                     .priceList[index].id ==
-                                                orderDetailsCubit.selectedServicesId
+                                                orderDetailsCubit
+                                                    .selectedServicesId
                                             ? primaryColor
                                             : Colors.grey.shade100,
-                                        borderRadius: BorderRadius.circular(25)),
+                                        borderRadius:
+                                            BorderRadius.circular(25)),
                                     child: Center(
                                       child: Text(
                                         '${orderDetailsCubit.priceList[index].name}',
@@ -132,7 +147,8 @@ class _PriceListScreenState extends State<PriceListScreen> {
                                   ),
                                 );
                               },
-                              separatorBuilder: (context, index) => const SizedBox(
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
                                 width: 10,
                               ),
                             ),
@@ -176,13 +192,16 @@ class _PriceListScreenState extends State<PriceListScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      BlocConsumer<OrderDetailsCubit,OrderDetailsState>(
-                        
-                        listener: (context, state) {},
-                        builder: (context, state) {
-                          var cubit = OrderDetailsCubit.get(context);
-                          return Text(' اجمالي القطع: ${cubit.totalQuantity}',style: const TextStyle(fontWeight: FontWeight.bold),);
-                        }),
+                      BlocConsumer<OrderDetailsCubit, OrderDetailsState>(
+                          listener: (context, state) {},
+                          builder: (context, state) {
+                            var cubit = OrderDetailsCubit.get(context);
+                            return Text(
+                              ' اجمالي القطع: ${cubit.totalQuantity}',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            );
+                          }),
                       ElevatedButton(
                         onPressed: () {
                           // orderDetailsCubit.formKey.currentState.save();
@@ -232,7 +251,8 @@ class _PriceListScreenState extends State<PriceListScreen> {
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,
                               builder: (context) => Container(
-                                height: MediaQuery.of(context).size.height * 0.80,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.80,
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.only(
@@ -240,7 +260,7 @@ class _PriceListScreenState extends State<PriceListScreen> {
                                     topRight: Radius.circular(25.0),
                                   ),
                                 ),
-                                child:  MetersView(),
+                                child: MetersView(),
                               ),
                             );
                           } else {
@@ -248,7 +268,8 @@ class _PriceListScreenState extends State<PriceListScreen> {
                                 context,
                                 CustomizeSpecalPreferences(
                                     items: items,
-                                    selectedItems: orderDetailsCubit.selectedItems,
+                                    selectedItems:
+                                        orderDetailsCubit.selectedItems,
                                     orderId: widget.orderId));
                           }
                         },
@@ -257,8 +278,8 @@ class _PriceListScreenState extends State<PriceListScreen> {
                             padding: EdgeInsets.symmetric(horizontal: 15.w)),
                         child: const Text(
                           'متابعة',
-                          style:
-                              TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                       ),
                     ],

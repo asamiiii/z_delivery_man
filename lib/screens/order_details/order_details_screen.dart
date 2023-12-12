@@ -11,13 +11,12 @@ import 'package:map_launcher/map_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:z_delivery_man/models/order_details_model.dart' as itemm;
+import 'package:z_delivery_man/models/order_mode.dart';
+import 'package:z_delivery_man/models/order_per_status_provider.dart';
 import 'package:z_delivery_man/models/price_list_model.dart' as pitem;
-import 'package:z_delivery_man/models/perferences_model.dart';
 import 'package:z_delivery_man/models/provider_order_details.dart';
-import 'package:z_delivery_man/models/provider_order_details.dart';
-import 'package:z_delivery_man/screens/order_details/functions.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/meters_view.dart';
+import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
 
 import '../../network/local/cache_helper.dart';
 import '../../shared/widgets/components.dart';
@@ -28,10 +27,12 @@ import 'cubit.dart';
 import 'order_details_state.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
-  const OrderDetailsScreen({Key? key, this.orderId, this.fromNotification})
+  const OrderDetailsScreen(
+      {Key? key, this.orderId, this.fromNotification, this.order})
       : super(key: key);
   final int? orderId;
   final bool? fromNotification;
+  final Orders? order;
 
   @override
   State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
@@ -43,11 +44,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   @override
   void initState() {
     var cubit = context.read<OrderDetailsCubit>();
-    isDeliveryMan == true
-        ? cubit.getOrderDetails(orderId: widget.orderId)
-        : cubit.getProviderOrderDetails(orderId: widget.orderId);
+
     super.initState();
     isDeliveryMan = CacheHelper.getData(key: 'type');
+        isDeliveryMan == true
+        ? cubit.getOrderDetails(orderId: widget.orderId)
+        : cubit.getProviderOrderDetails(orderId: widget.orderId);
   }
 
   @override
@@ -116,7 +118,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   IconButton(
                       onPressed: () {
                         navigateTo(context,
-                                PriceListScreen(orderId: widget.orderId))
+                                PriceListScreen(orderId: widget.orderId,))
                             .then((value) => cubit.getProviderOrderDetails(
                                 orderId: widget.orderId));
                       },
@@ -238,6 +240,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               orderId: widget.orderId!,
                               cubit: cubit,
                               state: state,
+                              order: widget.order,
                             );
                           }
                         }),
@@ -493,11 +496,11 @@ class DeliverySection extends StatelessWidget {
               ),
               if (cubit!.orderDetailsModel!.isReturn!)
                 Container(
+                  decoration: const BoxDecoration(color: Colors.red),
                   child: const Text(
                     'منتج مرتجع',
                     style: TextStyle(color: Colors.white),
                   ),
-                  decoration: const BoxDecoration(color: Colors.red),
                 ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -819,11 +822,13 @@ class DeliverySection extends StatelessWidget {
 }
 
 class ProviderSection extends StatefulWidget {
-  const ProviderSection({Key? key, this.cubit, this.orderId, this.state})
+  const ProviderSection(
+      {Key? key, this.cubit, this.orderId, this.state, this.order})
       : super(key: key);
   final OrderDetailsCubit? cubit;
   final int? orderId;
   final OrderDetailsState? state;
+  final Orders? order;
 
   @override
   State<ProviderSection> createState() => _ProviderSectionState();
@@ -924,20 +929,31 @@ class _ProviderSectionState extends State<ProviderSection> {
                       style: TextStyle(
                           fontSize: 14.sp, fontWeight: FontWeight.w400),
                     ),
-                    widget.cubit?.providerOrderDetails?.pickDeliveryMan!=null? Row(
-                    children: [
-                      Text('مندوب الاستلام : ',style: TextStyle(fontSize: 14.sp)),
-                      Text('${widget.cubit?.providerOrderDetails?.pickDeliveryMan}',style: TextStyle(fontSize: 14.sp)),
-                      
-                    ],
-                  ):const SizedBox(),
-                  widget.cubit?.providerOrderDetails?.deliverDeliveryMan!=null? Row(
-                    children: [
-                      Text('مندوب التوصيل : ',style: TextStyle(fontSize: 14.sp),),
-                      Text('${widget.cubit?.providerOrderDetails?.deliverDeliveryMan}',style: TextStyle(fontSize: 14.sp)),
-                      
-                    ],
-                  ):const SizedBox(),
+                    widget.cubit?.providerOrderDetails?.pickDeliveryMan != null
+                        ? Row(
+                            children: [
+                              Text('مندوب الاستلام : ',
+                                  style: TextStyle(fontSize: 14.sp)),
+                              Text(
+                                  '${widget.cubit?.providerOrderDetails?.pickDeliveryMan}',
+                                  style: TextStyle(fontSize: 14.sp)),
+                            ],
+                          )
+                        : const SizedBox(),
+                    widget.cubit?.providerOrderDetails?.deliverDeliveryMan !=
+                            null
+                        ? Row(
+                            children: [
+                              Text(
+                                'مندوب التوصيل : ',
+                                style: TextStyle(fontSize: 14.sp),
+                              ),
+                              Text(
+                                  '${widget.cubit?.providerOrderDetails?.deliverDeliveryMan}',
+                                  style: TextStyle(fontSize: 14.sp)),
+                            ],
+                          )
+                        : const SizedBox(),
                     Text(
                       "طلبات العميل:",
                       style: TextStyle(
@@ -1025,104 +1041,107 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 13.sp),
                                             ),
-                                            widget
-                                                        .cubit
-                                                        ?.providerOrderDetails
-                                                        ?.items?[index]
-                                                        .withDimension ==
-                                                    false
-                                                ? Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      InkWell(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: FaIcon(
-                                                            FontAwesomeIcons
-                                                                .minus,
-                                                            color: primaryColor,
-                                                            size: 20,
-                                                          ),
-                                                        ),
-                                                        onTap: () {
-                                                          // setStatee(() {
-                                                          // addOrdersFromOrderDetailesToCart(context,widget
-                                                          //   .cubit
-                                                          //   ?.providerOrderDetails
-                                                          //   ?.items?[index].id ?? 0);
-                                                          widget
-                                                              .cubit
-                                                              ?.providerOrderDetails
-                                                              ?.items?[index]
-                                                              .quantity = (widget
-                                                                  .cubit
-                                                                  ?.providerOrderDetails
-                                                                  ?.items?[
-                                                                      index]
-                                                                  .quantity)! -
-                                                              1;
-                                                          // });
-                                                          setState(() {});
-                                                        },
-                                                      ),
-                                                      SizedBox(
-                                                        width: 8.w,
-                                                      ),
-                                                      Text(
-                                                          '${widget.cubit?.providerOrderDetails?.items?[index].quantity}'),
-                                                      SizedBox(
-                                                        width: 8.w,
-                                                      ),
-                                                      InkWell(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: FaIcon(
-                                                            FontAwesomeIcons
-                                                                .plus,
-                                                            color: primaryColor,
-                                                            size: 20,
-                                                          ),
-                                                        ),
-                                                        onTap: () {
-                                                          // setStatee(() {
-                                                          widget
-                                                              .cubit
-                                                              ?.providerOrderDetails
-                                                              ?.items?[index]
-                                                              .quantity = (widget
-                                                                  .cubit
-                                                                  ?.providerOrderDetails
-                                                                  ?.items?[
-                                                                      index]
-                                                                  .quantity)! +
-                                                              1;
-                                                          // });
-                                                          setState(() {});
-                                                        },
-                                                      ),
-                                                    ],
-                                                  )
-                                                : const SizedBox(),
+                                            // widget
+                                            //             .cubit
+                                            //             ?.providerOrderDetails
+                                            //             ?.items?[index]
+                                            //             .withDimension ==
+                                            //         false
+                                            //     ? Row(
+                                            //         mainAxisAlignment:
+                                            //             MainAxisAlignment
+                                            //                 .center,
+                                            //         children: [
+                                            //           InkWell(
+                                            //             child: Padding(
+                                            //               padding:
+                                            //                   const EdgeInsets
+                                            //                       .all(8.0),
+                                            //               child: FaIcon(
+                                            //                 FontAwesomeIcons
+                                            //                     .minus,
+                                            //                 color: primaryColor,
+                                            //                 size: 20,
+                                            //               ),
+                                            //             ),
+                                            //             onTap: () {
+                                            //               // setStatee(() {
+                                            //               // addOrdersFromOrderDetailesToCart(context,widget
+                                            //               //   .cubit
+                                            //               //   ?.providerOrderDetails
+                                            //               //   ?.items?[index].id ?? 0);
+                                            //               widget
+                                            //                   .cubit
+                                            //                   ?.providerOrderDetails
+                                            //                   ?.items?[index]
+                                            //                   .quantity = (widget
+                                            //                       .cubit
+                                            //                       ?.providerOrderDetails
+                                            //                       ?.items?[
+                                            //                           index]
+                                            //                       .quantity)! -
+                                            //                   1;
+                                            //               // });
+                                            //               setState(() {});
+                                            //             },
+                                            //           ),
+                                            //           SizedBox(
+                                            //             width: 8.w,
+                                            //           ),
+                                            //           Text(
+                                            //               '${widget.cubit?.providerOrderDetails?.items?[index].quantity}'),
+                                            //           SizedBox(
+                                            //             width: 8.w,
+                                            //           ),
+                                            //           InkWell(
+                                            //             child: Padding(
+                                            //               padding:
+                                            //                   const EdgeInsets
+                                            //                       .all(8.0),
+                                            //               child: FaIcon(
+                                            //                 FontAwesomeIcons
+                                            //                     .plus,
+                                            //                 color: primaryColor,
+                                            //                 size: 20,
+                                            //               ),
+                                            //             ),
+                                            //             onTap: () {
+                                            //               // setStatee(() {
+                                            //               widget
+                                            //                   .cubit
+                                            //                   ?.providerOrderDetails
+                                            //                   ?.items?[index]
+                                            //                   .quantity = (widget
+                                            //                       .cubit
+                                            //                       ?.providerOrderDetails
+                                            //                       ?.items?[
+                                            //                           index]
+                                            //                       .quantity)! +
+                                            //                   1;
+                                            //               // });
+                                            //               setState(() {});
+                                            //             },
+                                            //           ),
+                                            //         ],
+                                            //       )
+                                            //     : const SizedBox(),
                                           ],
                                         ),
                                         const SizedBox(
                                           height: 20,
                                         ),
-                                        widget.cubit
-                                                    ?.providerOrderDetails
-                                                    ?.items?[index]
-                                                    .totalMeters !=
-                                                null && widget
-                                                    .cubit
-                                                    ?.providerOrderDetails
-                                                    ?.items?[index]
-                                                    .withDimension==true
+                                        widget
+                                                        .cubit
+                                                        ?.providerOrderDetails
+                                                        ?.items?[index]
+                                                        .totalMeters !=
+                                                    null &&
+                                                widget
+                                                        .cubit
+                                                        ?.providerOrderDetails
+                                                        ?.items?[index]
+                                                        .withDimension ==
+                                                    true
                                             ? Row(
                                                 children: [
                                                   const Text(
@@ -1150,10 +1169,18 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                 ],
                                               )
                                             : const SizedBox(),
-                                        if (widget.cubit?.providerOrderDetails
-                                                ?.items?[index].itemDetailes !=
-                                            []&&widget.cubit?.providerOrderDetails
-                                                ?.items?[index].withDimension==true)
+                                        if (widget
+                                                    .cubit
+                                                    ?.providerOrderDetails
+                                                    ?.items?[index]
+                                                    .itemDetailes !=
+                                                [] &&
+                                            widget
+                                                    .cubit
+                                                    ?.providerOrderDetails
+                                                    ?.items?[index]
+                                                    .withDimension ==
+                                                true)
                                           ListView.builder(
                                             physics: const ScrollPhysics(),
                                             shrinkWrap: true,
@@ -1321,34 +1348,57 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                                             ));
                                                               } else {
                                                                 // try {
-                                                                  debugPrint('if');
-                                                                  widget.cubit
-                                                                      ?.selectedItems
-                                                                      .clear();
-                                                                      if((widget.cubit?.providerOrderDetails?.items?[index].itemDetailes!)!.isEmpty){
-                                                                        Items? item = widget
+                                                                debugPrint(
+                                                                    'if');
+                                                                widget.cubit
+                                                                    ?.selectedItems
+                                                                    .clear();
+                                                                if ((widget
                                                                         .cubit
                                                                         ?.providerOrderDetails
-                                                                        ?.items?.first;
-                                                                        debugPrint('item icon : ${item?.icon}');
-                                                                          widget.cubit?.selectedItems.add(pitem.Items(
-                                                                        icon: item?.icon,
-                                                                         //! Required from api
-                                                                        categoryItemServiceId: item?.categoryItemServiceId, //! Required
-                                                                        id: item?.id,
-                                                                        lenght: item?.length,
-                                                                        width: item?.width,
-                                                                        localId: 0,
-                                                                        name: item?.name,
-                                                                        // price: ,
-                                                                        selectedQuantity: item?.quantity,
-                                                                        withDimension: item?.withDimension,
-                                                                        // categoryItemServiceId: item?.ca,
-                                                                        ));
-                                                                      }else{
-
-                                                                        debugPrint('else');
-                                                                      for (int i =0;i <(widget.cubit?.providerOrderDetails?.items?[index].itemDetailes?.length ??
+                                                                        ?.items?[
+                                                                            index]
+                                                                        .itemDetailes!)!
+                                                                    .isEmpty) {
+                                                                  Items? item = widget
+                                                                      .cubit
+                                                                      ?.providerOrderDetails
+                                                                      ?.items
+                                                                      ?.first;
+                                                                  debugPrint(
+                                                                      'item icon : ${item?.icon}');
+                                                                  widget.cubit
+                                                                      ?.selectedItems
+                                                                      .add(pitem
+                                                                          .Items(
+                                                                    icon: item
+                                                                        ?.icon,
+                                                                    //! Required from api
+                                                                    categoryItemServiceId:
+                                                                        item?.categoryItemServiceId, //! Required
+                                                                    id: item
+                                                                        ?.id,
+                                                                    lenght: item
+                                                                        ?.length,
+                                                                    width: item
+                                                                        ?.width,
+                                                                    localId: 0,
+                                                                    name: item
+                                                                        ?.name,
+                                                                    // price: ,
+                                                                    selectedQuantity:
+                                                                        item?.quantity,
+                                                                    withDimension:
+                                                                        item?.withDimension,
+                                                                    // categoryItemServiceId: item?.ca,
+                                                                  ));
+                                                                } else {
+                                                                  debugPrint(
+                                                                      'else');
+                                                                  for (int i =
+                                                                          0;
+                                                                      i <
+                                                                          (widget.cubit?.providerOrderDetails?.items?[index].itemDetailes?.length ??
                                                                               0);
                                                                       i++) {
                                                                     int localId =
@@ -1369,7 +1419,8 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                                         ?.items?[
                                                                             index]
                                                                         .itemDetailes?[i];
-                                                                        debugPrint('item icon : ${item?.icon}');
+                                                                    debugPrint(
+                                                                        'item icon : ${item?.icon}');
                                                                     widget.cubit?.selectedItems.add(pitem.Items(
                                                                         icon: item?.icon, //! required from api
                                                                         categoryItemServiceId: item?.categoryItemServiceId, //! required
@@ -1386,10 +1437,8 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                                     debugPrint(
                                                                         'item : ${widget.cubit?.selectedItems}');
                                                                   }
-                                                                } 
-                                                              
-                                                                      
-                                                                  
+                                                                }
+
                                                                 // widget.cubit?.selectedItems.addAll(iterable)
                                                                 showModalBottomSheet(
                                                                   context:
@@ -1420,9 +1469,21 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                                       ),
                                                                     ),
                                                                     child: MetersView(
-                                                                       orderId: widget.orderId,
-                                                                       quantity:widget.cubit?.providerOrderDetails?.items?[index].quantity ,
-                                                                       itemId:widget.cubit?.providerOrderDetails?.items?[index].id ,
+                                                                        orderId:
+                                                                            widget
+                                                                                .orderId,
+                                                                        quantity: widget
+                                                                            .cubit
+                                                                            ?.providerOrderDetails
+                                                                            ?.items?[
+                                                                                index]
+                                                                            .quantity,
+                                                                        itemId: widget
+                                                                            .cubit
+                                                                            ?.providerOrderDetails
+                                                                            ?.items?[
+                                                                                index]
+                                                                            .id,
                                                                         isUpdate:
                                                                             true),
                                                                   ),
@@ -1536,54 +1597,431 @@ class _ProviderSectionState extends State<ProviderSection> {
                     ? Container()
                     : ElevatedButton(
                         onPressed: () {
-                          showCupertinoDialog(
-                              context: context,
-                              builder: (context) => CupertinoAlertDialog(
-                                    title: const Text('!تاكيد'),
-                                    content: Card(
-                                      color: Colors.transparent,
-                                      elevation: 0.0,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        // ignore: prefer_const_literals_to_create_immutables
-                                        children: [
-                                          if (widget.cubit?.providerOrderDetails
-                                                  ?.coreNextStatus ==
-                                              'provider_received')
+                          debugPrint(
+                              'status : ${widget.cubit?.providerOrderDetails?.coreNextStatus}');
+                          if (widget.cubit?.providerOrderDetails
+                                  ?.coreNextStatus ==
+                              'finished') {
+                                showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            // enableDrag: true,
+                                            backgroundColor: Colors.transparent,
+                                            builder: (context) => Container(
+                                                padding: EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
+                                                    top: 10,
+                                                    bottom:
+                                                        MediaQuery.of(context)
+                                                            .viewInsets
+                                                            .bottom),
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.80,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(25.0),
+                                                    topRight:
+                                                        Radius.circular(25.0),
+                                                  ),
+                                                ),
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: [
+                                                      const Text(
+                                                        'تفضيلات الأوردر',
+                                                        style: TextStyle(
+                                                            fontSize: 20),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 15,
+                                                      ),
+                                                      widget.order?.prefrences
+                                                                  ?.isEmpty ??
+                                                              false
+                                                          ? const Center(
+                                                              child: Text(
+                                                              'لا يوجد تفضيلات',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize: 30),
+                                                            ))
+                                                          : SizedBox(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.15,
+                                                              child: ListView
+                                                                  .separated(
+                                                                      // shrinkWrap: true,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index) {
+                                                                        return Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: [
+                                                                            const SizedBox(
+                                                                              width: 20,
+                                                                            ),
+                                                                            ImageAsIcon(
+                                                                              image: widget.order?.prefrences?[index].icon,
+                                                                              height: 29.4,
+                                                                              width: 32.4,
+                                                                              fromNetwork: true,
+                                                                              orignalColor: true,
+                                                                            ),
+                                                                            const SizedBox(
+                                                                              width: 15,
+                                                                            ),
+                                                                            Expanded(
+                                                                              child: Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                children: [
+                                                                                  Text(
+                                                                                    "${widget.order?.prefrences?[index].name}",
+                                                                                    style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            Text(
+                                                                              '${widget.order?.prefrences?[index].preference}',
+                                                                              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                                                            )
+                                                                          ],
+                                                                        );
+                                                                      },
+                                                                      separatorBuilder:
+                                                                          (context, index) =>
+                                                                              const SizedBox(
+                                                                                height: 15,
+                                                                              ),
+                                                                      itemCount:
+                                                                          widget.order?.prefrences?.length ??
+                                                                              0),
+                                                            ),
+                                                      const Divider(
+                                                        height: 1,
+                                                        color: Colors.amber,
+                                                        indent: 20,
+                                                        endIndent: 20,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      const Text(
+                                                        'تعليقات الأوردر',
+                                                        style: TextStyle(
+                                                            fontSize: 20),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          // const Expanded(child: SizedBox()),
+                                                          Text(
+                                                            '${widget.order?.comments?.customerComment}',
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        15),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 20,
+                                                          ),
+                                                          const Text(
+                                                            'تعليق العميل',
+                                                            style: TextStyle(
+                                                                fontSize: 15),
+                                                          ),
+                                                          // const Expanded(child: SizedBox()),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Text(
+                                                            '${widget.order?.comments?.pickComment}',
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        15),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 20,
+                                                          ),
+                                                          const Text(
+                                                            'تعليق الاستلام',
+                                                            style: TextStyle(
+                                                                fontSize: 15),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      const Text(
+                                                        'الطلبات',
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                        // textAlign: TextAlign.end,
+                                                      ),
+                                                      const Divider(
+                                                        height: 1,
+                                                        color: Colors.amber,
+                                                        indent: 120,
+                                                        endIndent: 120,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      widget.order?.comments
+                                                                  ?.requests !=
+                                                              null
+                                                          ? SizedBox(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.10,
+                                                              child: ListView
+                                                                  .separated(
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      itemBuilder:
+                                                                          (context, index) =>
+                                                                              Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                children: [
+                                                                                  Text(
+                                                                                    '${widget.order?.comments?.requests?[index].comment}',
+                                                                                    style: const TextStyle(fontSize: 15),
+                                                                                  ),
+                                                                                  // const SizedBox(width: 20,),
+                                                                                  widget.order?.comments?.requests?[index].type == 'Only'
+                                                                                      ? const Text(
+                                                                                          ' : الآوردر الحالي',
+                                                                                          style: TextStyle(fontSize: 15),
+                                                                                        )
+                                                                                      : const Text(
+                                                                                          ' : جميع لاوردرات',
+                                                                                          style: TextStyle(fontSize: 15),
+                                                                                        ),
+                                                                                ],
+                                                                              ),
+                                                                      separatorBuilder: (context,
+                                                                              index) =>
+                                                                          const SizedBox(
+                                                                              height:
+                                                                                  10),
+                                                                      itemCount: widget
+                                                                              .order
+                                                                              ?.comments
+                                                                              ?.requests
+                                                                              ?.length ??
+                                                                          0),
+                                                            )
+                                                          : const Text(
+                                                              'لا يوجد بيانات متوفره حاليا !'),
+                                                      const SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      const Divider(
+                                                        height: 1,
+                                                        color: Colors.amber,
+                                                        indent: 50,
+                                                        endIndent: 50,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 30,
+                                                      ),
+                                                      TextField(
+                                                        controller:
+                                                            commentController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          hintText: 'comment',
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceAround,
+                                                        children: [
+                                                          ElevatedButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                widget.cubit?.goToNextStatus(
+                                                                    isDeliveryMan:
+                                                                        false,
+                                                                    orderId: widget
+                                                                        .order
+                                                                        ?.id,
+                                                                    itemCount: int.tryParse(
+                                                                        itemCountController
+                                                                            .text),
+                                                                    comment:
+                                                                        commentController
+                                                                            .text);
+                                                                debugPrint(
+                                                                    'goToNextStatus');
+                                                              },
+                                                              child: const Text(
+                                                                  'نعم')),
+                                                          ElevatedButton(
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child: const Text(
+                                                                  'لا'))
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                          );
+                          } else {
+                            showCupertinoDialog(
+                                context: context,
+                                builder: (context) => CupertinoAlertDialog(
+                                      title: const Text('!تاكيد'),
+                                      content: Card(
+                                        color: Colors.transparent,
+                                        elevation: 0.0,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          // ignore: prefer_const_literals_to_create_immutables
+                                          children: [
+                                            if (widget
+                                                    .cubit
+                                                    ?.providerOrderDetails
+                                                    ?.coreNextStatus ==
+                                                'provider_received')
+                                              TextField(
+                                                controller: itemCountController,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  hintText: 'item count',
+                                                ),
+                                              ),
                                             TextField(
-                                              controller: itemCountController,
+                                              controller: commentController,
                                               decoration: const InputDecoration(
-                                                hintText: 'item count',
+                                                hintText: 'comment',
                                               ),
                                             ),
-                                          TextField(
-                                            controller: commentController,
-                                            decoration: const InputDecoration(
-                                              hintText: 'comment',
-                                            ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    actions: [
-                                      CupertinoDialogAction(
-                                        child: const Text('نعم'),
-                                        onPressed: () {
-                                          debugPrint(
-                                              'hero ${widget.cubit!.providerOrderDetails!.coreNextStatus}');
-                                          // widget.cubit.deleteCustomer(id: widget.item.id);
-                                          if (widget.cubit?.providerOrderDetails
-                                                  ?.coreNextStatus ==
-                                              'provider_received') {
-                                            if (int.tryParse(itemCountController
-                                                    .text)! >=
-                                                widget
+                                      actions: [
+                                        CupertinoDialogAction(
+                                          child: const Text('نعم'),
+                                          onPressed: () {
+                                            debugPrint(
+                                                'hero ${widget.cubit!.providerOrderDetails!.coreNextStatus}');
+                                            // widget.cubit.deleteCustomer(id: widget.item.id);
+                                            if (widget
+                                                    .cubit
+                                                    ?.providerOrderDetails
+                                                    ?.coreNextStatus ==
+                                                'provider_received') {
+                                              if (int.tryParse(
+                                                      itemCountController
+                                                          .text)! >=
+                                                  widget
+                                                      .cubit!
+                                                      .providerOrderDetails!
+                                                      .itemCount!) {
+                                                widget.cubit?.goToNextStatus(
+                                                    isDeliveryMan: false,
+                                                    orderId: widget.orderId,
+                                                    itemCount: int.tryParse(
+                                                        itemCountController
+                                                            .text),
+                                                    comment:
+                                                        commentController.text);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  content: Text(
+                                                      'خطا في عدد الاصناف'),
+                                                  backgroundColor: Colors.red,
+                                                ));
+                                              }
+                                            }
+                                            if (widget
                                                     .cubit!
                                                     .providerOrderDetails!
-                                                    .itemCount!) {
+                                                    .coreNextStatus ==
+                                                'check_up') {
+                                              if (widget
+                                                      .cubit!.checkedNumberSum <
+                                                  widget
+                                                      .cubit!
+                                                      .providerOrderDetails!
+                                                      .itemCount!) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  content:
+                                                      Text('عدم تطابق القطع'),
+                                                  backgroundColor: Colors.red,
+                                                ));
+                                              } else if (widget
+                                                      .cubit!.checkedNumberSum >
+                                                  widget
+                                                      .cubit!
+                                                      .providerOrderDetails!
+                                                      .itemCount!) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                  content: Text(
+                                                      'برجاء العودة الي ادارة التشغيل'),
+                                                  backgroundColor: Colors.red,
+                                                ));
+                                              } else {
+                                                widget.cubit?.goToNextStatus(
+                                                    isDeliveryMan: false,
+                                                    orderId: widget.orderId,
+                                                    itemCount: int.tryParse(
+                                                        itemCountController
+                                                            .text),
+                                                    comment:
+                                                        commentController.text);
+                                              }
+                                            } else {
                                               widget.cubit?.goToNextStatus(
                                                   isDeliveryMan: false,
                                                   orderId: widget.orderId,
@@ -1591,73 +2029,20 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                       itemCountController.text),
                                                   comment:
                                                       commentController.text);
-                                            } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content:
-                                                    Text('خطا في عدد الاصناف'),
-                                                backgroundColor: Colors.red,
-                                              ));
                                             }
-                                          }
-                                          if (widget
-                                                  .cubit!
-                                                  .providerOrderDetails!
-                                                  .coreNextStatus ==
-                                              'check_up') {
-                                            if (widget.cubit!.checkedNumberSum <
-                                                widget
-                                                    .cubit!
-                                                    .providerOrderDetails!
-                                                    .itemCount!) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content:
-                                                    Text('عدم تطابق القطع'),
-                                                backgroundColor: Colors.red,
-                                              ));
-                                            } else if (widget
-                                                    .cubit!.checkedNumberSum >
-                                                widget
-                                                    .cubit!
-                                                    .providerOrderDetails!
-                                                    .itemCount!) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    'برجاء العودة الي ادارة التشغيل'),
-                                                backgroundColor: Colors.red,
-                                              ));
-                                            } else {
-                                              widget.cubit?.goToNextStatus(
-                                                  isDeliveryMan: false,
-                                                  orderId: widget.orderId,
-                                                  itemCount: int.tryParse(
-                                                      itemCountController.text),
-                                                  comment:
-                                                      commentController.text);
-                                            }
-                                          } else {
-                                            widget.cubit?.goToNextStatus(
-                                                isDeliveryMan: false,
-                                                orderId: widget.orderId,
-                                                itemCount: int.tryParse(
-                                                    itemCountController.text),
-                                                comment:
-                                                    commentController.text);
-                                          }
 
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      CupertinoDialogAction(
-                                        child: const Text('لا'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      )
-                                    ],
-                                  ));
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        CupertinoDialogAction(
+                                          child: const Text('لا'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        )
+                                      ],
+                                    ));
+                          }
                         },
                         child: Text(
                             // widget.order.nextStatus,
