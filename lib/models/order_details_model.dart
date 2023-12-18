@@ -34,7 +34,7 @@ class OrderDetailsModel {
       this.nextStatus});
 
   OrderDetailsModel.fromJson(Map<String, dynamic> json) {
-    Map<String, dynamic> servicesMap = json['services'];
+    Map<String, dynamic>? servicesMap = json['services'];
     services = [];
     if (servicesMap != null) {
       for (var element in servicesMap.entries) {

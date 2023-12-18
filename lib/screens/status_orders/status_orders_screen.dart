@@ -309,8 +309,8 @@ class _OrdersSectionState extends State<OrdersSection> {
                                 true) {
                               await MapLauncher.showMarker(
                                 mapType: MapType.google,
-                                coords: Coords(widget.order?.address?.lat,
-                                    widget.order?.address?.long),
+                                coords: Coords(widget.order?.address?.lat??0,
+                                    widget.order?.address?.long??0),
                                 title: "عنوان العميل",
                               );
                             }

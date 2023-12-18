@@ -39,35 +39,17 @@ class PriceListSystemOrder extends StatefulWidget {
 }
 
 class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
-  // int? initQuantity = 0;
+  int? initQuantity = 0;
   @override
   void initState() {
-    // var cubit = context.read<OrderDetailsCubit>();
-    // if (cubit.orderDetailsModel?.services != null) {
-    //   for (int i = 0; i < cubit.orderDetailsModel!.services!.length; i++) {
-    //     // var priceListItem = cubit.priceList[i];
-    //     if (cubit.orderDetailsModel!.services![i].categories != null) {
-    //       for (int j = 0;
-    //           j < cubit.orderDetailsModel!.services![i].categories!.length;
-    //           j++) {
-    //         if (cubit.orderDetailsModel!.services![i].categories![j].items !=
-    //             null) {
-    //           for (int k = 0;
-    //               k <
-    //                   cubit.orderDetailsModel!.services![i].categories![j]
-    //                       .items!.length;
-    //               k++) {
-    //             // if(cubit.orderDetailsModel?.services?[i].categories?[j].items?[k].name==widget.item?.name){
-    //             //  cubit.orderDetailsModel?.services?[i].categories?[j].items?[k].name;
-    //             //  debugPrint('initQuantity : ${cubit.orderDetailsModel?.services?[i].categories?[j].items?[k].name}');
-    //             //  break;
-    //             // }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    var cubit = context.read<OrderDetailsCubit>();
+    for (var element in cubit.initQuantityInPriceList) { 
+      if(element.catItemServiceId == widget.item?.name){
+         initQuantity = element.initQuantity;
+         debugPrint('initQuantity : $initQuantity');
+         break;
+      }
+    }
 
     super.initState();
     // Provider.of<CartsViewModel>(context, listen: false).getCartList();
@@ -87,6 +69,7 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
             child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            
             Expanded(
               child: Row(
                 children: [
@@ -123,6 +106,7 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
             const SizedBox(
               width: 10,
             ),
+            initQuantity! >=1 ? CircleAvatar(child: Text('$initQuantity')):const SizedBox(),
             Container(
                 alignment: Alignment.bottomRight,
                 child: OrderItemSystem(
@@ -134,8 +118,11 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
             const SizedBox(
               width: 10,
             ),
+            
           ],
-        ));
+        ),
+        
+        );
       },
     );
   }

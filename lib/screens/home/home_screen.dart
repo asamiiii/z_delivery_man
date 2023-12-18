@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
 import 'package:z_delivery_man/screens/home/all.dart';
@@ -27,6 +28,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isDeliveryMan = false;
   String name = '';
+  bool isToday = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -51,9 +53,51 @@ class _HomeScreenState extends State<HomeScreen> {
                 textDirection: TextDirection.rtl,
                 child: PageContainer(
                   child: Scaffold(
+                    backgroundColor: Colors.white,
                     drawer: isDeliveryMan ? const BuildDrawer() : null,
                     appBar: AppBar(
-                        title: Text(name), centerTitle: true, actions: []),
+                        title: Text(
+                          name,
+                          style: GoogleFonts.cairo(
+                            color: Colors.white,
+                          ),
+                        ),
+                        centerTitle: true,
+                        actions: [
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          isDeliveryMan==false? DropdownButton<String>(
+                            iconDisabledColor: Colors.white,
+                            iconEnabledColor: Colors.white,
+                            autofocus: true,
+                            hint: Text(isToday == true ? 'اليوم' : 'الكل',
+                                style: GoogleFonts.cairo(
+                                  color: Colors.white,
+                                )),
+                            items: <String>[
+                              'اليوم',
+                              'الكل',
+                            ].map((String value) {
+                              return DropdownMenuItem<String>(
+                                // enabled: false,
+                                value: value,
+                                child: Text(value,style: GoogleFonts.cairo(),),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              if (value == 'اليوم') {
+                                isToday = true;
+                              } else {
+                                isToday = false;
+                              }
+                              setState(() {});
+                            },
+                          ):const SizedBox(),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                        ]),
                     body: RefreshIndicator(
                       onRefresh: () => isDeliveryMan
                           ? homeCubit.getTimeSlots()
@@ -81,48 +125,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                   //       .indexModel?.statusModel?[index]!,
                                   //   cubit: homeCubit,
                                   // );
-
                                   //   return TableAll(model: homeCubit.indexModel,);
                                   // }
                                 })
-                            : Center(
-                                child: SingleChildScrollView(
-                                  physics:
-                                      const AlwaysScrollableScrollPhysics(),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(height: 20),
-                                      TableToday(model: homeCubit.indexModel),
-                                      const SizedBox(height: 20),
-                                      TableAll(model: homeCubit.indexModel),
-                                      const SizedBox(height: 20),
-                                      InkWell(
-                                        onTap: () => BlocProvider.of<HomeCubit>(
-                                                context)
-                                            .logout()
-                                            .then((value) => signOut(context)),
-                                        child: Container(
-                                          width: 170,
-                                          color: Colors.red,
-                                          child: const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              SizedBox(width: 20),
-                                              Text(AppStrings.logOut),
-                                              SizedBox(width: 10),
-                                              Icon(Icons.exit_to_app),
-                                              SizedBox(width: 10),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 20),
-                                    ],
-                                  ),
-                                ),
+                            : AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 1000),
+                                transitionBuilder: (Widget child,
+                                    Animation<double> animation) {
+                                  return FadeTransition(
+                                      opacity: animation, child: child);
+                                },
+                                child: isToday == true
+                                    ? TableToday(model: homeCubit.indexModel)
+                                    : TableAll(model: homeCubit.indexModel),
                               ),
                       ),
                     ),

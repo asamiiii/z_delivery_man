@@ -25,11 +25,12 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   Future<void> getOrderDetails({required int? orderId}) {
     emit(OrderDetailsLoadingState());
 
+debugPrint("order ID $orderId");
     return DioHelper.getData(url: "$GET_ORDER_DETAILS/$orderId", token: token)
         .then((value) {
-      // debugPrint(value.data);
+      debugPrint( "Details ${value.data}");
       orderDetailsModel = OrderDetailsModel.fromJson(value.data);
-      // debugPrint("$orderDetailsModel  order datails model");
+      debugPrint("$orderDetailsModel  order datails model");
 
       emit(OrderDetailsSuccessState());
     }).catchError((e) {
@@ -48,7 +49,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
             url: "$GET_PROVIDER_ORDER_DETAILS/$orderId", token: token)
         .then((value) {
       // print('order id : $orderId');
-      print('getProviderOrderDetails : ${value.data}');
+      // print('getProviderOrderDetails : ${value.data}');
       providerOrderDetails = ProviderOrderDetails.fromJson(value.data);
       checkedItemsNumber();
       emit(OrderProviderDetailsSuccessState());
@@ -59,7 +60,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
         emit(OrderProviderDetailsSuccessState());
       }
       for (var i in providerOrderDetails!.items!) {
-        initQuantityInPriceList.add(InitQuantityModel(initQuantity: i.quantity,catItemServiceId: i.id));
+        initQuantityInPriceList.add(InitQuantityModel(initQuantity: i.quantity,catItemServiceId: i.name));
       }
       debugPrint('initQuantityInPriceList : ${initQuantityInPriceList.map((e) => e.catItemServiceId)}');
     }).catchError((e) {
@@ -577,7 +578,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
 }
 
 class InitQuantityModel{
-int? catItemServiceId;
+String? catItemServiceId;
 int? initQuantity;
 
 InitQuantityModel({this.catItemServiceId,this.initQuantity});

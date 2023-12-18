@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
 import '../../../models/order_per_status_provider.dart';
@@ -83,6 +84,9 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
               centerTitle: true,
               title: Text(
                 'حالة: ${BlocProvider.of<HomeCubit>(context).handleStatusName(widget.statusName)}',
+                style: GoogleFonts.cairo(
+                                  color: Colors.white,
+                                ),
               ),
               backgroundColor: primaryColor,
             ),
@@ -103,15 +107,17 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
                                   order: cubit.orders![index],
                                   state: state,
                                   cubit: cubit))
-                          : const Center(
+                          :  Center(
                               child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   'No Oredrs',
-                                  style: TextStyle(fontSize: 30),
+                                  style: GoogleFonts.cairo(
+                                    fontSize: 40
                                 ),
-                                Icon(
+                                ),
+                                const Icon(
                                   Icons.breakfast_dining,
                                   size: 33,
                                 )
@@ -182,42 +188,45 @@ class _OrdersSectionState extends State<OrdersSection> {
                 children: [
                   Row(
                     children: [
-                      const Text('تاريخ الاستلام'),
+                       Text('تاريخ الاستلام',style: GoogleFonts.cairo(),),
                       const SizedBox(
                         width: 10,
                       ),
-                      Text('${widget.order?.pick?.date}'),
+                      Text('${widget.order?.pick?.date}',style: GoogleFonts.cairo(fontSize: 18),),
                     ],
                   ),
+                  const SizedBox(height: 5,),
                   Row(
                     children: [
-                      const Text('من:'),
-                      Text('${widget.order?.pick?.from}'),
+                       Text(' من : ',style: GoogleFonts.cairo(),),
+                      Text('${widget.order?.pick?.from}',style: GoogleFonts.cairo(fontSize: 20),),
                       const SizedBox(
                         width: 10,
                       ),
-                      const Text('الي:'),
-                      Text('${widget.order?.pick?.to}')
+                       Text(' الي : ',style: GoogleFonts.cairo(),),
+                      Text('${widget.order?.pick?.to}',style: GoogleFonts.cairo(fontSize: 20),)
                     ],
                   ),
+                  const SizedBox(height: 5,),
                   Row(
                     children: [
-                      const Text('تاريخ التسليم'),
+                       Text('تاريخ التسليم',style: GoogleFonts.cairo(),),
                       const SizedBox(
                         width: 10,
                       ),
-                      Text('${widget.order?.deliver?.date}'),
+                      Text('${widget.order?.deliver?.date}',style: GoogleFonts.cairo(fontSize: 18),),
                     ],
                   ),
+                  const SizedBox(height: 5,),
                   Row(
                     children: [
-                      const Text('من:'),
-                      Text('${widget.order?.deliver?.from}'),
+                       Text(' من : ',style: GoogleFonts.cairo(),),
+                      Text('${widget.order?.deliver?.from}',style: GoogleFonts.cairo(fontSize: 20),),
                       const SizedBox(
                         width: 10,
                       ),
-                      const Text('الي:'),
-                      Text('${widget.order?.deliver?.to}')
+                       Text(' الي : ',style: GoogleFonts.cairo(),),
+                      Text('${widget.order?.deliver?.to}',style: GoogleFonts.cairo(fontSize: 20),)
                     ],
                   ),
                   // widget.order?.pickDeliveryMan != null
@@ -257,7 +266,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                                             context: context,
                                             builder: (contextt) =>
                                                 CupertinoAlertDialog(
-                                                  title: const Text('!تاكيد'),
+                                                  title:  Text('!تاكيد',style: GoogleFonts.cairo(),),
                                                   content: Card(
                                                     color: Colors.transparent,
                                                     elevation: 0.0,
@@ -295,7 +304,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                   ),
                                                   actions: [
                                                     CupertinoDialogAction(
-                                                      child: const Text('نعم'),
+                                                      child:  Text('نعم',style: GoogleFonts.cairo(),),
                                                       onPressed: () {
                                                         Navigator.of(context)
                                                             .pop();
@@ -355,10 +364,9 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                 child: SingleChildScrollView(
                                                   child: Column(
                                                     children: [
-                                                      const Text(
+                                                       Text(
                                                         'تفضيلات الأوردر',
-                                                        style: TextStyle(
-                                                            fontSize: 20),
+                                                        style:GoogleFonts.cairo(fontSize: 20),
                                                       ),
                                                       const SizedBox(
                                                         height: 15,
@@ -366,13 +374,10 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                       widget.order?.prefrences
                                                                   ?.isEmpty ??
                                                               false
-                                                          ? const Center(
+                                                          ?  Center(
                                                               child: Text(
                                                               'لا يوجد تفضيلات',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontSize: 30),
+                                                              style: GoogleFonts.cairo(fontSize: 30),
                                                             ))
                                                           : SizedBox(
                                                               height: MediaQuery.of(
@@ -442,10 +447,8 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                       const SizedBox(
                                                         height: 10,
                                                       ),
-                                                      const Text(
-                                                        'تعليقات الأوردر',
-                                                        style: TextStyle(
-                                                            fontSize: 20),
+                                                       Text(
+                                                        'تعليقات الأوردر',style: GoogleFonts.cairo(),
                                                       ),
                                                       const SizedBox(
                                                         height: 30,
@@ -640,31 +643,28 @@ class _OrdersSectionState extends State<OrdersSection> {
             ),
           ),
           Positioned(
-            top: 0,
-            bottom: 0,
+            top: 10,
+            // bottom: 10,
             left: 9,
             child: Hero(
               tag: '${widget.order?.id}',
               child: Material(
                 color: Colors.transparent,
                 child: CircleAvatar(
-                  radius: 40,
+                  radius: 50,
                   backgroundColor: primaryColor,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                       Text(
                         'كود الاوردر',
-                        style: TextStyle(color: Colors.white),
+                        style:GoogleFonts.cairo(color: Colors.white),
                       ),
                       Text(
                         "#${widget.order?.id}",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.bold),
+                        style: GoogleFonts.cairo(color: Colors.white)
                       ),
                     ],
                   ),
@@ -673,11 +673,11 @@ class _OrdersSectionState extends State<OrdersSection> {
             ),
           ),
           Positioned(
-              top: 20,
-              // bottom: 10,
+              // top: 20,
+              bottom: 25,
               left: 9,
-              child: ElevatedButton(
-                  onPressed: () {
+              child: InkWell(
+                  onTap: () {
                     debugPrint('pref : ${widget.order?.prefrences}');
                     showModalBottomSheet(
                       context: context,
@@ -696,19 +696,18 @@ class _OrdersSectionState extends State<OrdersSection> {
                           ),
                           child: Column(
                             children: [
-                              const Text(
+                               Text(
                                 'تفضيلات الأوردر',
-                                style: TextStyle(fontSize: 20),
+                                style: GoogleFonts.cairo(fontSize: 25),
                               ),
                               const SizedBox(
                                 height: 15,
                               ),
                               widget.order?.prefrences?.isEmpty ?? false
-                                  ? const Center(
+                                  ?  Center(
                                       child: Text(
                                       'لا يوجد تفضيلات',
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 30),
+                                      style: GoogleFonts.cairo(fontSize: 30,),
                                     ))
                                   : Expanded(
                                       child: ListView.separated(
@@ -740,12 +739,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                     children: [
                                                       Text(
                                                         "${widget.order?.prefrences?[index].name}",
-                                                        style: const TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
+                                                        style: GoogleFonts.cairo()
                                                       ),
                                                     ],
                                                   ),
@@ -755,10 +749,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                 ),
                                                 Text(
                                                   '${widget.order?.prefrences?[index].preference}',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                  style: GoogleFonts.cairo(),
                                                 )
                                               ],
                                             );
@@ -775,15 +766,15 @@ class _OrdersSectionState extends State<OrdersSection> {
                           )),
                     );
                   },
-                  child: const Row(
-                    children: [Text('التفضيلات'), Icon(Icons.arrow_drop_down)],
+                  child:  Row(
+                    children: [Image.asset('assets/images/pref.png',height: 50,width: 50,color: Colors.green,)],
                   ))),
           Positioned(
               // top: 20,
               bottom: 20,
-              left: 9,
-              child: ElevatedButton(
-                  onPressed: () {
+              left: 70,
+              child: InkWell(
+                  onTap: () {
                     debugPrint(
                         'customer comment : ${widget.order?.comments?.customerComment}');
                     debugPrint(
@@ -908,10 +899,9 @@ class _OrdersSectionState extends State<OrdersSection> {
                           ])),
                     );
                   },
-                  child: const Row(
+                  child:  Row(
                     children: [
-                      SizedBox(child: Text('التعليقات')),
-                      Icon(Icons.arrow_drop_down)
+                      Image.asset('assets/images/comments.png',height: 50,width: 50,)
                     ],
                   ))),
         ],

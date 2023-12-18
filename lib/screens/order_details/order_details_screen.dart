@@ -273,6 +273,7 @@ class DeliverySection extends StatelessWidget {
     bool checkCollectByHand = false;
 
     bool checkCollectByMachine = false;
+    
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,8 +462,8 @@ class DeliverySection extends StatelessWidget {
                           await MapLauncher.showMarker(
                             mapType: MapType.google,
                             coords: Coords(
-                                cubit?.orderDetailsModel?.address?.lat,
-                                cubit?.orderDetailsModel?.address?.long),
+                                cubit?.orderDetailsModel?.address?.lat??0,
+                                cubit?.orderDetailsModel?.address?.long??0),
                             title: "عنوان العميل",
                           );
                         }
@@ -494,7 +495,7 @@ class DeliverySection extends StatelessWidget {
               const SizedBox(
                 height: 5,
               ),
-              if (cubit!.orderDetailsModel!.isReturn!)
+              if (cubit!.orderDetailsModel!.isReturn ?? false)
                 Container(
                   decoration: const BoxDecoration(color: Colors.red),
                   child: const Text(
