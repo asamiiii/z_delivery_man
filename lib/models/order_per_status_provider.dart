@@ -28,6 +28,9 @@ class OrderPerStatusProvider {
 
 class Orders {
   int? id;
+  int? customerCode;
+  int? itemsCount;
+  String? serviceType;
   Pick? pick;
   Pick? deliver;
   String? currentStatus;
@@ -41,6 +44,9 @@ class Orders {
 
   Orders(
       {this.id,
+      this.customerCode,
+      this.itemsCount,
+      this.serviceType,
       this.pick,
       this.deliver,
       this.currentStatus,
@@ -54,6 +60,9 @@ class Orders {
 
   Orders.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    customerCode = json['customer_code'];
+    itemsCount = json['item_count'];
+    serviceType = json['service'];
     pick = json['pick'] != null ? Pick.fromJson(json['pick']) : null;
     deliver = json['deliver'] != null ? Pick.fromJson(json['deliver']) : null;
     currentStatus = json['currentStatus'];

@@ -49,7 +49,7 @@ debugPrint("order ID $orderId");
             url: "$GET_PROVIDER_ORDER_DETAILS/$orderId", token: token)
         .then((value) {
       // print('order id : $orderId');
-      // print('getProviderOrderDetails : ${value.data}');
+      debugPrint('getProviderOrderDetails : ${value.data}');
       providerOrderDetails = ProviderOrderDetails.fromJson(value.data);
       checkedItemsNumber();
       emit(OrderProviderDetailsSuccessState());
@@ -60,7 +60,7 @@ debugPrint("order ID $orderId");
         emit(OrderProviderDetailsSuccessState());
       }
       for (var i in providerOrderDetails!.items!) {
-        initQuantityInPriceList.add(InitQuantityModel(initQuantity: i.quantity,catItemServiceId: i.name));
+        initQuantityInPriceList.add(InitQuantityModel(initQuantity: i.quantity,catItemServiceId: i.categoryItemServiceId));
       }
       debugPrint('initQuantityInPriceList : ${initQuantityInPriceList.map((e) => e.catItemServiceId)}');
     }).catchError((e) {
@@ -578,7 +578,7 @@ debugPrint("order ID $orderId");
 }
 
 class InitQuantityModel{
-String? catItemServiceId;
+int? catItemServiceId;
 int? initQuantity;
 
 InitQuantityModel({this.catItemServiceId,this.initQuantity});

@@ -43,11 +43,11 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
   @override
   void initState() {
     var cubit = context.read<OrderDetailsCubit>();
-    for (var element in cubit.initQuantityInPriceList) { 
-      if(element.catItemServiceId == widget.item?.name){
-         initQuantity = element.initQuantity;
-         debugPrint('initQuantity : $initQuantity');
-         break;
+    for (var element in cubit.initQuantityInPriceList) {
+      if (element.catItemServiceId == widget.item?.categoryItemServiceId) {
+        initQuantity = element.initQuantity;
+        debugPrint('initQuantity : $initQuantity');
+        break;
       }
     }
 
@@ -63,65 +63,64 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
       builder: (context, state) {
         final cubit = OrderDetailsCubit.get(context);
         return Container(
-            // cartsViewModel.isLoading
-            //     ? CustomLoading()
-            //     :
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            
-            Expanded(
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  ImageAsIcon(
-                    image: widget.item?.icon,
-                    height: 29.4,
-                    width: 32.4,
-                    fromNetwork: true,
-                    orignalColor: true,
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${widget.item?.name} (${widget.item?.categoryItemServiceId})",
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
+          // cartsViewModel.isLoading
+          //     ? CustomLoading()
+          //     :
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 20,
                     ),
-                  ),
-                ],
+                    ImageAsIcon(
+                      image: widget.item?.icon,
+                      height: 29.4,
+                      width: 32.4,
+                      fromNetwork: true,
+                      orignalColor: true,
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${widget.item?.name} (${widget.item?.categoryItemServiceId})",
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            initQuantity! >=1 ? CircleAvatar(child: Text('$initQuantity')):const SizedBox(),
-            Container(
-                alignment: Alignment.bottomRight,
-                child: OrderItemSystem(
-                    isMetersView: widget.isMetersView,
-                    item: widget.item,
-                    index: widget.index,
-                    // cartsViewModel: cartsViewModel,
-                    cubit: cubit)),
-            const SizedBox(
-              width: 10,
-            ),
-            
-          ],
-        ),
-        
+              const SizedBox(
+                width: 10,
+              ),
+              initQuantity! >= 1
+                  ? CircleAvatar(child: Text('$initQuantity'))
+                  : const SizedBox(),
+              Container(
+                  alignment: Alignment.bottomRight,
+                  child: OrderItemSystem(
+                      isMetersView: widget.isMetersView,
+                      item: widget.item,
+                      index: widget.index,
+                      // cartsViewModel: cartsViewModel,
+                      cubit: cubit)),
+              const SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
         );
       },
     );
@@ -129,13 +128,13 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
 }
 
 class OrderItemSystem extends StatefulWidget {
-  const OrderItemSystem(
-      {Key? key,
-      this.item,
-      this.index,
-      this.cubit,
-      this.isMetersView = false,})
-      : super(key: key);
+  const OrderItemSystem({
+    Key? key,
+    this.item,
+    this.index,
+    this.cubit,
+    this.isMetersView = false,
+  }) : super(key: key);
   final Items? item;
   final int? index;
   final bool isMetersView;
@@ -244,13 +243,13 @@ class orderItemSystem extends StatefulWidget {
   int? index;
   OrderDetailsCubit? cubit;
   bool isMetersView;
-  orderItemSystem(
-      {Key? key,
-      this.index,
-      this.item,
-      this.cubit,
-      this.isMetersView = false,})
-      : super(key: key);
+  orderItemSystem({
+    Key? key,
+    this.index,
+    this.item,
+    this.cubit,
+    this.isMetersView = false,
+  }) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -287,6 +286,7 @@ class _orderItemSystemState extends State<orderItemSystem> {
                   onTap: () async {
                     decreaseQuantity(item: widget.item!, cubit: widget.cubit);
                     widget.cubit?.getTotalQuantity();
+                    debugPrint('كسم السيسي');
                     setState(() {});
                   },
                   child: Container(
@@ -311,12 +311,20 @@ class _orderItemSystemState extends State<orderItemSystem> {
                       borderRadius: BorderRadius.circular(16),
                       color: Colors.white),
                   child: Center(
-                      child: Text(
-                    '${widget.item?.selectedQuantity}',
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600),
+                      child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return ScaleTransition(scale: animation, child: child);
+                    },
+                    child: Text(
+                      key: ValueKey<String>('${widget.item?.selectedQuantity}'),
+                      '${widget.item?.selectedQuantity}',
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                    ),
                   ))),
               InkWell(
                   borderRadius: BorderRadius.circular(32),

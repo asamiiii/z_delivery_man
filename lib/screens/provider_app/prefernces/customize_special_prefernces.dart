@@ -184,7 +184,7 @@ class _CustomizeSpecalPreferencesState
                                       // List<Map<String, dynamic>> itemDetails =
                                       //     [];
                                       for (var element in 
-                                          cubit.selectedItems!) {
+                                          cubit.selectedItems) {
                                         if (element.withDimension == true) {
                                           details.add({
                                             'category_item_service_id':
@@ -313,15 +313,12 @@ class _CustomizeSpecalPreferencesState
           listener: (context, state) {
             if (state is AssociateItemsPostSuccess) {
               if (state.successModel!.status!) {
+                Navigator.pop(context);
+                Navigator.pop(context);
                 showToast(
                     message: 'تم الاضافةالقطع بنجاح',
                     state: ToastStates.SUCCESS);
-                navigateAndReplace(
-                    context,
-                    OrderDetailsScreen(
-                      fromNotification: false,
-                      orderId: widget.orderId,
-                    ));
+                
               }
             }
             if (state is AssociateItemsPostFailed) {

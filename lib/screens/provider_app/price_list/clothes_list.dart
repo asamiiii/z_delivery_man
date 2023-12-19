@@ -20,7 +20,6 @@ class ClothesListWithPrice extends StatefulWidget {
 class _ClothesListWithPriceState extends State<ClothesListWithPrice> {
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.of(context).size;
     int indexList = 0;
     return BlocConsumer<OrderDetailsCubit, OrderDetailsState>(
       listener: (context, state) {},

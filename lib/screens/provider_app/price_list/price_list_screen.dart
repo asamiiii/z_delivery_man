@@ -60,7 +60,7 @@ class _PriceListScreenState extends State<PriceListScreen> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: primaryColor,
-            title: Text('كود الاوردر: ${widget.orderId}'),
+            title: Text('كود الاوردر: ${widget.orderId}',style: const TextStyle(color: Colors.white,fontSize: 15),),
             centerTitle: true,
             actions: [
               ElevatedButton(
@@ -84,7 +84,7 @@ class _PriceListScreenState extends State<PriceListScreen> {
                       ),
                     );
                   },
-                  child: const Text('تعديل الامتار'))
+                  child: const Text('تعديل الامتار',style: TextStyle(color: Colors.white),))
             ],
           ),
           body: Directionality(

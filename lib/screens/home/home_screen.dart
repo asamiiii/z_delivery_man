@@ -9,7 +9,6 @@ import 'package:z_delivery_man/screens/home/today.dart';
 import '../../models/time_slots_model.dart';
 import '../../network/local/cache_helper.dart';
 import '../../shared/widgets/components.dart';
-import '../../shared/widgets/constants.dart';
 import '../../shared/widgets/page_container.dart';
 import '../../shared/widgets/with_safe_area.dart';
 import '../../styles/color.dart';
@@ -132,8 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 duration: const Duration(milliseconds: 1000),
                                 transitionBuilder: (Widget child,
                                     Animation<double> animation) {
-                                  return FadeTransition(
-                                      opacity: animation, child: child);
+                                  return ScaleTransition(
+                                      scale: animation, child: child);
                                 },
                                 child: isToday == true
                                     ? TableToday(model: homeCubit.indexModel)
