@@ -300,14 +300,14 @@ class Item extends StatelessWidget {
           bottom: 0,
           child: ClipRRect(
             borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(80),
+                bottomLeft: Radius.circular(70),
                 topRight: Radius.circular(40),
                 bottomRight: Radius.circular(40),
                 topLeft: Radius.circular(10)),
             child: Container(
               color: Colors.blueAccent,
-              height: 210,
-              width: 190,
+              height: MediaQuery.of(context).size.height*0.25,
+              width: MediaQuery.of(context).size.width*0.45,
             ),
           ),
         ),
@@ -322,7 +322,7 @@ class Item extends StatelessWidget {
             )),
         Positioned(
             top: 140,
-            right: 30,
+            right: 10,
             child: Column(
               children: [
                 SizedBox(
@@ -335,9 +335,7 @@ class Item extends StatelessWidget {
                     style: GoogleFonts.cairo(color: Colors.white, fontSize: 17),
                   ),
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
+                
                 Row(
                   // mainAxisAlignment: MainAxisAlignment.,
                   crossAxisAlignment: CrossAxisAlignment.center,
