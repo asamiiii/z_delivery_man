@@ -169,8 +169,9 @@ class _CustomizeSpecalPreferencesState
     return WithSafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('تفضيلات '),
+          title: const Text('تفضيلات ',style: TextStyle(color:Colors.white),),
           centerTitle: true,
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         bottomNavigationBar: BlocConsumer<OrderDetailsCubit, OrderDetailsState>(
             listener: (context, state) {},
@@ -306,7 +307,7 @@ class _CustomizeSpecalPreferencesState
                 style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
                     padding: const EdgeInsets.symmetric(horizontal: 10)),
-                child: const Text('انتهاء'),
+                child: const Text('انتهاء',style: TextStyle(color: Colors.white),),
               );
             }),
         body: BlocConsumer<OrderDetailsCubit, OrderDetailsState>(

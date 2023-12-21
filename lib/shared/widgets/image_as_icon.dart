@@ -57,6 +57,7 @@ class ImageAsIcon extends StatelessWidget {
                             : defaultColor ?? const Color(0xffBCBCBC),
                     BlendMode.saturation),
                 child: Image.network(
+                  errorBuilder: (context, error, stackTrace) =>  const Icon(Icons.error,size: 30,),
                   image!,
                   width: width ?? 30,
                   fit: BoxFit.fill,

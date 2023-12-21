@@ -106,6 +106,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
                               itemBuilder: (context, index) => Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                                 child: OrdersSection(
+                                  statusName: widget.statusName,
                                     order: cubit.orders![index],
                                     state: state,
                                     cubit: cubit),
@@ -138,15 +139,17 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
 }
 
 class OrdersSection extends StatefulWidget {
-  const OrdersSection({
+   OrdersSection({
     Key? key,
     this.order,
     this.state,
     this.cubit,
+    this.statusName
   }) : super(key: key);
   final Orders? order;
   final OrderslistState? state;
   final OrderslistCubit? cubit;
+  String? statusName;
 
   @override
   State<OrdersSection> createState() => _OrdersSectionState();
@@ -162,7 +165,11 @@ class _OrdersSectionState extends State<OrdersSection> {
     commentController.dispose();
     super.dispose();
   }
-
+@override
+  void initState() {
+    debugPrint('status : ${widget.statusName}');
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -172,7 +179,7 @@ class _OrdersSectionState extends State<OrdersSection> {
         if (widget.order?.currentStatus == 'تم اسنادة الي المغسلة' ||
             widget.order?.currentStatus == 'في الطريق الي المغسلة') {
                showToast(
-                    message: 'يجب استلام الطلب',
+                    message: 'لا يوجد صلاحية علي الأوردر',
                     state: ToastStates.SUCCESS);
         } else {
           navigateTo(
@@ -263,7 +270,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                 //         ],
                 //       )
                 //     : const SizedBox(),
-                Row(
+                 widget.order?.currentStatus != 'تم اسنادة الي المغسلة'? Row(
                   children: [
                      Text('عدد القطع',style: GoogleFonts.cairo(),),
                     const SizedBox(
@@ -271,7 +278,8 @@ class _OrdersSectionState extends State<OrdersSection> {
                     ),
                     Text('${widget.order?.itemsCount}',style: GoogleFonts.cairo(fontSize: 18,fontWeight: FontWeight.bold),),
                   ],
-                ),
+                ):const SizedBox(),
+
 
                 Row(
                   children: [
@@ -695,7 +703,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                        Text(
-                        'كود الاوردر',
+                        'رقم الاوردر',
                         style:GoogleFonts.cairo(color: Colors.white,fontSize: 10),
                       ),
                       Text(
@@ -805,12 +813,12 @@ class _OrdersSectionState extends State<OrdersSection> {
                     );
                   },
                   child:  Row(
-                    children: [Image.asset('assets/images/pref.png',height: 50,width: 50,color: Colors.green,)],
+                    children: [Image.asset('assets/images/pref.png',height: 30,width: 30,color: Colors.green,)],
                   ))),
           Positioned(
               // top: 20,
               bottom: 20,
-              left: 70,
+              left: 50,
               child: InkWell(
                   onTap: () {
                     debugPrint(
@@ -939,7 +947,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                   },
                   child:  Row(
                     children: [
-                      Image.asset('assets/images/comments.png',height: 50,width: 50,)
+                      Image.asset('assets/images/comments.png',height: 30,width: 30,)
                     ],
                   ))),
         ],

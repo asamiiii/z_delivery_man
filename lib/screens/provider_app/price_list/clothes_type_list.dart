@@ -42,6 +42,19 @@ class _ClothesTypeListState extends State<ClothesTypeList> {
                           ),
                           onTap: () {
                             cubit.setSelectedCatId(catList?[index].id);
+                            // final cubit = OrderDetailsCubit.get(context);
+                            for (var element in cubit.initQuantityInPriceList) {
+                              for (int i = 0; i < cubit.itemList!.length; i++) {
+                                if (element.catItemServiceId ==
+                                    cubit.itemList![i]?.categoryItemServiceId) {
+                                  cubit.itemList![i]
+                                          ?.selectedQuantityFromOrder =
+                                      element.initQuantity;
+                                  debugPrint('init : $i');
+                                }
+                              }
+                            }
+                            setState(() {});
                           },
                           child: Container(
                               decoration: const BoxDecoration(

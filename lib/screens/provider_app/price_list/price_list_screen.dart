@@ -21,6 +21,7 @@ class PriceListScreen extends StatefulWidget {
   PriceListScreen({Key? key, this.orderId, this.orderItems}) : super(key: key);
   List<Items>? orderItems = [];
   final int? orderId;
+  
 
   @override
   State<PriceListScreen> createState() => _PriceListScreenState();
@@ -34,14 +35,14 @@ class _PriceListScreenState extends State<PriceListScreen> {
     var cubit = context.read<OrderDetailsCubit>();
     // WidgetsBinding.instance
     //     .addPostFrameCallback((_) async{
-             cubit.getPriceList(orderId: widget.orderId);
-           cubit.selectedItems.clear();
+    cubit.getPriceList(orderId: widget.orderId);
+    cubit.selectedItems.clear();
     cubit.totalQuantity = 0;
+
     // cubit.priceList[0].categories?[0].items;
-    
-        // });
-    
-    
+
+    // });
+
     super.initState();
   }
 
@@ -60,7 +61,11 @@ class _PriceListScreenState extends State<PriceListScreen> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: primaryColor,
-            title: Text('كود الاوردر: ${widget.orderId}',style: const TextStyle(color: Colors.white,fontSize: 15),),
+            iconTheme: const IconThemeData(color: Colors.white),
+            title: Text(
+              'كود الاوردر: ${widget.orderId}',
+              style: const TextStyle(color: Colors.white, fontSize: 15),
+            ),
             centerTitle: true,
             actions: [
               ElevatedButton(
@@ -84,207 +89,260 @@ class _PriceListScreenState extends State<PriceListScreen> {
                       ),
                     );
                   },
-                  child: const Text('تعديل الامتار',style: TextStyle(color: Colors.white),))
+                  child: const Text(
+                    'تعديل الامتار',
+                    style: TextStyle(color: Colors.white),
+                  ))
             ],
           ),
-          body: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Container(
-              alignment: Alignment.topCenter,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 5.h,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(25)),
-                    height: 40,
-                    child: ConditionalBuilder(
-                      condition: state is! PriceListLoading,
-                      fallback: (context) => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      builder: (context) => Column(
-                        children: [
-                          Expanded(
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: orderDetailsCubit.priceList.length,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    orderDetailsCubit.setSelectedServicesId(
-                                        orderDetailsCubit.priceList[index].id);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15),
-                                    decoration: BoxDecoration(
-                                        color: orderDetailsCubit
-                                                    .priceList[index].id ==
-                                                orderDetailsCubit
-                                                    .selectedServicesId
-                                            ? primaryColor
-                                            : Colors.grey.shade100,
-                                        borderRadius:
-                                            BorderRadius.circular(25)),
-                                    child: Center(
-                                      child: Text(
-                                        '${orderDetailsCubit.priceList[index].name}',
-                                        style: TextStyle(
-                                            color: orderDetailsCubit
-                                                        .priceList[index].id ==
-                                                    orderDetailsCubit
-                                                        .selectedServicesId
-                                                ? Colors.white
-                                                : Colors.grey.shade500),
+          body: WillPopScope(
+            // canPop: goBack!,
+            onWillPop: () async{
+               showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: Text('هل انت متآكد'),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                // Navigator.of(context).pop();
+                              },
+                              child: const Text('لا')),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              child: const Text('نعم')),
+                        ],
+                        
+                      ));
+                      return  false;
+            },
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Container(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(25)),
+                      height: 40,
+                      child: ConditionalBuilder(
+                        condition: state is! PriceListLoading,
+                        fallback: (context) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        builder: (context) => Column(
+                          children: [
+                            Expanded(
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: orderDetailsCubit.priceList.length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      orderDetailsCubit.setSelectedServicesId(
+                                          orderDetailsCubit
+                                              .priceList[index].id);
+                                      final cubit =
+                                          OrderDetailsCubit.get(context);
+                                      for (var element
+                                          in cubit.initQuantityInPriceList) {
+                                        for (int i = 0;
+                                            i < cubit.itemList!.length;
+                                            i++) {
+                                          if (element.catItemServiceId ==
+                                              cubit.itemList![i]
+                                                  ?.categoryItemServiceId) {
+                                            cubit.itemList![i]
+                                                    ?.selectedQuantityFromOrder =
+                                                element.initQuantity;
+                                            debugPrint('init : $i');
+                                          }
+                                        }
+                                      }
+                                      setState(() {});
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
+                                      decoration: BoxDecoration(
+                                          color: orderDetailsCubit
+                                                      .priceList[index].id ==
+                                                  orderDetailsCubit
+                                                      .selectedServicesId
+                                              ? primaryColor
+                                              : Colors.grey.shade100,
+                                          borderRadius:
+                                              BorderRadius.circular(25)),
+                                      child: Center(
+                                        child: Text(
+                                          '${orderDetailsCubit.priceList[index].name}',
+                                          style: TextStyle(
+                                              color: orderDetailsCubit
+                                                          .priceList[index]
+                                                          .id ==
+                                                      orderDetailsCubit
+                                                          .selectedServicesId
+                                                  ? Colors.white
+                                                  : Colors.grey.shade500),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(
-                                width: 10,
+                                  );
+                                },
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(
+                                  width: 10,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4.h,
-                  ),
-                  ConditionalBuilder(
-                      condition: state is! PriceListLoading,
-                      fallback: (context) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                      builder: (context) => const ClothesTypeList()),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  SearchInput(
-                    hintText: 'ابحث عن الصنف',
-                    searchController: searchController,
-                    onChanged: orderDetailsCubit.onSearchTextChanged,
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  ConditionalBuilder(
-                      condition: state is! PriceListLoading,
-                      fallback: (context) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                      builder: (context) => ClothesListWithPrice(
-                            isSearch:
-                                orderDetailsCubit.searchPriceList!.isNotEmpty,
-                          )),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      BlocConsumer<OrderDetailsCubit, OrderDetailsState>(
-                          listener: (context, state) {},
-                          builder: (context, state) {
-                            var cubit = OrderDetailsCubit.get(context);
-                            return Text(
-                              ' اجمالي القطع: ${cubit.totalQuantity}',
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            );
-                          }),
-                      ElevatedButton(
-                        onPressed: () {
-                          // orderDetailsCubit.formKey.currentState.save();
-                          // List<int> itemsInt = [];
-                          // for (var item in orderDetailsCubit.selectedItems) {
-                          //   itemsInt.add(item.id!);
-                          // }
-                          List<Map<String, dynamic>> items = [];
-                          for (var element in orderDetailsCubit.selectedItems) {
-                            items.add({
-                              'item_id': element.id,
-                              'category_item_service_id':
-                                  element.categoryItemServiceId
-                            });
-                          }
-
-                          debugPrint('pref : $items');
-                          bool validForm = true;
-                          for (var element in orderDetailsCubit.selectedItems) {
-                            debugPrint('Local Id : ${element.localId}');
-                            if (element.withDimension == true) {
-                              if (element.width == '0' ||
-                                  element.lenght == '0' ||
-                                  element.width == '' ||
-                                  element.lenght == '' ||
-                                  element.width == '0.0' ||
-                                  element.lenght == '0.0' ||
-                                  element.width == null ||
-                                  element.lenght == null) {
-                                validForm = false;
-
-                                break;
-                              }
-                            }
-                          }
-                          if (validForm == false) {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (context) =>
-                            //           MetersView(
-                            //               areaid: widget
-                            //                   .areaId),
-                            //     ));
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.80,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(25.0),
-                                    topRight: Radius.circular(25.0),
-                                  ),
-                                ),
-                                child: MetersView(),
-                              ),
-                            );
-                          } else {
-                            navigateTo(
-                                context,
-                                CustomizeSpecalPreferences(
-                                    items: items,
-                                    selectedItems:
-                                        orderDetailsCubit.selectedItems,
-                                    orderId: widget.orderId));
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                            primary: primaryColor,
-                            padding: EdgeInsets.symmetric(horizontal: 15.w)),
-                        child: const Text(
-                          'متابعة',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                          ],
                         ),
                       ),
-                    ],
-                  )
-                ],
+                    ),
+                    SizedBox(
+                      height: 4.h,
+                    ),
+                    ConditionalBuilder(
+                        condition: state is! PriceListLoading,
+                        fallback: (context) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                        builder: (context) => const ClothesTypeList()),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    SearchInput(
+                      hintText: 'ابحث عن الصنف',
+                      searchController: searchController,
+                      onChanged: orderDetailsCubit.onSearchTextChanged,
+                    ),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    ConditionalBuilder(
+                        condition: state is! PriceListLoading,
+                        fallback: (context) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                        builder: (context) => ClothesListWithPrice(
+                              isSearch:
+                                  orderDetailsCubit.searchPriceList!.isNotEmpty,
+                            )),
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        BlocConsumer<OrderDetailsCubit, OrderDetailsState>(
+                            listener: (context, state) {},
+                            builder: (context, state) {
+                              var cubit = OrderDetailsCubit.get(context);
+                              return Text(
+                                ' اجمالي القطع: ${cubit.totalQuantity}',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              );
+                            }),
+                        ElevatedButton(
+                          onPressed: () {
+                            // orderDetailsCubit.formKey.currentState.save();
+                            // List<int> itemsInt = [];
+                            // for (var item in orderDetailsCubit.selectedItems) {
+                            //   itemsInt.add(item.id!);
+                            // }
+                            List<Map<String, dynamic>> items = [];
+                            for (var element
+                                in orderDetailsCubit.selectedItems) {
+                              items.add({
+                                'item_id': element.id,
+                                'category_item_service_id':
+                                    element.categoryItemServiceId
+                              });
+                            }
+
+                            debugPrint('pref : $items');
+                            bool validForm = true;
+                            for (var element
+                                in orderDetailsCubit.selectedItems) {
+                              debugPrint('Local Id : ${element.localId}');
+                              if (element.withDimension == true) {
+                                if (element.width == '0' ||
+                                    element.lenght == '0' ||
+                                    element.width == '' ||
+                                    element.lenght == '' ||
+                                    element.width == '0.0' ||
+                                    element.lenght == '0.0' ||
+                                    element.width == null ||
+                                    element.lenght == null) {
+                                  validForm = false;
+
+                                  break;
+                                }
+                              }
+                            }
+                            if (validForm == false) {
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) =>
+                              //           MetersView(
+                              //               areaid: widget
+                              //                   .areaId),
+                              //     ));
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (context) => Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.80,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(25.0),
+                                      topRight: Radius.circular(25.0),
+                                    ),
+                                  ),
+                                  child: MetersView(),
+                                ),
+                              );
+                            } else {
+                              navigateTo(
+                                  context,
+                                  CustomizeSpecalPreferences(
+                                      items: items,
+                                      selectedItems:
+                                          orderDetailsCubit.selectedItems,
+                                      orderId: widget.orderId));
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                              primary: primaryColor,
+                              padding: EdgeInsets.symmetric(horizontal: 15.w)),
+                          child: const Text(
+                            'متابعة',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

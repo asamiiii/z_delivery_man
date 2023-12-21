@@ -18,6 +18,24 @@ class ClothesListWithPrice extends StatefulWidget {
 }
 
 class _ClothesListWithPriceState extends State<ClothesListWithPrice> {
+
+@override
+  void initState() {
+    //  WidgetsBinding.instance.addPostFrameCallback((_) {
+      final cubit = OrderDetailsCubit.get(context);
+      for (var element in cubit.initQuantityInPriceList) {
+        for(int i = 0 ; i<cubit.itemList!.length;i++){
+          if (element.catItemServiceId == cubit.itemList![i]?.categoryItemServiceId) {
+          cubit.itemList![i]?.selectedQuantityFromOrder = element.initQuantity;
+          debugPrint('init : $i');
+        }
+        }
+        
+      }
+    // });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     int indexList = 0;

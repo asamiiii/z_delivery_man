@@ -42,14 +42,17 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
   int? initQuantity = 0;
   @override
   void initState() {
-    var cubit = context.read<OrderDetailsCubit>();
-    for (var element in cubit.initQuantityInPriceList) {
-      if (element.catItemServiceId == widget.item?.categoryItemServiceId) {
-        initQuantity = element.initQuantity;
-        debugPrint('initQuantity : $initQuantity');
-        break;
-      }
-    }
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   final cubit = OrderDetailsCubit.get(context);
+    //   for (var element in cubit.initQuantityInPriceList) {
+    //     if (element.catItemServiceId == widget.item?.categoryItemServiceId) {
+    //       widget.item?.selectedQuantityFromOrder = element.initQuantity;
+    //       debugPrint('initQuantity : $initQuantity');
+    //       setState(() {});
+    //       // break;
+    //     }
+    //   }
+    // });
 
     super.initState();
     // Provider.of<CartsViewModel>(context, listen: false).getCartList();
@@ -105,8 +108,9 @@ class _PriceListSystemOrderState extends State<PriceListSystemOrder> {
               const SizedBox(
                 width: 10,
               ),
-              initQuantity! >= 1
-                  ? CircleAvatar(child: Text('$initQuantity'))
+              widget.item!.selectedQuantityFromOrder! >= 1
+                  ? CircleAvatar(
+                      child: Text('${widget.item!.selectedQuantityFromOrder!}'))
                   : const SizedBox(),
               Container(
                   alignment: Alignment.bottomRight,
@@ -286,7 +290,7 @@ class _orderItemSystemState extends State<orderItemSystem> {
                   onTap: () async {
                     decreaseQuantity(item: widget.item!, cubit: widget.cubit);
                     widget.cubit?.getTotalQuantity();
-                    debugPrint('كسم السيسي');
+                    debugPrint('');
                     setState(() {});
                   },
                   child: Container(

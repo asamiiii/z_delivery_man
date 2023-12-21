@@ -4,6 +4,7 @@ import 'package:z_delivery_man/models/index_model.dart';
 import 'package:z_delivery_man/screens/home/today.dart';
 import 'package:z_delivery_man/screens/provider_app/orders_list/orders_list_screen.dart';
 import 'package:z_delivery_man/shared/widgets/components.dart';
+import 'package:z_delivery_man/shared/widgets/constants.dart';
 // opened --> total order or Itemcount
 // providerAssigned --> لم يتم استلامه
 // provider_received --> تم استلامه
@@ -14,13 +15,13 @@ import 'package:z_delivery_man/shared/widgets/components.dart';
 
 // ignore: must_be_immutable
 class TableAll extends StatelessWidget {
-  IndexModel? model ;
-   TableAll({Key? key,required this.model}) : super(key: key);
+  IndexModel? model;
+  TableAll({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(15),
       key: const Key('all'),
       child: GridView(
         shrinkWrap: true,
@@ -65,7 +66,7 @@ class TableAll extends StatelessWidget {
                     orderCount: '${model?.all?.orderCount.providerReceived}',
                     image: 'assets/images/press.png')),
           ),
-      
+
           //? تم الفحص
           GestureDetector(
             onTap: () {
@@ -82,7 +83,7 @@ class TableAll extends StatelessWidget {
                     orderCount: '${model?.all?.orderCount.checkUp}',
                     image: 'assets/images/q.png')),
           ),
-      
+
           //? تم الانتهاء
           GestureDetector(
             onTap: () {
@@ -99,7 +100,7 @@ class TableAll extends StatelessWidget {
                     orderCount: '${model?.all?.orderCount.finished}',
                     image: 'assets/images/finished.png')),
           ),
-      
+
           //? تم التسليم للمندوب
           GestureDetector(
             onTap: () {
@@ -116,7 +117,7 @@ class TableAll extends StatelessWidget {
                     orderCount: '${model?.all?.orderCount.opened}',
                     image: 'assets/images/done.png')),
           ),
-      
+
           //? العدد الاجمالي
           GestureDetector(
             onTap: () {
@@ -133,12 +134,11 @@ class TableAll extends StatelessWidget {
                     orderCount: '${model?.all?.orderCount.opened}',
                     image: 'assets/images/all.png')),
           ),
-      
           
         ],
       ),
     );
-    
+
     // Column(
     //   crossAxisAlignment: CrossAxisAlignment.center,
     //                             children: [
@@ -237,7 +237,7 @@ class TableAll extends StatelessWidget {
     //                                   //   DataCell(Center(child: Text('${model?.all?.itemCount.providerReceived}',style: const TextStyle(color:Colors.white)))),
     //                                   // ])
     //                                 ],
-                                  
+
     //                                 ),
     //                               ),
     //                             ],

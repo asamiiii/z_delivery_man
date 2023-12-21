@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
 import 'package:z_delivery_man/screens/home/all.dart';
 import 'package:z_delivery_man/screens/home/today.dart';
+import 'package:z_delivery_man/shared/widgets/constants.dart';
 import '../../models/time_slots_model.dart';
 import '../../network/local/cache_helper.dart';
 import '../../shared/widgets/components.dart';
@@ -77,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             items: <String>[
                               'اليوم',
                               'الكل',
+                              'الخروج'
                             ].map((String value) {
                               return DropdownMenuItem<String>(
                                 // enabled: false,
@@ -87,8 +89,30 @@ class _HomeScreenState extends State<HomeScreen> {
                             onChanged: (value) {
                               if (value == 'اليوم') {
                                 isToday = true;
-                              } else {
+                              } else if(value == 'الكل') {
                                 isToday = false;
+                              }else{
+                                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: Text('هل انت متآكد'),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                // Navigator.of(context).pop();
+                              },
+                              child: const Text('لا')),
+                          TextButton(
+                              onPressed: () {
+                                // Navigator.pop(context);
+                                signOut(context);
+                              },
+                              child: const Text('نعم')),
+                        ],
+                        
+                      ));
+                                
                               }
                               setState(() {});
                             },
@@ -97,47 +121,53 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 15,
                           ),
                         ]),
-                    body: RefreshIndicator(
-                      onRefresh: () => isDeliveryMan
-                          ? homeCubit.getTimeSlots()
-                          : homeCubit.getStatusWithCount(),
-                      child: ConditionalBuilder(
-                        condition: state is! HomeLoadingState &&
-                            state is! HomeLoadingStatus,
-                        fallback: (context) =>
-                            const Center(child: CircularProgressIndicator()),
-                        builder: (context) => isDeliveryMan
-                            ? ListView.separated(
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                separatorBuilder: (context, index) => SizedBox(
-                                      height: 2.h,
-                                    ),
-                                itemCount: homeCubit.timeSlots?.length ?? 0,
-                                itemBuilder: (context, index) {
-                                  // if (isDeliveryMan) {
-                                  return BuildCard(
-                                      item: homeCubit.timeSlots?[index]);
-                                  // } else {
-                                  // return BuildProviderCard(
-                                  //   item: homeCubit
-                                  //       .indexModel?.statusModel?[index]!,
-                                  //   cubit: homeCubit,
-                                  // );
-                                  //   return TableAll(model: homeCubit.indexModel,);
-                                  // }
-                                })
-                            : AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 1000),
-                                transitionBuilder: (Widget child,
-                                    Animation<double> animation) {
-                                  return ScaleTransition(
-                                      scale: animation, child: child);
-                                },
-                                child: isToday == true
-                                    ? TableToday(model: homeCubit.indexModel)
-                                    : TableAll(model: homeCubit.indexModel),
-                              ),
+                    body: WillPopScope(
+                      onWillPop: () async{
+                        
+                        return false;
+                      },
+                      child: RefreshIndicator(
+                        onRefresh: () => isDeliveryMan
+                            ? homeCubit.getTimeSlots()
+                            : homeCubit.getStatusWithCount(),
+                        child: ConditionalBuilder(
+                          condition: state is! HomeLoadingState &&
+                              state is! HomeLoadingStatus,
+                          fallback: (context) =>
+                              const Center(child: CircularProgressIndicator()),
+                          builder: (context) => isDeliveryMan
+                              ? ListView.separated(
+                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  separatorBuilder: (context, index) => SizedBox(
+                                        height: 2.h,
+                                      ),
+                                  itemCount: homeCubit.timeSlots?.length ?? 0,
+                                  itemBuilder: (context, index) {
+                                    // if (isDeliveryMan) {
+                                    return BuildCard(
+                                        item: homeCubit.timeSlots?[index]);
+                                    // } else {
+                                    // return BuildProviderCard(
+                                    //   item: homeCubit
+                                    //       .indexModel?.statusModel?[index]!,
+                                    //   cubit: homeCubit,
+                                    // );
+                                    //   return TableAll(model: homeCubit.indexModel,);
+                                    // }
+                                  })
+                              : AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 1000),
+                                  transitionBuilder: (Widget child,
+                                      Animation<double> animation) {
+                                    return ScaleTransition(
+                                        scale: animation, child: child);
+                                  },
+                                  child: isToday == true
+                                      ? TableToday(model: homeCubit.indexModel)
+                                      : TableAll(model: homeCubit.indexModel),
+                                ),
+                        ),
                       ),
                     ),
                   ),

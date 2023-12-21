@@ -78,7 +78,7 @@ class Items {
   String? icon;
   int? categoryItemServiceId;
   int? selectedQuantity = 0;
-  int? selectedQuantityFromOrder;
+  int? selectedQuantityFromOrder=0;
   bool? withDimension ;
   dynamic lenght;
   dynamic width;

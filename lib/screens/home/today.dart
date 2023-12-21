@@ -24,7 +24,7 @@ class TableToday extends StatelessWidget {
       padding: EdgeInsets.all(10),
       key: const Key('today'),
       child: GridView(
-        shrinkWrap: true,
+        // shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -252,7 +252,6 @@ class TableToday extends StatelessWidget {
     //                                     cells: [
     //                                      DataCell(const Text('المتبقي',style: TextStyle(color:Colors.red,fontWeight: FontWeight.bold)),
     //                                       onTap: () {
-    //                                         navigateTo(context,
     //                                           const OrdersListScreen(
     //                                           statusName: 'remaining',
     //                                           ));

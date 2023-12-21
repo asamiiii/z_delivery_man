@@ -133,6 +133,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 'تفاصيل الاوردر',
                 style: TextStyle(color: Colors.white),
               ),
+              iconTheme: const IconThemeData(color: Colors.white),
               backgroundColor: primaryColor,
               centerTitle: true,
               actions: [
@@ -1635,8 +1636,9 @@ class _ProviderSectionState extends State<ProviderSection> {
           ),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            // SizedBox(width: 20,),
             ConditionalBuilder(
               condition: widget.state is! OrderDetailsNextStatusLoadingState,
               fallback: (context) => const CupertinoActivityIndicator(),
@@ -2089,7 +2091,8 @@ class _ProviderSectionState extends State<ProviderSection> {
                             // widget.order.nextStatus,
                             '${widget.cubit?.providerOrderDetails?.nextStatus}')),
               ),
-            )
+            ),
+            SizedBox(width: 20,),
           ],
         ),
         const SizedBox(
