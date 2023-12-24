@@ -93,7 +93,7 @@ class Items {
       this.categoryItemServiceId,
       this.txtController,
       this.selectedQuantity,
-      this.selectedQuantityFromOrder,
+      this.selectedQuantityFromOrder=0,
       this.withDimension,
       this.localId,
       this.lenght,

@@ -52,6 +52,8 @@ class LoginScreen extends StatelessWidget {
               }
               
             });
+          }else if(state is LoginFailedState){
+            showToast(message: 'Login Failed', state: ToastStates.ERROR,);
           }
         },
         builder: (context, state) {

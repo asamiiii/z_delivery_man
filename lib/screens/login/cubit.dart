@@ -35,7 +35,10 @@ class LoginCubit extends Cubit<LoginStates> {
       
       loginModel = LoginModel.fromJson(value.data);
       debugPrint(' login resp : ${value.data}');
-      isDeliveyMan = loginModel?.type == deliveryMan;
+      if(value.data.toString().contains('errors')){
+      emit(LoginFailedState());
+      }else{
+       isDeliveyMan = loginModel?.type == deliveryMan;
       
       debugPrint('user token : ${loginModel?.token}');
       await CacheHelper.saveData(key: 'name', value:loginModel?.name );
@@ -45,6 +48,8 @@ class LoginCubit extends Cubit<LoginStates> {
         
       });
       emit(LoginSuccessState(loginModel: loginModel));
+      }
+      
     }).catchError((e) {
       print(e);
       emit(LoginFailedState());
