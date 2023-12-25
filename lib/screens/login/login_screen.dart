@@ -203,9 +203,9 @@ class LoginScreen extends StatelessWidget {
                                                 backgroundColor: Colors.red,
                                               ));
                                               }else{
-                         FirebaseMessaging.instance
-                                              .getToken()
-                                              .then((token) {
+                        //  FirebaseMessaging.instance
+                        //                       .getToken()
+                        //                       .then((token) {
                                             debugPrint('fcm token: $token');
                                             cubit.login(
                                                 email: cubit
@@ -215,8 +215,9 @@ class LoginScreen extends StatelessWidget {
                                                     .passwordController.text
                                                     .trim(),
                                                 deviceName: 'deviceName',
-                                                fcmToken: token);
-                                          });
+                                                fcmToken: 'token');
+                                          // }
+                                          // );
                                               }
                                           
                                         }
