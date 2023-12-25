@@ -61,6 +61,7 @@ dependencies:
   fdottedline_nullsafety: ^2.0.1
   firebase_messaging: ^14.6.7
   google_fonts: ^6.1.0
+  # flutter_screenutil: ^5.9.0
 
 dev_dependencies:
   flutter_test:

@@ -39,6 +39,7 @@ void main() async {
   await CacheHelper.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // debugPrint('x : $x');
+  // await ScreenUtil.ensureScreenSize();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   token = CacheHelper.getData(key: 'token');
   debugPrint('token : $token');

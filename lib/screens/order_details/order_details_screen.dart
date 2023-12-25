@@ -314,8 +314,14 @@ class DeliverySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Card(
-          elevation: 10,
+        Container(
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.blue[200],
+            border: Border.all(),
+            borderRadius: BorderRadius.circular(25)
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -397,26 +403,42 @@ class DeliverySection extends StatelessWidget {
             style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
           ),
         ),
-        Card(
-          elevation: 10,
+        Container(
+          // elevation: 10,
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.blue[200],
+            border: Border.all(),
+            borderRadius: BorderRadius.circular(25)
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    width: 90.w,
+                    child: Text(
+                      "اسم  العميل: ${cubit?.orderDetailsModel?.customer?.name}",
+                      style:
+                          TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+                          overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  
+                ],
+              ),
+              Row(
                 children: [
                   Text(
-                    "اسم  العميل: ${cubit?.orderDetailsModel?.customer?.name}",
-                    style:
-                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
-                  ),
-                  Text(
-                    "كود العميل: ${cubit?.orderDetailsModel?.address?.customerId}",
-                    style:
-                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
-                  ),
+                        "كود العميل: ${cubit?.orderDetailsModel?.address?.customerId}",
+                        style:
+                            TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+                      ),
                 ],
               ),
               Column(
@@ -524,8 +546,15 @@ class DeliverySection extends StatelessWidget {
             style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
           ),
         ),
-        Card(
-          elevation: 10,
+        Container(
+          // elevation: 10,
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.blue[200],
+            border: Border.all(),
+            borderRadius: BorderRadius.circular(25)
+          ),
           child: Column(
             children: [
               const SizedBox(
@@ -708,7 +737,8 @@ class DeliverySection extends StatelessWidget {
               state is! OrderDetailsLoadingState,
           fallback: (context) => const CupertinoActivityIndicator(),
           builder: (context) => Container(
-            alignment: Alignment.center,
+            alignment: Alignment.bottomLeft,
+            margin: const EdgeInsets.all(10),
             height: 9.h,
             child: cubit?.orderDetailsModel?.nextStatus == null
                 ? cubit?.orderDetailsModel?.canCollect == true
