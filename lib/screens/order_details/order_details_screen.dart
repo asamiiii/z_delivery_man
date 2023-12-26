@@ -15,6 +15,7 @@ import 'package:z_delivery_man/models/order_mode.dart';
 import 'package:z_delivery_man/models/order_per_status_provider.dart';
 import 'package:z_delivery_man/models/price_list_model.dart' as pitem;
 import 'package:z_delivery_man/models/provider_order_details.dart';
+import 'package:z_delivery_man/screens/order_item_images_screen/order_item_images_view.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/meters_view.dart';
 import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
 
@@ -1085,7 +1086,6 @@ class _ProviderSectionState extends State<ProviderSection> {
                       itemBuilder: (context, index) {
                         return Container(
                           color: Colors.blue[100],
-                          // elevation: 10,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -1097,11 +1097,26 @@ class _ProviderSectionState extends State<ProviderSection> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'الصنف: ${widget.cubit?.providerOrderDetails?.items?[index].category}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 13.sp),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'الصنف: ${widget.cubit?.providerOrderDetails?.items?[index].category}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 13.sp),
+                                          ),
+                                          SizedBox(width: 15.w,),
+                                           TextButton(child:
+                                           Row(
+                                             children: [
+                                               const Icon(Icons.camera_alt_outlined),
+                                               SizedBox(width: 1.w,),
+                                               const Text('اضافه صور')
+                                             ],
+                                           ), onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => OrderItemImagesScreen(itemName:widget.cubit?.providerOrderDetails?.items?[index].name),));
+                                             },),
+                                        ],
                                       ),
                                       Text(
                                         'خدمة: ${widget.cubit?.providerOrderDetails?.items?[index].service}',
@@ -1324,6 +1339,7 @@ class _ProviderSectionState extends State<ProviderSection> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: [
+                                          
                                           Builder(builder: (context) {
                                             return ConditionalBuilder(
                                                 condition: widget.state
