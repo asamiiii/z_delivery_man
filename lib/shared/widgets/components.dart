@@ -124,3 +124,28 @@ chooseToastColor(ToastStates state) {
   }
   return color;
 }
+
+showAreYouSureDialoge(
+    {required BuildContext context,
+    required Function yesFun,
+    required Function noFun}) {
+  showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: const Text('هل انت متأكد'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    noFun();
+                    debugPrint('Cancel');
+                  },
+                  child: const Text('لا')),
+              TextButton(
+                  onPressed: () {
+                    debugPrint('image removed');
+                    yesFun();
+                  },
+                  child: const Text('نعم')),
+            ],
+          ));
+}

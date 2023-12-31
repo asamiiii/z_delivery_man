@@ -60,7 +60,7 @@ class _PaintOnImageState extends State<PaintOnImage> {
           initialStrokeWidth: 5,
           textDelegate: TextDelegate(),
           initialColor: Colors.green,
-          initialPaintMode: PaintMode.line,
+          initialPaintMode: PaintMode.freeStyle,
         ):const Center(child: CircularProgressIndicator()),
       );},
     );

@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-zdeliveryman-dev-112950-authRole",
+      "UnauthRoleArn": "arn:aws:iam::347618436673:role/amplify-zdeliveryman-dev-112950-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::347618436673:role/amplify-zdeliveryman-dev-112950-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-zdeliveryman-dev-112950-deployment",
+      "UnauthRoleName": "amplify-zdeliveryman-dev-112950-unauthRole",
+      "StackName": "amplify-zdeliveryman-dev-112950",
+      "StackId": "arn:aws:cloudformation:us-east-1:347618436673:stack/amplify-zdeliveryman-dev-112950/7e349c40-a49a-11ee-a54d-0e2b0f092d73",
+      "AmplifyAppId": "delq3eunlw5h0"
+    },
+    "categories": {
+      "auth": {
+        "zdeliverymanff63aa62": {}
+      },
+      "storage": {
+        "zlaundry": {}
+      }
+    }
+  }
+}

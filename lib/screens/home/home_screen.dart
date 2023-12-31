@@ -67,63 +67,51 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(
                             width: 15,
                           ),
-                          isDeliveryMan==false? DropdownButton<String>(
-                            iconDisabledColor: Colors.white,
-                            iconEnabledColor: Colors.white,
-                            autofocus: true,
-                            hint: Text(isToday == true ? 'اليوم' : 'الكل',
-                                style: GoogleFonts.cairo(
-                                  color: Colors.white,
-                                )),
-                            items: <String>[
-                              'اليوم',
-                              'الكل',
-                              'الخروج'
-                            ].map((String value) {
-                              return DropdownMenuItem<String>(
-                                // enabled: false,
-                                value: value,
-                                child: Text(value,style: GoogleFonts.cairo(),),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              if (value == 'اليوم') {
-                                isToday = true;
-                              } else if(value == 'الكل') {
-                                isToday = false;
-                              }else{
-                                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: Text('هل انت متآكد'),
-                        actions: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                // Navigator.of(context).pop();
-                              },
-                              child: const Text('لا')),
-                          TextButton(
-                              onPressed: () {
-                                // Navigator.pop(context);
-                                signOut(context);
-                              },
-                              child: const Text('نعم')),
-                        ],
-                        
-                      ));
-                                
-                              }
-                              setState(() {});
-                            },
-                          ):const SizedBox(),
+                          isDeliveryMan == false
+                              ? DropdownButton<String>(
+                                  iconDisabledColor: Colors.white,
+                                  iconEnabledColor: Colors.white,
+                                  autofocus: true,
+                                  hint: Text(isToday == true ? 'اليوم' : 'الكل',
+                                      style: GoogleFonts.cairo(
+                                        color: Colors.white,
+                                      )),
+                                  items: <String>['اليوم', 'الكل', 'الخروج']
+                                      .map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      // enabled: false,
+                                      value: value,
+                                      child: Text(
+                                        value,
+                                        style: GoogleFonts.cairo(),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    if (value == 'اليوم') {
+                                      isToday = true;
+                                    } else if (value == 'الكل') {
+                                      isToday = false;
+                                    } else {
+                                      showAreYouSureDialoge(
+                                          context: context,
+                                          yesFun: () {
+                                            signOut(context);
+                                          },
+                                          noFun: () {
+                                            Navigator.of(context).pop();
+                                          });
+                                    }
+                                    setState(() {});
+                                  },
+                                )
+                              : const SizedBox(),
                           const SizedBox(
                             width: 15,
                           ),
                         ]),
                     body: WillPopScope(
-                      onWillPop: () async{
-                        
+                      onWillPop: () async {
                         return false;
                       },
                       child: RefreshIndicator(
@@ -137,9 +125,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               const Center(child: CircularProgressIndicator()),
                           builder: (context) => isDeliveryMan
                               ? ListView.separated(
-                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
                                   shrinkWrap: true,
-                                  separatorBuilder: (context, index) => SizedBox(
+                                  separatorBuilder: (context, index) =>
+                                      SizedBox(
                                         height: 2.h,
                                       ),
                                   itemCount: homeCubit.timeSlots?.length ?? 0,
