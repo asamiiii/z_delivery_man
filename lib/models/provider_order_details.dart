@@ -164,6 +164,7 @@ class Items {
   bool? withDimension;
   List<Items>? itemDetailes;
   dynamic totalMeters;
+  List<String>? imagesUrl; //! new value in the model
 
   Items(
       {this.id,
@@ -176,7 +177,8 @@ class Items {
       this.width,
       this.itemDetailes,
       this.withDimension,
-      this.totalMeters
+      this.totalMeters,
+      this.imagesUrl
       });
 
   Items.fromJson(Map<String, dynamic> json) {

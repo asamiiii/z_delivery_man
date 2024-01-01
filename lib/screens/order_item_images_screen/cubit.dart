@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:z_delivery_man/network/remote/fire_storage.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/state.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/upladed_image_model.dart';
+import 'package:z_delivery_man/shared/widgets/components.dart';
 
 class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
   OrderItemImagesCubit() : super(OrderItemImagesInitialState());
@@ -19,6 +20,8 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
   List<UploadedImageModel> imagesLocalFiles = [];
   List<String> remoteList = [];
 
+//* Pick Image Form Camera
+//* and Add Picked Image To imagesLocalFiles List
   pickImageFromCamera() async {
     emit(OrderItemImagesLoadingState());
     final pickedFile = await ImagePicker().pickImage(
@@ -33,6 +36,7 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     debugPrint('imagesLocalFiles : $imagesLocalFiles');
   }
 
+  //* Save Image After Edit
   Future<void> saveImage(BuildContext context, File localImage) async {
     var index = 0;
     emit(OrderItemImagesLoadingState());
@@ -58,11 +62,13 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     }
   }
 
+//* Uploade All Local Images To Fire Storage and Get URL
   Future<void> uploadImagesToStorage() async {
     List<String> imagesUrl = [];
     emit(OrderItemImagesLoadingState());
     try {
-      for (var element in imagesLocalFiles) {
+      if(imagesLocalFiles.isNotEmpty){
+         for (var element in imagesLocalFiles) {
         imagesUrl.add(await FireStorage.uploadImageOnFirebaseStorage(
             element.imageFile!, element.imagePath!));
         debugPrint('images URL  $imagesUrl');
@@ -70,11 +76,14 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
         remoteList = imagesUrl;
         emit(OrderItemImagesSuccessState());
       }
+      }else{
+        showToast(message: 'لا يوجد صور !', state: ToastStates.ERROR);
+      }
+      
     } catch (error) {
       emit(OrderItemImagesFailedState());
     }
-
-    // return imagesUrl;
+    emit(OrderItemImagesStopLoadingState());
   }
 
   removeImageFromFireStorage(String? imageUrl) {

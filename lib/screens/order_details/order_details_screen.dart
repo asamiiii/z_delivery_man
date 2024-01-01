@@ -29,11 +29,12 @@ import 'order_details_state.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   const OrderDetailsScreen(
-      {Key? key, this.orderId, this.fromNotification, this.order})
+      {Key? key, this.orderId, this.fromNotification, this.order,this.statusName})
       : super(key: key);
   final int? orderId;
   final bool? fromNotification;
   final Orders? order;
+  final String? statusName;
 
   @override
   State<OrderDetailsScreen> createState() => _OrderDetailsScreenState();
@@ -279,6 +280,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                               cubit: cubit,
                               state: state,
                               order: widget.order,
+                              statusName: widget.statusName,
                             );
                           }
                         }),
@@ -891,12 +893,13 @@ class DeliverySection extends StatelessWidget {
 
 class ProviderSection extends StatefulWidget {
   const ProviderSection(
-      {Key? key, this.cubit, this.orderId, this.state, this.order})
+      {Key? key, this.cubit, this.orderId, this.state, this.order,this.statusName})
       : super(key: key);
   final OrderDetailsCubit? cubit;
   final int? orderId;
   final OrderDetailsState? state;
   final Orders? order;
+  final String? statusName;
 
   @override
   State<ProviderSection> createState() => _ProviderSectionState();
@@ -923,7 +926,7 @@ class _ProviderSectionState extends State<ProviderSection> {
               //   "تاريخ الاستلام: ${cubit.providerOrderDetails.pick.date}",
               //   style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
               // ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Row(
@@ -968,7 +971,7 @@ class _ProviderSectionState extends State<ProviderSection> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Row(
@@ -981,7 +984,7 @@ class _ProviderSectionState extends State<ProviderSection> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Text(
@@ -1111,10 +1114,10 @@ class _ProviderSectionState extends State<ProviderSection> {
                                              children: [
                                                const Icon(Icons.camera_alt_outlined),
                                                SizedBox(width: 1.w,),
-                                               const Text('اضافه صور')
+                                               const Text('صور العنصر')
                                              ],
                                            ), onPressed: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => OrderItemImagesScreen(itemName:widget.cubit?.providerOrderDetails?.items?[index].name),));
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => OrderItemImagesScreen(itemName:widget.cubit?.providerOrderDetails?.items?[index].name,statusName: widget.statusName),));
                                              },),
                                         ],
                                       ),

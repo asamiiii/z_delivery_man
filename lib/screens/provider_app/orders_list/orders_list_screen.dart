@@ -188,6 +188,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                 fromNotification: false,
                 orderId: widget.order?.id,
                 order: widget.order,
+                statusName: widget.statusName,
               ));
         }
       },

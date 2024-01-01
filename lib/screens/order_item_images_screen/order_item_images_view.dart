@@ -12,8 +12,11 @@ import 'cubit.dart';
 
 class OrderItemImagesScreen extends StatefulWidget {
   String? itemName;
+  String? statusName;
+
   bool? idEdit;
-  OrderItemImagesScreen({Key? key, required this.itemName, this.idEdit=false}) : super(key: key);
+  OrderItemImagesScreen({Key? key, required this.itemName, this.idEdit = false,this.statusName})
+      : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -21,10 +24,10 @@ class OrderItemImagesScreen extends StatefulWidget {
 }
 
 class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
-@override
+  @override
   void initState() {
-     final cubit = OrderItemImagesCubit.get(context);
-     cubit.imagesLocalFiles.clear();
+    final cubit = OrderItemImagesCubit.get(context);
+    cubit.imagesLocalFiles.clear();
     super.initState();
   }
 
@@ -33,8 +36,7 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
     return BlocConsumer<OrderItemImagesCubit, OrderItemImagesState>(
       listener: (context, state) {
         if (state is OrderItemImagesSuccessState) {
-          showToast(
-              message: 'تمت العملية بنجاح', state: ToastStates.SUCCESS);
+          showToast(message: 'تمت العملية بنجاح', state: ToastStates.SUCCESS);
         } else if (state is OrderItemImagesFailedState) {
           showToast(message: 'حدث خطأ !!', state: ToastStates.ERROR);
         }
@@ -49,145 +51,183 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
               style: const TextStyle(color: Colors.white),
             ),
             actions: [
-              TextButton(onPressed: () {
-                cubit.uploadImagesToStorage();
-              }, child: const Text('رفع الصور',style: TextStyle(color: Colors.white),))
+              cubit.imagesLocalFiles.isNotEmpty? TextButton(
+                  onPressed: () {
+                    cubit.uploadImagesToStorage();
+                  },
+                  child: const Text(
+                    'رفع الصور',
+                    style: TextStyle(color: Colors.white),
+                  )):const SizedBox()
             ],
           ),
-          body: state is OrderItemImagesLoadingState ? const Center(child: CircularProgressIndicator(),): Padding(
-            padding: const EdgeInsets.all(8),
-            child: GridView(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 5,
-                childAspectRatio: 0.7,
-                crossAxisSpacing: 10,
-              ),
-              children: [
-                ...cubit.imagesLocalFiles
-                    .map((e) => Stack(
+          body: state is OrderItemImagesLoadingState
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: cubit.imagesLocalFiles.isNotEmpty ||
+                          cubit.remoteList.isNotEmpty
+                      ? GridView(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 5,
+                            childAspectRatio: 0.7,
+                            crossAxisSpacing: 10,
+                          ),
                           children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          PaintOnImage(image: e.imageFile),
-                                    ));
-                              },
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(26),
-                                child: FadeInImage(
-                                  fit: BoxFit.cover,
-                                  placeholder:
-                                      const AssetImage('assets/images/q.png'),
-                                  image: FileImage(
-                                    e.imageFile??File('dummmy_path'),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                                top: 5,
-                                left: 5,
-                                child: InkWell(
-                                  onTap: () {
-                                    showAreYouSureDialoge(
-                                        context: context,
-                                        yesFun: () {
-                                          cubit.removeImageFromLocalStorageList(e.imageFile);
-                                          Navigator.pop(context);
-                                        },
-                                        noFun: () {
-                                          Navigator.pop(context);
-                                        });
-                                  },
-                                  child: CircleAvatar(
-                                    radius: 10.sp,
-                                    backgroundColor: primaryColor,
-                                    child: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ))
-                          ],
-                        ))
-                    .toList(),
+                            ...cubit.imagesLocalFiles
+                                .map((e) => Stack(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PaintOnImage(
+                                                          image: e.imageFile),
+                                                ));
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(26),
+                                            child: FadeInImage(
+                                              fit: BoxFit.fill,
 
-                    ...cubit.remoteList.map((e) =>Stack(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //       builder: (context) =>
-                                //           PaintOnImage(image: e),
-                                //     ));
-                              },
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(26),
-                                child: FadeInImage(
-                                  fit: BoxFit.cover,
-                                  placeholder:
-                                      const AssetImage('assets/images/q.png'),
-                                  image: NetworkImage(
-                                    e,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                                top: 5,
-                                left: 5,
-                                child: InkWell(
-                                  onTap: () {
-                                    showAreYouSureDialoge(
-                                        context: context,
-                                        yesFun: () {
-                                          cubit.removeImageFromFireStorage(e);
-                                          Navigator.pop(context);
-                                        },
-                                        noFun: () {
-                                          Navigator.pop(context);
-                                        });
-                                  },
-                                  child: CircleAvatar(
-                                    radius: 10.sp,
-                                    backgroundColor: Colors.green,
-                                    child: const Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ))
+                                              placeholder: const AssetImage(
+                                                  'assets/images/q.png',),
+                                              image: FileImage(
+                                                e.imageFile ??
+                                                    File('dummmy_path'),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        widget.statusName =='provider_received_all' || widget.statusName =='provider_received'? Positioned(
+                                            top: 5,
+                                            left: 5,
+                                            child: InkWell(
+                                              onTap: () {
+                                                showAreYouSureDialoge(
+                                                    context: context,
+                                                    yesFun: () {
+                                                      cubit
+                                                          .removeImageFromLocalStorageList(
+                                                              e.imageFile);
+                                                      Navigator.pop(context);
+                                                    },
+                                                    noFun: () {
+                                                      Navigator.pop(context);
+                                                    });
+                                              },
+                                              child: CircleAvatar(
+                                                radius: 10.sp,
+                                                backgroundColor: primaryColor,
+                                                child: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            )):const SizedBox()
+                                      ],
+                                    ))
+                                .toList(),
+                            ...cubit.remoteList
+                                .map((e) => Stack(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            // Navigator.push(
+                                            //     context,
+                                            //     MaterialPageRoute(
+                                            //       builder: (context) =>
+                                            //           PaintOnImage(image: e),
+                                            //     ));
+                                          },
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(26),
+                                            child: FadeInImage(
+                                              fit: BoxFit.cover,
+                                              placeholder: const AssetImage(
+                                                  'assets/images/q.png'),
+                                              image: NetworkImage(
+                                                e,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        widget.statusName =='provider_received_all' || widget.statusName =='provider_received'? Positioned(
+                                            top: 5,
+                                            left: 5,
+                                            child: InkWell(
+                                              onTap: () {
+                                                showAreYouSureDialoge(
+                                                    context: context,
+                                                    yesFun: () {
+                                                      cubit
+                                                          .removeImageFromFireStorage(
+                                                              e);
+                                                      Navigator.pop(context);
+                                                    },
+                                                    noFun: () {
+                                                      Navigator.pop(context);
+                                                    });
+                                              },
+                                              child: CircleAvatar(
+                                                radius: 10.sp,
+                                                backgroundColor: Colors.green,
+                                                child: const Icon(
+                                                  Icons.close,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            )):const SizedBox()
+                                      ],
+                                    ))
+                                .toList()
                           ],
-                    )
-                    ).toList()
-              ],
-            ),
-          ),
-          floatingActionButton: SizedBox(
+                        )
+                      : Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.image,
+                                size: 100,
+                                color: primaryColor,
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              const Text('لا يوجد صور متاحة'),
+                            ],
+                          ),
+                        ),
+                ),
+          floatingActionButton: widget.statusName =='provider_received_all' || widget.statusName =='provider_received'?SizedBox(
             width: 40.w,
             // height: 20.h,
             child: FloatingActionButton(
               onPressed: () async {
-               await cubit.pickImageFromCamera();
-               setState(() {
-                 
-               });
+                await cubit.pickImageFromCamera();
+                setState(() {});
               },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text('اضافه صوره'),
-                  Icon(Icons.add_a_photo_outlined),
+                  Icon(
+                    Icons.add_a_photo_outlined,
+                  ),
                 ],
               ),
             ),
-          ),
+          ):const SizedBox(),
         );
       },
     );
