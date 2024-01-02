@@ -20,6 +20,7 @@ class ProviderOrderDetails {
   List<Images>? images;
   String? pickDeliveryMan;
   String? deliverDeliveryMan;
+  List<String>? imagesUrl; //! imagesUrl
 
   ProviderOrderDetails(
       {this.id,
@@ -39,7 +40,8 @@ class ProviderOrderDetails {
       this.associateItems,
       this.items,
       this.deliverDeliveryMan,
-      this.pickDeliveryMan
+      this.pickDeliveryMan,
+      this.imagesUrl //! imagesUrl  we need to add to from json
       });
 
   ProviderOrderDetails.fromJson(Map<String, dynamic> json) {
@@ -164,7 +166,7 @@ class Items {
   bool? withDimension;
   List<Items>? itemDetailes;
   dynamic totalMeters;
-  List<String>? imagesUrl; //! new value in the model
+  // List<String>? imagesUrl; //! new value in the model
 
   Items(
       {this.id,
@@ -178,7 +180,7 @@ class Items {
       this.itemDetailes,
       this.withDimension,
       this.totalMeters,
-      this.imagesUrl
+      // this.imagesUrl
       });
 
   Items.fromJson(Map<String, dynamic> json) {

@@ -15,7 +15,8 @@ class OrderItemImagesScreen extends StatefulWidget {
   String? statusName;
 
   bool? idEdit;
-  OrderItemImagesScreen({Key? key, required this.itemName, this.idEdit = false,this.statusName})
+  OrderItemImagesScreen(
+      {Key? key, required this.itemName, this.idEdit = false, this.statusName})
       : super(key: key);
 
   @override
@@ -28,6 +29,7 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
   void initState() {
     final cubit = OrderItemImagesCubit.get(context);
     cubit.imagesLocalFiles.clear();
+    cubit.getOrderItemImages(); //* Empty Fun 
     super.initState();
   }
 
@@ -51,14 +53,17 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
               style: const TextStyle(color: Colors.white),
             ),
             actions: [
-              cubit.imagesLocalFiles.isNotEmpty? TextButton(
-                  onPressed: () {
-                    cubit.uploadImagesToStorage();
-                  },
-                  child: const Text(
-                    'رفع الصور',
-                    style: TextStyle(color: Colors.white),
-                  )):const SizedBox()
+              cubit.imagesLocalFiles.isNotEmpty
+                  ? TextButton(
+                      onPressed: ()async{
+                        await cubit.uploadImagesToStorage();
+                        await cubit.sendOrderItemImages();
+                      },
+                      child: const Text(
+                        'رفع الصور',
+                        style: TextStyle(color: Colors.white),
+                      ))
+                  : const SizedBox()
             ],
           ),
           body: state is OrderItemImagesLoadingState
@@ -96,9 +101,9 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                                 BorderRadius.circular(26),
                                             child: FadeInImage(
                                               fit: BoxFit.fill,
-
                                               placeholder: const AssetImage(
-                                                  'assets/images/q.png',),
+                                                'assets/images/q.png',
+                                              ),
                                               image: FileImage(
                                                 e.imageFile ??
                                                     File('dummmy_path'),
@@ -106,32 +111,40 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                             ),
                                           ),
                                         ),
-                                        widget.statusName =='provider_received_all' || widget.statusName =='provider_received'? Positioned(
-                                            top: 5,
-                                            left: 5,
-                                            child: InkWell(
-                                              onTap: () {
-                                                showAreYouSureDialoge(
-                                                    context: context,
-                                                    yesFun: () {
-                                                      cubit
-                                                          .removeImageFromLocalStorageList(
-                                                              e.imageFile);
-                                                      Navigator.pop(context);
-                                                    },
-                                                    noFun: () {
-                                                      Navigator.pop(context);
-                                                    });
-                                              },
-                                              child: CircleAvatar(
-                                                radius: 10.sp,
-                                                backgroundColor: primaryColor,
-                                                child: const Icon(
-                                                  Icons.close,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            )):const SizedBox()
+                                        widget.statusName ==
+                                                    'provider_received_all' ||
+                                                widget.statusName ==
+                                                    'provider_received'
+                                            ? Positioned(
+                                                top: 5,
+                                                left: 5,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    showAreYouSureDialoge(
+                                                        context: context,
+                                                        yesFun: () {
+                                                          cubit
+                                                              .removeImageFromLocalStorageList(
+                                                                  e.imageFile);
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        noFun: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        });
+                                                  },
+                                                  child: CircleAvatar(
+                                                    radius: 10.sp,
+                                                    backgroundColor:
+                                                        primaryColor,
+                                                    child: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ))
+                                            : const SizedBox()
                                       ],
                                     ))
                                 .toList(),
@@ -160,32 +173,40 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                             ),
                                           ),
                                         ),
-                                        widget.statusName =='provider_received_all' || widget.statusName =='provider_received'? Positioned(
-                                            top: 5,
-                                            left: 5,
-                                            child: InkWell(
-                                              onTap: () {
-                                                showAreYouSureDialoge(
-                                                    context: context,
-                                                    yesFun: () {
-                                                      cubit
-                                                          .removeImageFromFireStorage(
-                                                              e);
-                                                      Navigator.pop(context);
-                                                    },
-                                                    noFun: () {
-                                                      Navigator.pop(context);
-                                                    });
-                                              },
-                                              child: CircleAvatar(
-                                                radius: 10.sp,
-                                                backgroundColor: Colors.green,
-                                                child: const Icon(
-                                                  Icons.close,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            )):const SizedBox()
+                                        widget.statusName ==
+                                                    'provider_received_all' ||
+                                                widget.statusName ==
+                                                    'provider_received'
+                                            ? Positioned(
+                                                top: 5,
+                                                left: 5,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    showAreYouSureDialoge(
+                                                        context: context,
+                                                        yesFun: () {
+                                                          cubit
+                                                              .removeImageFromFireStorage(
+                                                                  e);
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        noFun: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        });
+                                                  },
+                                                  child: CircleAvatar(
+                                                    radius: 10.sp,
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                    child: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ))
+                                            : const SizedBox()
                                       ],
                                     ))
                                 .toList()
@@ -209,25 +230,28 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                           ),
                         ),
                 ),
-          floatingActionButton: widget.statusName =='provider_received_all' || widget.statusName =='provider_received'?SizedBox(
-            width: 40.w,
-            // height: 20.h,
-            child: FloatingActionButton(
-              onPressed: () async {
-                await cubit.pickImageFromCamera();
-                setState(() {});
-              },
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text('اضافه صوره'),
-                  Icon(
-                    Icons.add_a_photo_outlined,
+          floatingActionButton: widget.statusName == 'provider_received_all' ||
+                  widget.statusName == 'provider_received'
+              ? SizedBox(
+                  width: 40.w,
+                  // height: 20.h,
+                  child: FloatingActionButton(
+                    onPressed: () async {
+                      await cubit.pickImageFromCamera();
+                      setState(() {});
+                    },
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text('اضافه صوره'),
+                        Icon(
+                          Icons.add_a_photo_outlined,
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ):const SizedBox(),
+                )
+              : const SizedBox(),
         );
       },
     );

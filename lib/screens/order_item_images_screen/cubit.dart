@@ -74,13 +74,14 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
         debugPrint('images URL  $imagesUrl');
 
         remoteList = imagesUrl;
-        emit(OrderItemImagesSuccessState());
+        // emit(OrderItemImagesSuccessState());
       }
       }else{
         showToast(message: 'لا يوجد صور !', state: ToastStates.ERROR);
       }
-      
+      emit(OrderItemImagesSuccessState());
     } catch (error) {
+      showToast(message: '$error', state: ToastStates.ERROR);
       emit(OrderItemImagesFailedState());
     }
     emit(OrderItemImagesStopLoadingState());
@@ -96,5 +97,13 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     emit(OrderItemImagesLoadingState());
     imagesLocalFiles.removeWhere((element) => element.imageFile == image);
     emit(OrderItemImagesSuccessState());
+  }
+
+  getOrderItemImages(){
+   //! get order images from backend
+  }
+
+  sendOrderItemImages(){
+   //! send the images to backend
   }
 }

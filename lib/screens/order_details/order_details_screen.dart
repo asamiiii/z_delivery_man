@@ -29,7 +29,11 @@ import 'order_details_state.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   const OrderDetailsScreen(
-      {Key? key, this.orderId, this.fromNotification, this.order,this.statusName})
+      {Key? key,
+      this.orderId,
+      this.fromNotification,
+      this.order,
+      this.statusName})
       : super(key: key);
   final int? orderId;
   final bool? fromNotification;
@@ -118,13 +122,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   ],
                 ),
                 onPressed: () {
-                   navigateTo(
-                                context,
-                                PriceListScreen(
-                                  orderId: widget.orderId,
-                                ))
-                            .then((value) => cubit.getProviderOrderDetails(
-                                orderId: widget.orderId));
+                  navigateTo(
+                          context,
+                          PriceListScreen(
+                            orderId: widget.orderId,
+                          ))
+                      .then((value) => cubit.getProviderOrderDetails(
+                          orderId: widget.orderId));
                 },
               ),
             ),
@@ -321,10 +325,9 @@ class DeliverySection extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.blue[200],
-            border: Border.all(),
-            borderRadius: BorderRadius.circular(25)
-          ),
+              color: Colors.blue[200],
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(25)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -411,10 +414,9 @@ class DeliverySection extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.blue[200],
-            border: Border.all(),
-            borderRadius: BorderRadius.circular(25)
-          ),
+              color: Colors.blue[200],
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(25)),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -427,21 +429,20 @@ class DeliverySection extends StatelessWidget {
                     width: 90.w,
                     child: Text(
                       "اسم  العميل: ${cubit?.orderDetailsModel?.customer?.name}",
-                      style:
-                          TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
-                          overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.w400),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  
                 ],
               ),
               Row(
                 children: [
                   Text(
-                        "كود العميل: ${cubit?.orderDetailsModel?.address?.customerId}",
-                        style:
-                            TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
-                      ),
+                    "كود العميل: ${cubit?.orderDetailsModel?.address?.customerId}",
+                    style:
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+                  ),
                 ],
               ),
               Column(
@@ -554,10 +555,9 @@ class DeliverySection extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.blue[200],
-            border: Border.all(),
-            borderRadius: BorderRadius.circular(25)
-          ),
+              color: Colors.blue[200],
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(25)),
           child: Column(
             children: [
               const SizedBox(
@@ -893,7 +893,12 @@ class DeliverySection extends StatelessWidget {
 
 class ProviderSection extends StatefulWidget {
   const ProviderSection(
-      {Key? key, this.cubit, this.orderId, this.state, this.order,this.statusName})
+      {Key? key,
+      this.cubit,
+      this.orderId,
+      this.state,
+      this.order,
+      this.statusName})
       : super(key: key);
   final OrderDetailsCubit? cubit;
   final int? orderId;
@@ -1108,17 +1113,36 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 13.sp),
                                           ),
-                                          SizedBox(width: 15.w,),
-                                           TextButton(child:
-                                           Row(
-                                             children: [
-                                               const Icon(Icons.camera_alt_outlined),
-                                               SizedBox(width: 1.w,),
-                                               const Text('صور العنصر')
-                                             ],
-                                           ), onPressed: () {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => OrderItemImagesScreen(itemName:widget.cubit?.providerOrderDetails?.items?[index].name,statusName: widget.statusName),));
-                                             },),
+                                          SizedBox(
+                                            width: 15.w,
+                                          ),
+                                          TextButton(
+                                            child: Row(
+                                              children: [
+                                                const Icon(
+                                                    Icons.camera_alt_outlined),
+                                                SizedBox(
+                                                  width: 1.w,
+                                                ),
+                                                const Text('صور العنصر')
+                                              ],
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        OrderItemImagesScreen(
+                                                            itemName: widget
+                                                                .cubit
+                                                                ?.providerOrderDetails
+                                                                ?.items?[index]
+                                                                .name,
+                                                            statusName: widget
+                                                                .statusName),
+                                                  ));
+                                            },
+                                          ),
                                         ],
                                       ),
                                       Text(
@@ -1342,7 +1366,6 @@ class _ProviderSectionState extends State<ProviderSection> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: [
-                                          
                                           Builder(builder: (context) {
                                             return ConditionalBuilder(
                                                 condition: widget.state
@@ -1999,6 +2022,10 @@ class _ProviderSectionState extends State<ProviderSection> {
                                     ),
                                   )),
                             );
+                          } else if (widget.statusName ==
+                                  'provider_received_all' ||
+                              widget.statusName == 'provider_received') {
+                                //! order images validation
                           } else {
                             showCupertinoDialog(
                                 context: context,
@@ -2141,7 +2168,9 @@ class _ProviderSectionState extends State<ProviderSection> {
                             '${widget.cubit?.providerOrderDetails?.nextStatus}')),
               ),
             ),
-            SizedBox(width: 20,),
+            SizedBox(
+              width: 20,
+            ),
           ],
         ),
         const SizedBox(
