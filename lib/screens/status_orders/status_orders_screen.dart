@@ -227,8 +227,8 @@ class _OrdersSectionState extends State<OrdersSection> {
         children: [
           Container(
             width: 100.w,
-            padding: EdgeInsets.only(left: 3.w, right: 3.w,top:1.h),
-            margin: EdgeInsets.only(left: 0.5.h, right: 0.5.h,top: 0.5.h),
+            padding: EdgeInsets.only(left: 3.w, right: 3.w,top:1.h,bottom: 1.h),
+            margin: EdgeInsets.only(left: 0.5.h, right: 0.5.h,top: 0.5.h,),
             decoration:  BoxDecoration(
               color: Colors.blue[200],
                 borderRadius:
@@ -379,7 +379,25 @@ class _OrdersSectionState extends State<OrdersSection> {
                           ),
                   ],
                 ),
+                const Row(
+                  children: [
+                    Icon(Icons.dry_cleaning),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                            'عدد القطع : ${'Back End'}', //! get this value from backend
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            softWrap: true,
+                            style: TextStyle(fontSize: 15),
+                          )
+                        ,
+                  ],
+                ),
+
                 SizedBox(height: 1.h,),
+                
                 Text(
                   'القيمة الكلية: ${widget.order?.total}',
                   textAlign: TextAlign.end,
