@@ -1,4 +1,5 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '/../models/orders_per_status_model.dart';
 import '/../screens/drawer/drawer.dart';
 import '/../screens/home/home_screen.dart';
@@ -125,37 +126,43 @@ class _OrderPerStatusScreenState extends State<OrderPerStatusScreen> {
                   ),
                 ),
               ),
-              builder: (context) => cubit.allOrders.isNotEmpty? Expanded(
-                child: ListView.separated(
-                  controller: _scrollController,
-                  physics: const BouncingScrollPhysics(),
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 5,
-                  ),
-                  shrinkWrap: true,
-                  itemCount: cubit.allOrders.length,
-                  itemBuilder: (context, index) {
-                    return OrdersSection(
-                        order: cubit.allOrders.elementAt(index),
-                        state: state,
-                        cubit: cubit);
-                  },
-                ),
-              ): Center(child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                   Icon(Icons.assignment_late_rounded,size: 30.sp,),
-                  SizedBox(height: 1.h,),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(20)
-                    ),
-                    
-                    child: const Text('هذه الحاله فارغه !!')),
-                ],
-              )),
+              builder: (context) => cubit.allOrders.isNotEmpty
+                  ? Expanded(
+                      child: ListView.separated(
+                        controller: _scrollController,
+                        physics: const BouncingScrollPhysics(),
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 5,
+                        ),
+                        shrinkWrap: true,
+                        itemCount: cubit.allOrders.length,
+                        itemBuilder: (context, index) {
+                          return OrdersSection(
+                              order: cubit.allOrders.elementAt(index),
+                              state: state,
+                              cubit: cubit);
+                        },
+                      ),
+                    )
+                  : Center(
+                      child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.assignment_late_rounded,
+                          size: 30.sp,
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: const Text('هذه الحاله فارغه !!')),
+                      ],
+                    )),
             ),
           ),
         );
@@ -227,12 +234,16 @@ class _OrdersSectionState extends State<OrdersSection> {
         children: [
           Container(
             width: 100.w,
-            padding: EdgeInsets.only(left: 3.w, right: 3.w,top:1.h,bottom: 1.h),
-            margin: EdgeInsets.only(left: 0.5.h, right: 0.5.h,top: 0.5.h,),
-            decoration:  BoxDecoration(
-              color: Colors.blue[200],
-                borderRadius:
-                    BorderRadius.circular(25)),
+            padding:
+                EdgeInsets.only(left: 3.w, right: 3.w, top: 1.h, bottom: 1.h),
+            margin: EdgeInsets.only(
+              left: 0.5.h,
+              right: 0.5.h,
+              top: 0.5.h,
+            ),
+            decoration: BoxDecoration(
+                color: Colors.blue[200],
+                borderRadius: BorderRadius.circular(25)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -258,7 +269,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                       ),
                     ),
                     // const Spacer(),
-                    
+
                     // const Spacer(),
                   ],
                 ),
@@ -266,8 +277,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                   height: 5,
                 ),
                 InkWell(
-                  onTap: () =>
-                      launch("tel:${widget.order?.customer?.mobile}"),
+                  onTap: () => launch("tel:${widget.order?.customer?.mobile}"),
                   child: Row(
                     children: [
                       const Icon(Icons.phone),
@@ -310,7 +320,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                           // final availableMaps =
                           //     await MapLauncher
                           //         .installedMaps;
-          
+
                           // await availableMaps.first
                           //     .showMarker(
                           //   coords: Coords(37.759392,
@@ -322,8 +332,8 @@ class _OrdersSectionState extends State<OrdersSection> {
                               true) {
                             await MapLauncher.showMarker(
                               mapType: MapType.google,
-                              coords: Coords(widget.order?.address?.lat??0,
-                                  widget.order?.address?.long??0),
+                              coords: Coords(widget.order?.address?.lat ?? 0,
+                                  widget.order?.address?.long ?? 0),
                               title: "عنوان العميل",
                             );
                           }
@@ -331,12 +341,11 @@ class _OrdersSectionState extends State<OrdersSection> {
                         child: Text(
                           'الي العنوان',
                           style: TextStyle(
-                              color: primaryColor,
-                              fontWeight: FontWeight.bold),
+                              color: primaryColor, fontWeight: FontWeight.bold),
                         )),
                   ],
                 ),
-                
+
                 const SizedBox(
                   height: 5,
                 ),
@@ -386,41 +395,43 @@ class _OrdersSectionState extends State<OrdersSection> {
                       width: 10,
                     ),
                     Text(
-                            'عدد القطع : ${'Back End'}', //! get this value from backend
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            softWrap: true,
-                            style: TextStyle(fontSize: 15),
-                          )
-                        ,
+                      'عدد القطع : ${'Back End'}', //! get this value from backend
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      softWrap: true,
+                      style: TextStyle(fontSize: 15),
+                    ),
                   ],
                 ),
 
-                SizedBox(height: 1.h,),
-                
+                SizedBox(
+                  height: 1.h,
+                ),
+
                 Text(
                   'القيمة الكلية: ${widget.order?.total}',
                   textAlign: TextAlign.end,
                   style: const TextStyle(
                       fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 1.h,),
+                SizedBox(
+                  height: 1.h,
+                ),
                 Text(
                   'كود العميل: ${widget.order?.customer?.id}',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   softWrap: true,
-                  style: TextStyle(fontSize: 10.sp,fontWeight: FontWeight.bold),
+                  style:
+                      TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    
                     ConditionalBuilder(
-                      condition: widget.state
-                          is! OrderPerStatusNextStatusLoadingState,
-                      fallback: (context) =>
-                          const CupertinoActivityIndicator(),
+                      condition:
+                          widget.state is! OrderPerStatusNextStatusLoadingState,
+                      fallback: (context) => const CupertinoActivityIndicator(),
                       builder: (context) => Container(
                         alignment: Alignment.bottomRight,
                         child: widget.order?.nextStatus == null
@@ -434,11 +445,10 @@ class _OrdersSectionState extends State<OrdersSection> {
                                               context: context,
                                               builder: (context) =>
                                                   CupertinoAlertDialog(
-                                                    title:
-                                                        const Text('!تاكيد'),
+                                                    title: const Text('!تاكيد'),
                                                     content: StatefulBuilder(
-                                                      builder: (context,
-                                                          setStatee) {
+                                                      builder:
+                                                          (context, setStatee) {
                                                         return Card(
                                                           color: Colors
                                                               .transparent,
@@ -497,15 +507,13 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                               checkCollectByMachine ==
                                                                   true) {
                                                             widget.cubit?.collectOrder(
-                                                                orderId:
-                                                                    widget
-                                                                        .order
-                                                                        ?.id,
+                                                                orderId: widget
+                                                                    .order?.id,
                                                                 collectMethod:
                                                                     checkCollectByHand
                                                                         ? "collected_by_hand"
                                                                         : "collected_by_machine");
-          
+
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
@@ -513,11 +521,9 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                         },
                                                       ),
                                                       CupertinoDialogAction(
-                                                        child:
-                                                            const Text('لا'),
+                                                        child: const Text('لا'),
                                                         onPressed: () {
-                                                          Navigator.of(
-                                                                  context)
+                                                          Navigator.of(context)
                                                               .pop();
                                                         },
                                                       )
@@ -584,15 +590,15 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                       // widget.cubit.deleteCustomer(id: widget.item.id);
                                                       widget.cubit?.goToNextStatus(
                                                           isDeliveryMan: true,
-                                                          orderId: widget
-                                                              .order?.id,
+                                                          orderId:
+                                                              widget.order?.id,
                                                           itemCount: int.tryParse(
                                                               itemCountController
                                                                   .text),
                                                           comment:
                                                               commentController
                                                                   .text);
-          
+
                                                       Navigator.of(context)
                                                           .pop();
                                                     },
@@ -634,9 +640,9 @@ class _OrdersSectionState extends State<OrdersSection> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                       Text(
+                      Text(
                         'رقم الأوردر',
-                        style: TextStyle(color: Colors.white,fontSize: 8.sp),
+                        style: TextStyle(color: Colors.white, fontSize: 8.sp),
                       ),
                       Text(
                         "#${widget.order?.id}",
@@ -653,6 +659,253 @@ class _OrdersSectionState extends State<OrdersSection> {
               ),
             ),
           ),
+          Positioned(
+              // top: 20,
+              bottom: 20,
+              left: 50,
+              child: InkWell(
+                  onTap: () {
+                    // debugPrint(
+                    //     'customer comment : ${widget.order?.comments?.customerComment}');
+                    // debugPrint(
+                    //     'pick comment : ${widget.order?.comments?.pickComment}');
+                    // debugPrint(
+                    //     'requests comment : ${widget.order?.comments?.requests}');
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Container(
+                          height: MediaQuery.of(context).size.height * 0.50,
+                          padding: const EdgeInsets.all(15),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25.0),
+                              topRight: Radius.circular(25.0),
+                            ),
+                          ),
+                          child: Column(children: [
+                            const Text(
+                              'تعليقات الأوردر',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                // const Expanded(child: SizedBox()),
+                                // Text(
+                                //   '${widget.order?.comments?.customerComment}',
+                                //   style: const TextStyle(fontSize: 15),
+                                // ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                const Text(
+                                  'تعليق العميل',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                // const Expanded(child: SizedBox()),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                // Text(
+                                //   '${widget.order?.comments?.pickComment}',
+                                //   style: const TextStyle(fontSize: 15),
+                                // ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                const Text(
+                                  'تعليق الاستلام',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            const Text(
+                              'الطلبات',
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                              // textAlign: TextAlign.end,
+                            ),
+                            const Divider(
+                              height: 1,
+                              color: Colors.amber,
+                              indent: 50,
+                              endIndent: 50,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            // widget.order?.comments?.requests != null
+                            //     ? ListView.separated(
+                            //         shrinkWrap: true,
+                            //         itemBuilder: (context, index) => Row(
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.end,
+                            //               children: [
+                            //                 Text(
+                            //                   '${widget.order?.comments?.requests?[index].comment}',
+                            //                   style:
+                            //                       const TextStyle(fontSize: 15),
+                            //                 ),
+                            //                 // const SizedBox(width: 20,),
+                            //                 widget
+                            //                             .order
+                            //                             ?.comments
+                            //                             ?.requests?[index]
+                            //                             .type ==
+                            //                         'Only'
+                            //                     ? const Text(
+                            //                         ' : الآوردر الحالي',
+                            //                         style:
+                            //                             TextStyle(fontSize: 15),
+                            //                       )
+                            //                     : const Text(
+                            //                         ' : جميع لاوردرات',
+                            //                         style:
+                            //                             TextStyle(fontSize: 15),
+                            //                       ),
+                            //               ],
+                            //             ),
+                            //         separatorBuilder: (context, index) =>
+                            //             const SizedBox(height: 10),
+                            //         itemCount: widget.order?.comments?.requests
+                            //                 ?.length ??
+                            //             0)
+                            //     : const Text('لا يوجد بيانات متوفره حاليا !')
+                          ])),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/comments.png',
+                        height: 30,
+                        width: 30,
+                      )
+                    ],
+                  ))),
+          //! Prefrences Botttom Sheet
+          Positioned(
+              // top: 20,
+              bottom: 25,
+              left: 9,
+              child: InkWell(
+                  onTap: () {
+                    // debugPrint('pref : ${widget.order?.prefrences}');
+                    showModalBottomSheet(
+                      context : context,
+                      isScrollControlled : true,
+                      // enableDrag : true,
+                      backgroundColor : Colors.transparent,
+                      builder : (context) => Container(
+                          padding : const EdgeInsets.all(20),
+                          height: MediaQuery.of(context).size.height * 0.50,
+                          width: MediaQuery.of(context).size.width ,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25.0),
+                              topRight: Radius.circular(25.0),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                'تفضيلات الأوردر',
+                                style: GoogleFonts.cairo(fontSize: 25),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              // widget.order?.prefrences?.isEmpty ?? false
+                              //     ? Center(
+                              //         child: Text(
+                              //         'لا يوجد تفضيلات',
+                              //         style: GoogleFonts.cairo(
+                              //           fontSize: 30,
+                              //         ),
+                              //       ))
+                              //     : Expanded(
+                              //         child: ListView.separated(
+                              //             // shrinkWrap: true,
+                              //             itemBuilder: (context, index) {
+                              //               return Row(
+                              //                 mainAxisAlignment:
+                              //                     MainAxisAlignment.center,
+                              //                 children: [
+                              //                   const SizedBox(
+                              //                     width: 20,
+                              //                   ),
+                              //                   // ImageAsIcon(
+                              //                   //   image: widget.order
+                              //                   //       ?.prefrences?[index].icon,
+                              //                   //   height: 29.4,
+                              //                   //   width: 32.4,
+                              //                   //   fromNetwork: true,
+                              //                   //   orignalColor: true,
+                              //                   // ),
+                              //                   const SizedBox(
+                              //                     width: 15,
+                              //                   ),
+                              //                   Expanded(
+                              //                     child: Column(
+                              //                       crossAxisAlignment:
+                              //                           CrossAxisAlignment
+                              //                               .start,
+                              //                       children: [
+                              //                         // Text(
+                              //                         //     "${widget.order?.prefrences?[index].name}",
+                              //                         //     style: GoogleFonts
+                              //                         //         .cairo()),
+                              //                       ],
+                              //                     ),
+                              //                   ),
+                              //                   const SizedBox(
+                              //                     width: 10,
+                              //                   ),
+                              //                   Text(
+                              //                     '${widget.order?.prefrences?[index].preference}',
+                              //                     style: GoogleFonts.cairo(),
+                              //                   )
+                              //                 ],
+                              //               );
+                              //             },
+                              //             separatorBuilder: (context, index) =>
+                              //                 const SizedBox(
+                              //                   height: 15,
+                              //                 ),
+                              //             itemCount: widget
+                              //                     .order!.prefrences?.length ??
+                              //                 0),
+                              //       )
+                            ],
+                          )),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/pref.png',
+                        height: 30,
+                        width: 30,
+                        color: Colors.green,
+                      )
+                    ],
+                  ))),
         ],
       ),
     );

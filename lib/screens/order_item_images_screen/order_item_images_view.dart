@@ -29,7 +29,7 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
   void initState() {
     final cubit = OrderItemImagesCubit.get(context);
     cubit.imagesLocalFiles.clear();
-    cubit.getOrderItemImages(); //* Empty Fun 
+    cubit.getOrderItemImages(); //* Empty Fun
     super.initState();
   }
 
@@ -53,17 +53,23 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
               style: const TextStyle(color: Colors.white),
             ),
             actions: [
+              SizedBox(width: 10,),
               cubit.imagesLocalFiles.isNotEmpty
-                  ? TextButton(
-                      onPressed: ()async{
-                        await cubit.uploadImagesToStorage();
-                        await cubit.sendOrderItemImages();
+                  ? ElevatedButton(
+                      onPressed: () async {
+                        await cubit.postAssociateImage(orderId: 1);
+                        // await cubit.uploadImagesToStorage();
+                        // await cubit.sendOrderItemImages();
+                        Navigator.pop(context);
+
+                        //
                       },
-                      child: const Text(
+                      child:  Text(
                         'رفع الصور',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: primaryColor),
                       ))
-                  : const SizedBox()
+                  : const SizedBox(),
+                  const SizedBox(width: 10,),
             ],
           ),
           body: state is OrderItemImagesLoadingState
@@ -144,7 +150,72 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                                     ),
                                                   ),
                                                 ))
-                                            : const SizedBox()
+                                            : const SizedBox(),
+                                        Positioned(
+                                            bottom: 20,
+                                            left: 10,
+                                            child: ElevatedButton(
+                                              style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all(
+                                                          primaryColor)),
+                                              onPressed: () {
+                                                TextEditingController
+                                                    commentController =
+                                                    TextEditingController(
+                                                        text: e.comment);
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        AlertDialog(
+                                                          title: const Text(
+                                                              'اضافة تعليقات'),
+                                                          content:
+                                                              TextFormField(
+                                                            controller:
+                                                                commentController,
+                                                            maxLines: 2,
+                                                            textDirection:
+                                                                TextDirection
+                                                                    .rtl,
+                                                            decoration: const InputDecoration(
+                                                                hintText:
+                                                                    'أضف تعليقك ..',
+                                                                hintTextDirection:
+                                                                    TextDirection
+                                                                        .rtl),
+                                                          ),
+                                                          actions: [
+                                                            TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  debugPrint(
+                                                                      'Cancel');
+                                                                },
+                                                                child: const Text(
+                                                                    'تراجع')),
+                                                            TextButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  e.comment =
+                                                                      commentController
+                                                                          .text;
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        'حفظ')),
+                                                          ],
+                                                        ));
+                                              },
+                                              child: const Text(
+                                                'اضافة تعليق',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ))
                                       ],
                                     ))
                                 .toList(),

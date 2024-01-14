@@ -378,6 +378,7 @@ debugPrint("order ID $orderId");
       Map<String, dynamic>? data,
       bool? meter = false}) {
     emit(AssociateItemsUpdateLoading());
+    debugPrint("updateAssociateItems Url : $POST_ASSOCIATE_ITEMS/$orderId/items/$itemId");
     return DioHelper.updateData(
             url: "$POST_ASSOCIATE_ITEMS/$orderId/items/$itemId",
             data: {
@@ -434,6 +435,40 @@ debugPrint("order ID $orderId");
 
       return null;
     }
+  }
+    //! Send Images --> 
+    Future<void> addImagesToThisItem(
+      {required int? orderId,
+      required int? itemId,
+      required List<String>? imagesList,
+      // Map<String, dynamic>? data,
+      // bool? meter = false
+      }) {
+    emit(AssociateItemsUpdateLoading());
+    //! Yes  
+    debugPrint("Add Images EndPoint : $POST_ASSOCIATE_ITEMS/$orderId/items/$itemId");
+    return DioHelper.updateData(
+            url: "$POST_ASSOCIATE_ITEMS/$orderId/items/$itemId",
+            data: {
+              // 'quantity': quantity,
+              // 'width': meter == true ? data!['width'] : null,
+              // 'length': meter == true ? data!['length'] : null,
+              // 'item_details': meter == true ? data!['item_details'] : null
+            },
+            token: token)
+        .then((value) {
+      try {
+        debugPrint('updateAssociateItems: ${value.data}');
+        successModel = SuccessModel.fromJson(value.data);
+        emit(AssociateItemsUpdateSuccess(successModel: successModel));
+      } catch (e) {
+        debugPrint('error$e');
+        emit(AssociateItemsUpdateFailed());
+      }
+    }).catchError((e) {
+      debugPrint('$e');
+      emit(AssociateItemsUpdateFailed());
+    });
   }
 
   Future<void> postAssociateImage({required int? orderId}) async {
