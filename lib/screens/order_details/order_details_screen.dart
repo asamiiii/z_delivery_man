@@ -1139,7 +1139,14 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                                 ?.items?[index]
                                                                 .name,
                                                             statusName: widget
-                                                                .statusName),
+                                                                .statusName,
+                                                            itemId:widget
+                                                                .cubit
+                                                                ?.providerOrderDetails
+                                                                ?.items?[index]
+                                                                .id ,
+                                                             orderId: widget.orderId,
+                                                                ),
                                                   ));
                                             },
                                           ),

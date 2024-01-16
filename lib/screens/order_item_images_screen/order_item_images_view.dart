@@ -13,10 +13,17 @@ import 'cubit.dart';
 class OrderItemImagesScreen extends StatefulWidget {
   String? itemName;
   String? statusName;
+  int? itemId;
+  int? orderId;
 
   bool? idEdit;
   OrderItemImagesScreen(
-      {Key? key, required this.itemName, this.idEdit = false, this.statusName})
+      {Key? key,
+      required this.itemName,
+      this.idEdit = false,
+      this.statusName,
+      this.itemId,
+      this.orderId})
       : super(key: key);
 
   @override
@@ -53,23 +60,28 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
               style: const TextStyle(color: Colors.white),
             ),
             actions: [
-              SizedBox(width: 10,),
+              SizedBox(
+                width: 10,
+              ),
               cubit.imagesLocalFiles.isNotEmpty
                   ? ElevatedButton(
-                      onPressed: () async {
-                        await cubit.postAssociateImage(orderId: 1);
-                        // await cubit.uploadImagesToStorage();
-                        // await cubit.sendOrderItemImages();
-                        Navigator.pop(context);
-
-                        //
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(state is OrderItemImagesLoadingState? Colors.grey[300] :Colors.white)
+                    ),
+                      onPressed: state is OrderItemImagesLoadingState? (){} : ()async {
+                        await cubit.postAssociateImage(
+                            orderId: widget.orderId, itemId: widget.itemId).then((value){
+                               Navigator.pop(context);
+                            });
                       },
-                      child:  Text(
+                      child: Text(
                         'رفع الصور',
                         style: TextStyle(color: primaryColor),
                       ))
                   : const SizedBox(),
-                  const SizedBox(width: 10,),
+              const SizedBox(
+                width: 10,
+              ),
             ],
           ),
           body: state is OrderItemImagesLoadingState

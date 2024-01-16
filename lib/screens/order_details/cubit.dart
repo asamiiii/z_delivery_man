@@ -25,10 +25,10 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   Future<void> getOrderDetails({required int? orderId}) {
     emit(OrderDetailsLoadingState());
 
-debugPrint("order ID $orderId");
+    debugPrint("order ID $orderId");
     return DioHelper.getData(url: "$GET_ORDER_DETAILS/$orderId", token: token)
         .then((value) {
-      debugPrint( "Details ${value.data}");
+      debugPrint("Details ${value.data}");
       orderDetailsModel = OrderDetailsModel.fromJson(value.data);
       debugPrint("$orderDetailsModel  order datails model");
 
@@ -44,7 +44,7 @@ debugPrint("order ID $orderId");
   ProviderOrderDetails? providerOrderDetails;
   Future<void> getProviderOrderDetails({required int? orderId}) {
     emit(OrderProviderDetailsLoadingState());
-   initQuantityInPriceList=[];
+    initQuantityInPriceList = [];
     return DioHelper.getData(
             url: "$GET_PROVIDER_ORDER_DETAILS/$orderId", token: token)
         .then((value) {
@@ -60,9 +60,12 @@ debugPrint("order ID $orderId");
         emit(OrderProviderDetailsSuccessState());
       }
       for (var i in providerOrderDetails!.items!) {
-        initQuantityInPriceList.add(InitQuantityModel(initQuantity: i.quantity,catItemServiceId: i.categoryItemServiceId));
+        initQuantityInPriceList.add(InitQuantityModel(
+            initQuantity: i.quantity,
+            catItemServiceId: i.categoryItemServiceId));
       }
-      debugPrint('initQuantityInPriceList : ${initQuantityInPriceList.map((e) => e.catItemServiceId)}');
+      debugPrint(
+          'initQuantityInPriceList : ${initQuantityInPriceList.map((e) => e.catItemServiceId)}');
     }).catchError((e) {
       debugPrint('details filed $e');
       emit(OrderProviderDetailsFailedState());
@@ -378,7 +381,8 @@ debugPrint("order ID $orderId");
       Map<String, dynamic>? data,
       bool? meter = false}) {
     emit(AssociateItemsUpdateLoading());
-    debugPrint("updateAssociateItems Url : $POST_ASSOCIATE_ITEMS/$orderId/items/$itemId");
+    debugPrint(
+        "updateAssociateItems Url : $POST_ASSOCIATE_ITEMS/$orderId/items/$itemId");
     return DioHelper.updateData(
             url: "$POST_ASSOCIATE_ITEMS/$orderId/items/$itemId",
             data: {
@@ -436,17 +440,19 @@ debugPrint("order ID $orderId");
       return null;
     }
   }
-    //! Send Images --> 
-    Future<void> addImagesToThisItem(
-      {required int? orderId,
-      required int? itemId,
-      required List<String>? imagesList,
-      // Map<String, dynamic>? data,
-      // bool? meter = false
-      }) {
+
+  //! Send Images -->
+  Future<void> addImagesToThisItem({
+    required int? orderId,
+    required int? itemId,
+    required List<String>? imagesList,
+    // Map<String, dynamic>? data,
+    // bool? meter = false
+  }) {
     emit(AssociateItemsUpdateLoading());
-    //! Yes  
-    debugPrint("Add Images EndPoint : $POST_ASSOCIATE_ITEMS/$orderId/items/$itemId");
+    //! Yes
+    debugPrint(
+        "Add Images EndPoint : $POST_ASSOCIATE_ITEMS/$orderId/items/$itemId");
     return DioHelper.updateData(
             url: "$POST_ASSOCIATE_ITEMS/$orderId/items/$itemId",
             data: {
@@ -471,55 +477,7 @@ debugPrint("order ID $orderId");
     });
   }
 
-  Future<void> postAssociateImage({required int? orderId}) async {
-    emit(PostAssociateImagesLoading());
-    // var formData = FormData.fromMap({
-    //   'images[]': [
-    //     for (var item in pickedImages)
-    //       {
-    //         await MultipartFile.fromFile(
-    //           item.path,
-    //           filename: item.path.split('/').last,
-    //           contentType: MediaType("image", item.path.split(".").last),
-    //         )
-    //       }.toList()
-    //   ]
-    // });
-    // var formData = FormData.fromMap({"images[]": pickedImages});
 
-    var formData = FormData();
-    for (var file in pickedImages) {
-      formData.files.addAll([
-        MapEntry("images[]", await MultipartFile.fromFile(file.path)),
-      ]);
-    }
-    // formData.files.addAll(
-    //   [
-    //     for(var image in pickedImages){
-    //       MapEntry("images[]", await MultipartFile.fromFile(image.path))
-    //     }
-    //   ]
-    // );
-    debugPrint(formData.files[0].key);
-    debugPrint(formData.files[0].value.filename);
-
-    DioHelper.postDataMultipart(
-            url: "$POST_ASSOCIATE_ITEMS/$orderId/associateImages",
-            token: token,
-            data: formData)
-        .then((value) {
-      debugPrint(value.data);
-      // successModel = SuccessModel.fromJson(value.data);
-      // if (value.data.toString() == "{'status':true}") {
-      emit(PostAssociateImagesSuccess());
-      // } else {
-      //   emit(PostAssociateImagesFailed());
-      // }
-    }).catchError((e) {
-      debugPrint(e.toString());
-      emit(PostAssociateImagesFailed());
-    });
-  }
 
   Future<void> deleteAssociateImage(
       {required int? orderId, required int? imageId}) {
@@ -612,9 +570,9 @@ debugPrint("order ID $orderId");
   var formKey = GlobalKey<FormState>();
 }
 
-class InitQuantityModel{
-int? catItemServiceId;
-int? initQuantity;
+class InitQuantityModel {
+  int? catItemServiceId;
+  int? initQuantity;
 
-InitQuantityModel({this.catItemServiceId,this.initQuantity});
+  InitQuantityModel({this.catItemServiceId, this.initQuantity});
 }

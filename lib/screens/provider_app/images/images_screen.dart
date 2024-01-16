@@ -244,7 +244,7 @@ class ImagesScreen extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             print("orderid :$orderId");
-                            cubit.postAssociateImage(orderId: orderId);
+                            // cubit.postAssociateImage(orderId: orderId,itemId: );
                           },
                           child: const Text(
                             'الموافقة علي الصور',
