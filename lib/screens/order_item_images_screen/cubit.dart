@@ -33,10 +33,12 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
       source: ImageSource.camera,
       imageQuality: 40,
     );
-    if (pickedFile != null) {
+    if (pickedFile != null){
+      var imageLength= (await pickedFile.length()/ (1024 * 1024)).toStringAsFixed(3);
+      debugPrint('imageLength $imageLength');
       emit(OrderItemImagesSuccessState());
-      imagesLocalFiles
-          .add(UploadedImageModel(imageFile: File(pickedFile.path),imagePath:  pickedFile.path));
+      imagesLocalFiles.add(UploadedImageModel(
+          imageFile: File(pickedFile.path), imagePath: pickedFile.path));
     }
     debugPrint('imagesLocalFiles : $imagesLocalFiles');
   }
@@ -57,7 +59,9 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
           index = imagesLocalFiles.indexOf(element);
           imagesLocalFiles.removeAt(index);
           imagesLocalFiles.insert(
-              index, UploadedImageModel(imageFile: File(fullPath),imagePath:  fullPath));
+              index,
+              UploadedImageModel(
+                  imageFile: File(fullPath), imagePath: fullPath));
           debugPrint('image is exist');
           imgFile.writeAsBytesSync(image);
           break;
@@ -66,22 +70,23 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
       emit(OrderItemImagesSuccessState());
     }
   }
+
 //! Canceled
 //* Uploade All Local Images To Fire Storage and Get URL
   Future<void> uploadImagesToStorage() async {
     List<String> imagesUrl = [];
     emit(OrderItemImagesLoadingState());
     try {
-      if(imagesLocalFiles.isNotEmpty){
-         for (var element in imagesLocalFiles) {
-        imagesUrl.add(await FireStorage.uploadImageOnFirebaseStorage(
-            element.imageFile!, element.imagePath!));
-        debugPrint('images URL  $imagesUrl');
+      if (imagesLocalFiles.isNotEmpty) {
+        for (var element in imagesLocalFiles) {
+          imagesUrl.add(await FireStorage.uploadImageOnFirebaseStorage(
+              element.imageFile!, element.imagePath!));
+          debugPrint('images URL  $imagesUrl');
 
-        remoteList = imagesUrl;
-        // emit(OrderItemImagesSuccessState());
-      }
-      }else{
+          remoteList = imagesUrl;
+          // emit(OrderItemImagesSuccessState());
+        }
+      } else {
         showToast(message: 'لا يوجد صور !', state: ToastStates.ERROR);
       }
       emit(OrderItemImagesSuccessState());
@@ -92,46 +97,44 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     emit(OrderItemImagesStopLoadingState());
   }
 
-    Future<void> postAssociateImage({required int? orderId}) async {
+//! Upload List Of Images Into Item order
+  Future<void> postAssociateImage(
+      {required int? orderId, required int? itemId}) async {
+        var totalImagesSize = 0.0;
     // emit(PostAssociateImagesLoading());
- 
-
+    emit(OrderItemImagesLoadingState());
+    List<MultipartFile> imagesFiles = [];
+    //! Convert List Of Files (images) To List Of MultipartFile
+    for (var element in imagesLocalFiles) {
+      String fileName = element.imageFile!.path.split('/').last;
+      debugPrint('fileName : $fileName');
+      imagesFiles.add(await MultipartFile.fromFile(element.imageFile!.path,
+          filename: fileName));
+      totalImagesSize =( totalImagesSize + await element.imageFile!.length()/ (1024 * 1024));
+    }
+    debugPrint('imagesFiles : $imagesFiles');
+    debugPrint('Total Images Size : ${totalImagesSize.toStringAsFixed(4)}');
     var formData = FormData();
-    String fileName = imagesLocalFiles[0].imageFile!.path.split('/').last;
-    debugPrint('Image Path last : $fileName');
-  // FormData formData = FormData.fromMap({
-  //   "TransferDocument":
-  //       await MultipartFile.fromFile(transferDocument.path, filename: fileName,),
-  //   "Date": '$date',
-  //   "Amount": '$amount',
-  //   "SharesPONumber": '$sharesPONumber',
-  //   "BankInfo": '$bankInfo'
-  // });
-    // for (var file in imagesLocalFiles) {
-    //   formData.files.addAll([
-    //     MapEntry("images[]", await MultipartFile.fromFile(file.imagePath!)),
-    //   ]);
-    // }
-    
-    // debugPrint(formData.files[0].key);
-    // debugPrint(formData.files[0].value.filename);
+    formData = FormData.fromMap({"images[]": imagesFiles, "item_id": itemId});
 
-    // DioHelper.postDataMultipart(
-    //         url: "$POST_ASSOCIATE_ITEMS/$orderId/associateImages",
-    //         token: token,
-    //         data: formData)
-    //     .then((value) {
-    //   debugPrint(value.data);
-    //   // successModel = SuccessModel.fromJson(value.data);
-    //   // if (value.data.toString() == "{'status':true}") {
-    //   // emit(PostAssociateImagesSuccess());
-    //   // } else {
-    //   //   emit(PostAssociateImagesFailed());
-    //   // }
-    // }).catchError((e) {
-    //   debugPrint(e.toString());
-    //   // emit(PostAssociateImagesFailed());
-    // });
+    await DioHelper.postDataMultipart(
+            url: "$POST_ASSOCIATE_ITEMS/$orderId/associateImages",
+            token: token,
+            data: formData)
+        .then((value) {
+      debugPrint(value.data);
+      // successModel = SuccessModel.fromJson(value.data);
+      if (value.data.toString() == '{"status":true}') {
+        emit(OrderItemImagesSuccessState());
+        // emit(PostAssociateImagesSuccess());
+      } else {
+        emit(OrderItemImagesFailedState());
+        // emit(PostAssociateImagesFailed());
+      }
+    }).catchError((e) {
+      debugPrint(e.toString());
+      emit(OrderItemImagesFailedState());
+    });
   }
 
   removeImageFromFireStorage(String? imageUrl) {
@@ -146,11 +149,11 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     emit(OrderItemImagesSuccessState());
   }
 
-  getOrderItemImages(){
-   //! get order images from backend
+  getOrderItemImages() {
+    //! get order images from backend
   }
 
-  sendOrderItemImages(){
-   //! send the images to backend
+  sendOrderItemImages() {
+    //! send the images to backend
   }
 }
