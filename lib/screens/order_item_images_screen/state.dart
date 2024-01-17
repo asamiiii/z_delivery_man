@@ -4,6 +4,8 @@ class OrderItemImagesInitialState extends OrderItemImagesState{}
 
 class OrderItemImagesLoadingState extends OrderItemImagesState{}
 
+class OrderItemImagesUpLoadingState extends OrderItemImagesState{}
+
 class OrderItemImagesStopLoadingState extends OrderItemImagesState{}
 
 class OrderItemImagesSuccessState extends OrderItemImagesState{}

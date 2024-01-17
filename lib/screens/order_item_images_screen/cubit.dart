@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -23,22 +24,35 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
 
   final imageKey = GlobalKey<ImagePainterState>();
   List<UploadedImageModel> imagesLocalFiles = [];
-  List<String> remoteList = [];
+  List<RemoteImage> remoteList = [];
+  bool addLocalShimmer = false;
 
 //* Pick Image Form Camera
 //* and Add Picked Image To imagesLocalFiles List
-  pickImageFromCamera() async {
+  Future pickImageFromCamera(
+      {required int? orderId, required int? itemId}) async {
     emit(OrderItemImagesLoadingState());
     final pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
       imageQuality: 40,
     );
-    if (pickedFile != null){
-      var imageLength= (await pickedFile.length()/ (1024 * 1024)).toStringAsFixed(3);
-      debugPrint('imageLength $imageLength');
-      emit(OrderItemImagesSuccessState());
+    if (pickedFile != null) {
+      // var imageLength =
+      //     (await pickedFile.length() / (1024 * 1024)).toStringAsFixed(3);
+      // debugPrint('imageLength $imageLength');
+
       imagesLocalFiles.add(UploadedImageModel(
           imageFile: File(pickedFile.path), imagePath: pickedFile.path));
+
+      emit(OrderItemImagesUpLoadingState());
+      // await uploadImagesToStorage(UploadedImageModel(
+      //     imageFile: File(pickedFile.path), imagePath: pickedFile.path));
+      await postAssociateImage(
+          itemId: itemId,
+          orderId: orderId,
+          imageFile: UploadedImageModel(
+              imageFile: File(pickedFile.path), imagePath: pickedFile.path));
+      emit(OrderItemImagesSuccessState());
     }
     debugPrint('imagesLocalFiles : $imagesLocalFiles');
   }
@@ -73,20 +87,20 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
 
 //! Canceled
 //* Uploade All Local Images To Fire Storage and Get URL
-  Future<void> uploadImagesToStorage() async {
-    List<String> imagesUrl = [];
+  Future<void> uploadImagesToStorage(UploadedImageModel imageFile) async {
+    // String imagesUrl = ;
+
     emit(OrderItemImagesLoadingState());
     try {
       if (imagesLocalFiles.isNotEmpty) {
-        for (var element in imagesLocalFiles) {
-          imagesUrl.add(await FireStorage.uploadImageOnFirebaseStorage(
-              element.imageFile!, element.imagePath!));
-          debugPrint('images URL  $imagesUrl');
+        var url = await FireStorage.uploadImageOnFirebaseStorage(
+            imageFile.imageFile!, imageFile.imagePath!);
 
-          remoteList = imagesUrl;
-          // emit(OrderItemImagesSuccessState());
-        }
+        //  remoteList.removeLast();
+        remoteList.add(RemoteImage(url, null));
+        emit(OrderItemImagesSuccessState());
       } else {
+        emit(OrderItemImagesFailedState());
         showToast(message: 'لا يوجد صور !', state: ToastStates.ERROR);
       }
       emit(OrderItemImagesSuccessState());
@@ -99,38 +113,35 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
 
 //! Upload List Of Images Into Item order
   Future<void> postAssociateImage(
-      {required int? orderId, required int? itemId}) async {
-        var totalImagesSize = 0.0;
+      {required UploadedImageModel imageFile,
+      required int? orderId,
+      required int? itemId}) async {
+    var totalImagesSize = 0.0;
     // emit(PostAssociateImagesLoading());
     emit(OrderItemImagesLoadingState());
-    List<MultipartFile> imagesFiles = [];
+    // List<MultipartFile> imagesFiles = [];
     //! Convert List Of Files (images) To List Of MultipartFile
-    for (var element in imagesLocalFiles) {
-      String fileName = element.imageFile!.path.split('/').last;
-      debugPrint('fileName : $fileName');
-      imagesFiles.add(await MultipartFile.fromFile(element.imageFile!.path,
-          filename: fileName));
-      totalImagesSize =( totalImagesSize + await element.imageFile!.length()/ (1024 * 1024));
-    }
-    debugPrint('imagesFiles : $imagesFiles');
-    debugPrint('Total Images Size : ${totalImagesSize.toStringAsFixed(4)}');
+    // for (var element in imagesLocalFiles) {
+    String fileName = imageFile.imageFile!.path.split('/').last;
+    debugPrint('fileName : $fileName');
+
+    debugPrint('Total Images Size : ${totalImagesSize.toStringAsFixed(3)}');
     var formData = FormData();
-    formData = FormData.fromMap({"images[]": imagesFiles, "item_id": itemId});
+    formData = FormData.fromMap({
+      "images[]": await MultipartFile.fromFile(imageFile.imageFile!.path,
+          filename: fileName),
+      "item_id": itemId
+    });
 
     await DioHelper.postDataMultipart(
             url: "$POST_ASSOCIATE_ITEMS/$orderId/associateImages",
             token: token,
             data: formData)
         .then((value) {
-      debugPrint(value.data);
-      // successModel = SuccessModel.fromJson(value.data);
-      if (value.data.toString() == '{"status":true}') {
-        emit(OrderItemImagesSuccessState());
-        // emit(PostAssociateImagesSuccess());
-      } else {
-        emit(OrderItemImagesFailedState());
-        // emit(PostAssociateImagesFailed());
-      }
+      List<dynamic> response = jsonDecode(value.data);
+List<RemoteImage> remoteImages = response.map((json) => RemoteImage.fromjson(json)).toList();
+      remoteList.add(remoteImages.first);
+      emit(OrderItemImagesSuccessState());
     }).catchError((e) {
       debugPrint(e.toString());
       emit(OrderItemImagesFailedState());
