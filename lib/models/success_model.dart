@@ -1,19 +1,19 @@
 class SuccessModel {
   bool? status;
-  List<Errors>? errors;
+  // List<Errors>? errors;
 
-  SuccessModel({required this.status, required this.errors});
+  SuccessModel({required this.status,});
 
   SuccessModel.fromJson(dynamic json) {
     if (json['status'] != null) {
       status = json['status'];
     }
-    if (json['errors'] != null) {
-      errors = <Errors>[];
-      json['errors'].forEach((v) {
-        errors?.add(Errors.fromJson(v));
-      });
-    }
+    // if (json['errors'] != null) {
+    //   errors = <Errors>[];
+    //   json['errors'].forEach((v) {
+    //     errors?.add(Errors.fromJson(v));
+    //   });
+    // }
   }
 
   Map<String, dynamic> toJson() {

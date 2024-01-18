@@ -43,16 +43,39 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double? screenWidth = MediaQuery.of(context).size.width;
+    var itemsCount = (screenWidth / 190).floor();
     return BlocConsumer<OrderItemImagesCubit, OrderItemImagesState>(
       listener: (context, state) {
         if (state is OrderItemImagesSuccessState) {
           showToast(message: 'تمت العملية بنجاح', state: ToastStates.SUCCESS);
         } else if (state is OrderItemImagesFailedState) {
           showToast(message: 'حدث خطأ !!', state: ToastStates.ERROR);
-        } 
-        else if (state is OrderItemImagesUpLoadingState) {
+        } else if (state is OrderItemImagesUpLoadingState) {
           showToast(
               message: 'يتم رفع الصوره الان ، يمكنك اضافة صور اخري',
+              state: ToastStates.ERROR);
+        }
+        else if (state is OrderItemCommentLoadingState) {
+          showToast(
+              message: "يتم اضافة تعليق",
+              state: ToastStates.ERROR);
+        }
+        else if (state is OrderItemCommentSuccessState) {
+          showToast(
+              message: "تم اضافة التعليق بنجاح",
+              state: ToastStates.ERROR);
+        }
+
+        else if (state is OrderItemRemoveImagesLoadingState) {
+          showToast(
+              message: "جاري حذف الصوره من العنصر",
+              state: ToastStates.ERROR);
+        }
+        else if (state is OrderItemRemoveImagesSuccessState) {
+          showToast(
+
+              message: "تم الحذف",
               state: ToastStates.ERROR);
         }
       },
@@ -103,8 +126,8 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                 cubit.imagesLocalFiles.isNotEmpty || cubit.remoteList.isNotEmpty
                     ? GridView(
                         gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
+                             SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: itemsCount,
                           mainAxisSpacing: 5,
                           childAspectRatio: 0.7,
                           crossAxisSpacing: 10,
@@ -244,27 +267,37 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                               .map((e) => Stack(
                                     children: [
                                       InkWell(
-                                        onTap: () {
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //       builder: (context) =>
-                                          //           PaintOnImage(image: e),
-                                          //     ));
-                                        },
-                                        child:ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(26),
-                                                child: FadeInImage(
-                                                  fit: BoxFit.fill,
-                                                  placeholder: const AssetImage(
-                                                      'assets/images/q.png'),
-                                                  image: NetworkImage(
-                                                    e.url??'',
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PaintOnImage(url: e.url,itemId: widget.itemId,orderId: widget.orderId),
+                                              ));
+                                          },
+                                          child: e.id != null
+                                              ? ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(26),
+                                                  child: FadeInImage(
+                                                    height: 30.h,
+                                                    fit: BoxFit.fill,
+                                                    placeholder: const AssetImage(
+                                                        'assets/images/q.png'),
+                                                    image: NetworkImage(
+                                                      e.url ?? '',
+                                                    ),
                                                   ),
-                                                ),
-                                              )
-                                      ),
+                                                )
+                                              : ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(26),
+                                                  child: Image.asset(
+                                                    'assets/images/loading.gif',
+                                                    fit: BoxFit.fitHeight,
+                                                    height: 30.h,
+                                                  ),
+                                                )),
                                       widget.statusName ==
                                                   'provider_received_all' ||
                                               widget.statusName ==
@@ -274,31 +307,116 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                               left: 5,
                                               child: InkWell(
                                                 onTap: () {
-                                                  showAreYouSureDialoge(
-                                                      context: context,
-                                                      yesFun: () {
-                                                        cubit
-                                                            .removeImageFromFireStorage(
-                                                                e.url);
-                                                        Navigator.pop(context);
-                                                      },
-                                                      noFun: () {
-                                                        Navigator.pop(context);
-                                                      });
+                                                  e.url != ''
+                                                      ? showAreYouSureDialoge(
+                                                          context: context,
+                                                          yesFun: e.url != ''
+                                                              ? () {
+                                                                  cubit.deleteAssociateImage(
+                                                                      imageId:
+                                                                          e.id,
+                                                                      orderId:
+                                                                          widget
+                                                                              .orderId);
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                }
+                                                              : () {},
+                                                          noFun: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          })
+                                                      : () {};
                                                 },
                                                 child: CircleAvatar(
                                                   radius: 10.sp,
-                                                  backgroundColor: Colors.green,
+                                                  backgroundColor: e.url != ''
+                                                      ? Colors.green
+                                                      : Colors.grey,
                                                   child: const Icon(
                                                     Icons.close,
                                                     color: Colors.white,
                                                   ),
                                                 ),
                                               ))
-                                          : const SizedBox()
+                                          : const SizedBox(),
+                                      Positioned(
+                                          bottom: 10,
+                                          left: 10,
+                                          child: ElevatedButton(
+                                            style: ButtonStyle(
+                                              
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(primaryColor )
+                                                            ),
+                                            onPressed: state
+                                                    is OrderItemImagesLoadingState
+                                                ? () {}
+                                                : () {
+                                                    TextEditingController
+                                                        commentController =
+                                                        TextEditingController(
+                                                            text: e.comment);
+                                                    showDialog(
+                                                        context: context,
+                                                        builder:
+                                                            (context) =>
+                                                                AlertDialog(
+                                                                  title: const Text(
+                                                                      'اضافة تعليقات'),
+                                                                  content:
+                                                                      TextFormField(
+                                                                    controller:
+                                                                        commentController,
+                                                                    maxLines: 2,
+                                                                    textDirection:
+                                                                        TextDirection
+                                                                            .rtl,
+                                                                    decoration: const InputDecoration(
+                                                                        hintText:
+                                                                            'أضف تعليقك ..',
+                                                                        hintTextDirection:
+                                                                            TextDirection.rtl),
+                                                                  ),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          debugPrint(
+                                                                              'Cancel');
+                                                                        },
+                                                                        child: const Text(
+                                                                            'تراجع')),
+                                                                    TextButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          cubit.addComment(
+                                                                              imageId: e.id,
+                                                                              orderId: widget.orderId,
+                                                                              comment: commentController.text);
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          // e.comment =
+                                                                          //     commentController
+                                                                          //         .text;
+                                                                        },
+                                                                        child: const Text(
+                                                                            'حفظ')),
+                                                                  ],
+                                                                ));
+                                                  },
+                                            child: const Text(
+                                              'تعليق',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ))
                                     ],
                                   ))
-                              .toList()
+                              .toList(),
+                              // SizedBox(height: 30,)
                         ],
                       )
                     : Center(
@@ -319,20 +437,23 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                         ),
                       ),
           ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton: widget.statusName == 'provider_received_all' ||
                   widget.statusName == 'provider_received'
               ? SizedBox(
-                  width: 40.w,
+                  width: 15.w,
                   // height: 20.h,
                   child: FloatingActionButton(
+                    backgroundColor: Colors.cyanAccent,
                     onPressed: () async {
-                      await cubit.pickImageFromCamera(itemId: widget.itemId,orderId: widget.orderId);
-                      setState(() {});
+                      await cubit.pickImageFromCamera(
+                          itemId: widget.itemId, orderId: widget.orderId);
+                      // setState(() {});
                     },
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text('اضافه صوره'),
+                        // Text('اضافه صوره'),
                         Icon(
                           Icons.add_a_photo_outlined,
                         ),

@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_painter/image_painter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:z_delivery_man/models/success_model.dart';
 import 'package:z_delivery_man/network/end_points.dart';
 import 'package:z_delivery_man/network/remote/dio_helper.dart';
 import 'package:z_delivery_man/network/remote/fire_storage.dart';
@@ -52,13 +53,13 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
           orderId: orderId,
           imageFile: UploadedImageModel(
               imageFile: File(pickedFile.path), imagePath: pickedFile.path));
-      emit(OrderItemImagesSuccessState());
+      // emit(OrderItemImagesSuccessState());
     }
     debugPrint('imagesLocalFiles : $imagesLocalFiles');
   }
 
   //* Save Image After Edit
-  Future<void> saveImage(BuildContext context, File localImage) async {
+  Future<void> saveImage(BuildContext context, File localImage , int? orderId , int? itemId) async {
     var index = 0;
     emit(OrderItemImagesLoadingState());
     final image = await imageKey.currentState?.exportImage();
@@ -67,15 +68,17 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     final fullPath =
         '$directory/sample/${DateTime.now().millisecondsSinceEpoch}.png';
     final imgFile = File(fullPath);
+    imgFile.writeAsBytesSync(image!);
+    await postAssociateImage(imageFile: UploadedImageModel(imageFile: imgFile,imagePath: imgFile.path), orderId: orderId, itemId: itemId);
     if (image != null) {
       for (var element in imagesLocalFiles) {
         if (element.imageFile == localImage) {
-          index = imagesLocalFiles.indexOf(element);
-          imagesLocalFiles.removeAt(index);
-          imagesLocalFiles.insert(
-              index,
-              UploadedImageModel(
-                  imageFile: File(fullPath), imagePath: fullPath));
+          // index = imagesLocalFiles.indexOf(element);
+          // imagesLocalFiles.removeAt(index);
+          // imagesLocalFiles.insert(
+          //     index,
+          //     UploadedImageModel(
+          //         imageFile: File(fullPath), imagePath: fullPath));
           debugPrint('image is exist');
           imgFile.writeAsBytesSync(image);
           break;
@@ -117,6 +120,8 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
       required int? orderId,
       required int? itemId}) async {
     var totalImagesSize = 0.0;
+    debugPrint('orderId : $orderId');
+    debugPrint('itemId : $itemId');
     // emit(PostAssociateImagesLoading());
     emit(OrderItemImagesLoadingState());
     // List<MultipartFile> imagesFiles = [];
@@ -132,19 +137,87 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
           filename: fileName),
       "item_id": itemId
     });
-
+    remoteList.add(RemoteImage('', null));
     await DioHelper.postDataMultipart(
             url: "$POST_ASSOCIATE_ITEMS/$orderId/associateImages",
             token: token,
             data: formData)
         .then((value) {
       List<dynamic> response = jsonDecode(value.data);
-List<RemoteImage> remoteImages = response.map((json) => RemoteImage.fromjson(json)).toList();
-      remoteList.add(remoteImages.first);
+      List<RemoteImage> remoteImages =
+          response.map((json) => RemoteImage.fromjson(json)).toList();
+      // remoteList.add(remoteImages.first);
+
+      int usedIndex = remoteList
+          .indexWhere((element) => element.url == '' || element.id == null);
+      remoteList[usedIndex] =
+          RemoteImage(remoteImages.first.url, remoteImages.first.id);
+      debugPrint('remoteList.length : ${remoteList.length}');
       emit(OrderItemImagesSuccessState());
+      // imageFile.imageFile?.delete();
     }).catchError((e) {
       debugPrint(e.toString());
+      int usedIndex = remoteList
+          .indexWhere((element) => element.url == '' || element.id == null);
+      remoteList.removeAt(usedIndex);
       emit(OrderItemImagesFailedState());
+    });
+  }
+
+  //! delete Image In Order
+  Future<void> deleteAssociateImage(
+      {required int? orderId, required int? imageId}) {
+    emit(OrderItemRemoveImagesLoadingState());
+    return DioHelper.deleteData(
+            url: "$DELETE_ASSOCIATE_IMAGE/$orderId/images/$imageId",
+            token: token)
+        .then((value) {
+       debugPrint('deleteAssociateImage Response :  ${value.data}');
+      if (value.data.toString().contains('"status":true') ) {
+        emit(OrderItemRemoveImagesSuccessState());
+        debugPrint('Done');
+        remoteList.removeWhere((item) => item.id == imageId);
+      }else{
+        debugPrint('Fail');
+        emit(OrderItemRemoveImagesFailedState());
+      }
+
+    }).catchError((e) {
+      debugPrint('deleteAssociateImage Error :  $e');
+      emit(OrderItemImagesFailedState());
+    });
+  }
+
+
+    //! delete Image In Order
+  Future<void> addComment(
+      {required int? orderId, required int? imageId,String? comment}) {
+    emit(OrderItemCommentLoadingState());
+    debugPrint('addComment EndPoint : $DELETE_ASSOCIATE_IMAGE/$orderId/images/$imageId');
+    return DioHelper.updateData(
+            url: "$DELETE_ASSOCIATE_IMAGE/$orderId/images/$imageId",
+            data: {"comment":comment},
+            token: token)
+        .then((value) {
+        final jsonData = jsonDecode(value.data.toString());
+       debugPrint('addComment Response :  ${value.data}');
+       RemoteImage image = RemoteImage.fromjson(jsonData);
+       debugPrint('comment Response :  ${image.comment}');
+       if(image.id == imageId){
+        debugPrint('Done');
+        // remoteList.(remoteList.indexWhere((element) => element.id==imageId), RemoteImage(comment: image.comment,image.url,image.id));
+        int usedIndex = remoteList
+          .indexWhere((element) => element.id == imageId);
+      remoteList[usedIndex] =
+          RemoteImage(image.url,image.id,comment: image.comment);
+        emit(OrderItemCommentSuccessState());
+       }else{
+        debugPrint('Fail');
+        emit(OrderItemCommentFailedState());
+       }
+    }).catchError((e) {
+      debugPrint('deleteAssociateImage Error :  $e');
+      emit(OrderItemCommentFailedState());
     });
   }
 
@@ -167,4 +240,24 @@ List<RemoteImage> remoteImages = response.map((json) => RemoteImage.fromjson(jso
   sendOrderItemImages() {
     //! send the images to backend
   }
+
+
+Future<File> downloadAndSaveImage(String imageUrl) async {
+  final dio = Dio();
+  emit(PaintLoading());
+  final appDir = await getApplicationDocumentsDirectory();
+  final fileName = 'image.jpg'; // Provide a desired file name and extension
+
+  final file = File('${appDir.path}/$fileName');
+  emit(PaintLoading());
+  await dio.download(imageUrl, file.path);
+  emit(PaintSuccess());
+  print('Image downloaded and saved at: ${file.path}');
+  
+  return file;
 }
+
+}
+
+
+

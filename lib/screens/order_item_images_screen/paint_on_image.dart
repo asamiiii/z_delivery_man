@@ -10,8 +10,10 @@ import 'package:z_delivery_man/screens/order_item_images_screen/order_item_image
 import 'package:z_delivery_man/screens/order_item_images_screen/state.dart';
 
 class PaintOnImage extends StatefulWidget {
-  File? image;
-  PaintOnImage({Key? key, required this.image}) : super(key: key);
+  String? url;
+  int? orderId;
+  int? itemId;
+  PaintOnImage({Key? key, required this.url, required this.itemId, required this.orderId}) : super(key: key);
 
   @override
   _PaintOnImageState createState() => _PaintOnImageState();
@@ -19,8 +21,18 @@ class PaintOnImage extends StatefulWidget {
 
 class _PaintOnImageState extends State<PaintOnImage> {
   bool isloading = false;
-  
 
+  File? imageFile;
+  
+@override
+  void initState() {
+    final cubit = OrderItemImagesCubit.get(context);
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+              imageFile =await  cubit.downloadAndSaveImage(widget.url ?? '');
+        });
+
+    super.initState();
+  }
  
 
   @override
@@ -37,7 +49,8 @@ class _PaintOnImageState extends State<PaintOnImage> {
             SizedBox(width: 1.w,),
             InkWell(
               onTap: state is OrderItemImagesLoadingState? (){} : () async{
-                await cubit.saveImage(context,widget.image!);
+                
+                await cubit.saveImage(context,imageFile ?? File(''),widget.itemId,widget.orderId);
               // ignore: use_build_context_synchronously
               Navigator.pop(context);
               },
@@ -53,15 +66,17 @@ class _PaintOnImageState extends State<PaintOnImage> {
           SizedBox(width: 3.w,),
           ],
         ),
-        body: state is OrderItemImagesSuccessState ? ImagePainter.file(
-          widget.image!,
+        body: 
+        state is !PaintLoading ? ImagePainter.file(
+          imageFile ?? File(''),
           key: cubit.imageKey,
           scalable: true,
           initialStrokeWidth: 5,
           textDelegate: TextDelegate(),
           initialColor: Colors.green,
           initialPaintMode: PaintMode.freeStyle,
-        ):const Center(child: CircularProgressIndicator()),
+        ):
+        const Center(child: CircularProgressIndicator()),
       );},
     );
   }
