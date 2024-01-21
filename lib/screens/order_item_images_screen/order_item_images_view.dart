@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/paint_on_image.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/state.dart';
+import 'package:z_delivery_man/screens/order_item_images_screen/upladed_image_model.dart';
 import 'package:z_delivery_man/shared/widgets/components.dart';
 import 'package:z_delivery_man/styles/color.dart';
 
@@ -16,6 +17,8 @@ class OrderItemImagesScreen extends StatefulWidget {
   String? statusName;
   int? itemId;
   int? orderId;
+  List<RemoteImage>? images ;
+  
 
   bool? idEdit;
   OrderItemImagesScreen(
@@ -24,7 +27,9 @@ class OrderItemImagesScreen extends StatefulWidget {
       this.idEdit = false,
       this.statusName,
       this.itemId,
-      this.orderId})
+      this.orderId,
+      this.images
+      })
       : super(key: key);
 
   @override
@@ -37,6 +42,10 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
   void initState() {
     final cubit = OrderItemImagesCubit.get(context);
     cubit.imagesLocalFiles.clear();
+    cubit.remoteList.clear();
+    widget.images?.forEach((element) { 
+      cubit.remoteList.add(element);
+    });
     cubit.getOrderItemImages(); //* Empty Fun
     super.initState();
   }

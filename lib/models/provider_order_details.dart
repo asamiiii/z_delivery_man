@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:z_delivery_man/models/order_details_model.dart';
+import 'package:z_delivery_man/screens/order_item_images_screen/upladed_image_model.dart';
 
 class ProviderOrderDetails {
   int? id;
@@ -20,7 +22,7 @@ class ProviderOrderDetails {
   List<Images>? images;
   String? pickDeliveryMan;
   String? deliverDeliveryMan;
-  List<String>? imagesUrl; //! imagesUrl
+  List<RemoteImage>? imagesUrl; //! imagesUrl
 
   ProviderOrderDetails(
       {this.id,
@@ -71,6 +73,13 @@ class ProviderOrderDetails {
         items?.add(Items.fromJson(v));
       });
     }
+    if (json['images'] != null) {
+      images = <Images>[];
+      json['images'].forEach((v) {
+        images?.add(Images.fromJson(v));
+      });
+    }
+
     if (json['images'] != null) {
       images = <Images>[];
       json['images'].forEach((v) {
@@ -166,7 +175,7 @@ class Items {
   bool? withDimension;
   List<Items>? itemDetailes;
   dynamic totalMeters;
-  // List<String>? imagesUrl; //! new value in the model
+  List<RemoteImage>? imagesUrl; //! new value in the model
 
   Items(
       {this.id,
@@ -180,7 +189,7 @@ class Items {
       this.itemDetailes,
       this.withDimension,
       this.totalMeters,
-      // this.imagesUrl
+      this.imagesUrl
       });
 
   Items.fromJson(Map<String, dynamic> json) {
@@ -201,6 +210,16 @@ class Items {
       itemDetailes = <Items>[];
       json['item_details'].forEach((v) {
         itemDetailes?.add(Items.fromJson(v));
+      });
+    }else{
+      itemDetailes = [];
+    }
+
+    if (json['images'] != null) {
+      imagesUrl = <RemoteImage>[];
+      json['images'].forEach((v) {
+        imagesUrl?.add(RemoteImage.fromjson(v));
+        debugPrint('Image URL : ${imagesUrl?.length}');
       });
     }else{
       itemDetailes = [];

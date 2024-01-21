@@ -62,6 +62,7 @@ class DioHelper {
       String? token}) async {
     dio?.options.contentType = 'application/json';
     dio?.options.responseType = ResponseType.plain;
+    dio?.options.validateStatus = (status) => true;
     dio?.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',

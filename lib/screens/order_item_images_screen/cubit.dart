@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -23,10 +24,11 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
 
   static OrderItemImagesCubit get(context) => BlocProvider.of(context);
 
-  final imageKey = GlobalKey<ImagePainterState>();
+  
   List<UploadedImageModel> imagesLocalFiles = [];
   List<RemoteImage> remoteList = [];
   bool addLocalShimmer = false;
+  final imageKey = GlobalKey<ImagePainterState>();
 
 //* Pick Image Form Camera
 //* and Add Picked Image To imagesLocalFiles List
@@ -42,8 +44,8 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
       //     (await pickedFile.length() / (1024 * 1024)).toStringAsFixed(3);
       // debugPrint('imageLength $imageLength');
 
-      imagesLocalFiles.add(UploadedImageModel(
-          imageFile: File(pickedFile.path), imagePath: pickedFile.path));
+      // imagesLocalFiles.add(UploadedImageModel(
+      //     imageFile: File(pickedFile.path), imagePath: pickedFile.path));
 
       emit(OrderItemImagesUpLoadingState());
       // await uploadImagesToStorage(UploadedImageModel(
@@ -58,33 +60,26 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     debugPrint('imagesLocalFiles : $imagesLocalFiles');
   }
 
-  //* Save Image After Edit
-  Future<void> saveImage(BuildContext context, File localImage , int? orderId , int? itemId) async {
-    var index = 0;
-    emit(OrderItemImagesLoadingState());
+
+Future <void> saveImage({int? orderId, int? itemId}) async {
+  emit(PaintLoading());
     final image = await imageKey.currentState?.exportImage();
     final directory = (await getApplicationDocumentsDirectory()).path;
     await Directory('$directory/sample').create(recursive: true);
     final fullPath =
         '$directory/sample/${DateTime.now().millisecondsSinceEpoch}.png';
-    final imgFile = File(fullPath);
-    imgFile.writeAsBytesSync(image!);
-    await postAssociateImage(imageFile: UploadedImageModel(imageFile: imgFile,imagePath: imgFile.path), orderId: orderId, itemId: itemId);
+    final imgFile = File('$fullPath');
     if (image != null) {
-      for (var element in imagesLocalFiles) {
-        if (element.imageFile == localImage) {
-          // index = imagesLocalFiles.indexOf(element);
-          // imagesLocalFiles.removeAt(index);
-          // imagesLocalFiles.insert(
-          //     index,
-          //     UploadedImageModel(
-          //         imageFile: File(fullPath), imagePath: fullPath));
-          debugPrint('image is exist');
-          imgFile.writeAsBytesSync(image);
-          break;
-        }
+      try
+      {
+        imgFile.writeAsBytesSync(image);
+      emit(PaintLoading());
+      await postAssociateImage(imageFile: UploadedImageModel(imageFile: imgFile, imagePath: imgFile.path), orderId: orderId, itemId: itemId);
+      emit(PaintSuccess());
+      }catch(e){
+       emit(PaintFailed());
       }
-      emit(OrderItemImagesSuccessState());
+      
     }
   }
 
@@ -113,7 +108,13 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     }
     emit(OrderItemImagesStopLoadingState());
   }
+  
 
+ String generateRandomString(int len) {
+    var r = Random();
+    String randomString =String.fromCharCodes(List.generate(len, (index)=> r.nextInt(33) + 89));
+      return randomString;
+    }
 //! Upload List Of Images Into Item order
   Future<void> postAssociateImage(
       {required UploadedImageModel imageFile,
@@ -122,6 +123,8 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     var totalImagesSize = 0.0;
     debugPrint('orderId : $orderId');
     debugPrint('itemId : $itemId');
+    debugPrint('Image Path : ${imageFile.imagePath}');
+    debugPrint('Image Name : ${imageFile.imageFile}');
     // emit(PostAssociateImagesLoading());
     emit(OrderItemImagesLoadingState());
     // List<MultipartFile> imagesFiles = [];
@@ -134,7 +137,7 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     var formData = FormData();
     formData = FormData.fromMap({
       "images[]": await MultipartFile.fromFile(imageFile.imageFile!.path,
-          filename: fileName),
+          filename: fileName ),
       "item_id": itemId
     });
     remoteList.add(RemoteImage('', null));
@@ -156,7 +159,7 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
       emit(OrderItemImagesSuccessState());
       // imageFile.imageFile?.delete();
     }).catchError((e) {
-      debugPrint(e.toString());
+      debugPrint('Image uploade Error : ${e.toString()}');
       int usedIndex = remoteList
           .indexWhere((element) => element.url == '' || element.id == null);
       remoteList.removeAt(usedIndex);

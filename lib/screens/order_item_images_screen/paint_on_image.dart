@@ -26,10 +26,10 @@ class _PaintOnImageState extends State<PaintOnImage> {
   
 @override
   void initState() {
-    final cubit = OrderItemImagesCubit.get(context);
-        WidgetsBinding.instance.addPostFrameCallback((_) async {
-              imageFile =await  cubit.downloadAndSaveImage(widget.url ?? '');
-        });
+    // final cubit = OrderItemImagesCubit.get(context);
+    //     WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //           imageFile =await  cubit.downloadAndSaveImage(widget.url ?? '');
+    //     });
 
     super.initState();
   }
@@ -49,10 +49,10 @@ class _PaintOnImageState extends State<PaintOnImage> {
             SizedBox(width: 1.w,),
             InkWell(
               onTap: state is OrderItemImagesLoadingState? (){} : () async{
-                
-                await cubit.saveImage(context,imageFile ?? File(''),widget.itemId,widget.orderId);
+                Navigator.pop(context);
+                await cubit.saveImage(itemId:widget.itemId,orderId:  widget.orderId);
               // ignore: use_build_context_synchronously
-              Navigator.pop(context);
+              
               },
               child: Row(
                 children: [
@@ -67,8 +67,8 @@ class _PaintOnImageState extends State<PaintOnImage> {
           ],
         ),
         body: 
-        state is !PaintLoading ? ImagePainter.file(
-          imageFile ?? File(''),
+        state is !PaintLoading  ? ImagePainter.network(
+          widget.url??'',
           key: cubit.imageKey,
           scalable: true,
           initialStrokeWidth: 5,

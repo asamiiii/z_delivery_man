@@ -1128,6 +1128,7 @@ class _ProviderSectionState extends State<ProviderSection> {
                                               ],
                                             ),
                                             onPressed: () {
+                                              // widget.cubit?.remoteList.
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -1146,6 +1147,10 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                                 ?.items?[index]
                                                                 .id ,
                                                              orderId: widget.orderId,
+                                                             images: widget
+                                                                .cubit
+                                                                ?.providerOrderDetails
+                                                                ?.items?[index].imagesUrl,
                                                                 ),
                                                   ));
                                             },
