@@ -26,6 +26,8 @@ class DioHelper {
     Map<String, dynamic>? query,
     String? token,
   }) async {
+    dio?.options.validateStatus = (status) => true;
+    dio?.options.responseType = ResponseType.json;
     dio?.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
@@ -42,6 +44,7 @@ class DioHelper {
       Map<String, dynamic>? query,
       dynamic data,
       String? token}) async {
+        dio?.options.responseType = ResponseType.json;
     dio?.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
@@ -60,11 +63,11 @@ class DioHelper {
       dynamic data,
       Map<String, dynamic>? query,
       String? token}) async {
-    dio?.options.contentType = 'application/json';
+    dio?.options.contentType = 'multipart/form-data';
     dio?.options.responseType = ResponseType.plain;
     dio?.options.validateStatus = (status) => true;
     dio?.options.headers = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       'Authorization': 'Bearer $token',
     };
     return await dio!.post(url!, data: data, queryParameters: query);
@@ -75,6 +78,7 @@ class DioHelper {
       required Map<String, dynamic>? data,
       Map<String, dynamic>? query,
       String? token}) async {
+        dio?.options.responseType = ResponseType.json;
     dio?.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
@@ -88,6 +92,7 @@ class DioHelper {
       Map<String, dynamic>? data,
       Map<String, dynamic>? query,
       required String? token}) async {
+        dio?.options.responseType = ResponseType.json;
     dio?.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',

@@ -45,8 +45,8 @@ class TableToday extends StatelessWidget {
             child: Item(
               chocoItem: ItemModel(
                   label: ' لم يتم استلامه ',
-                  itemCount: '${model?.today?.itemCount.providerAssigned}',
-                  orderCount: '${model?.today?.orderCount.providerAssigned}',
+                  itemCount: '${model?.today?.itemCount.providerAssigned??0}',
+                  orderCount: '${model?.today?.orderCount.providerAssigned??0}',
                   image: 'assets/images/R.png'),
             ),
           ),
@@ -62,8 +62,8 @@ class TableToday extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: '  تم استلامه  ',
-                    itemCount: '${model?.today?.itemCount.providerReceived}',
-                    orderCount: '${model?.today?.orderCount.providerReceived}',
+                    itemCount: '${model?.today?.itemCount.providerReceived??0}',
+                    orderCount: '${model?.today?.orderCount.providerReceived??0}',
                     image: 'assets/images/press.png')),
           ),
       
@@ -79,8 +79,8 @@ class TableToday extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'تم الفحص',
-                    itemCount: '${model?.today?.itemCount.checkUp}',
-                    orderCount: '${model?.today?.orderCount.checkUp}',
+                    itemCount: '${model?.today?.itemCount.checkUp??0}',
+                    orderCount: '${model?.today?.orderCount.checkUp??0}',
                     image: 'assets/images/q.png')),
           ),
       
@@ -96,8 +96,8 @@ class TableToday extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'تم الانتهاء',
-                    itemCount: '${model?.today?.itemCount.finished}',
-                    orderCount: '${model?.today?.orderCount.finished}',
+                    itemCount: '${model?.today?.itemCount.finished??0}',
+                    orderCount: '${model?.today?.orderCount.finished??0}',
                     image: 'assets/images/finished.png')),
           ),
       
@@ -113,8 +113,8 @@ class TableToday extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'تم التسليم',
-                    itemCount: '${model?.today?.itemCount.opened}',
-                    orderCount: '${model?.today?.orderCount.opened}',
+                    itemCount: '${model?.today?.itemCount.opened??0}',
+                    orderCount: '${model?.today?.orderCount.opened??0}',
                     image: 'assets/images/done.png')),
           ),
       
@@ -130,8 +130,8 @@ class TableToday extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'العدد الإجمالي',
-                    itemCount: '${model?.today?.itemCount.opened}',
-                    orderCount: '${model?.today?.orderCount.opened}',
+                    itemCount: '${model?.today?.itemCount.opened??0}',
+                    orderCount: '${model?.today?.orderCount.opened??0}',
                     image: 'assets/images/all.png')),
           ),
       

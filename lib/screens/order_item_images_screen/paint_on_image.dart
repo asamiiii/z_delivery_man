@@ -13,7 +13,8 @@ class PaintOnImage extends StatefulWidget {
   String? url;
   int? orderId;
   int? itemId;
-  PaintOnImage({Key? key, required this.url, required this.itemId, required this.orderId}) : super(key: key);
+  int? imageId;
+  PaintOnImage({Key? key, required this.url, required this.itemId, required this.orderId,required this.imageId}) : super(key: key);
 
   @override
   _PaintOnImageState createState() => _PaintOnImageState();
@@ -50,7 +51,7 @@ class _PaintOnImageState extends State<PaintOnImage> {
             InkWell(
               onTap: state is OrderItemImagesLoadingState? (){} : () async{
                 Navigator.pop(context);
-                await cubit.saveImage(itemId:widget.itemId,orderId:  widget.orderId);
+                await cubit.saveImage(itemId:widget.itemId,orderId:  widget.orderId,imageId: widget.imageId);
               // ignore: use_build_context_synchronously
               
               },

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import '../../models/price_list_model.dart' as pricelist;
@@ -42,23 +43,27 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   List<InitQuantityModel> initQuantityInPriceList = [];
 
   ProviderOrderDetails? providerOrderDetails;
-  Future<void> getProviderOrderDetails({required int? orderId}) {
+  Future<void> getProviderOrderDetails({required int? orderId}) async{
+    // ProviderOrderDetails? providerOrderDetails;
+    debugPrint('Order Id : $orderId');
     emit(OrderProviderDetailsLoadingState());
     initQuantityInPriceList = [];
-    return DioHelper.getData(
+    return await DioHelper.getData(
             url: "$GET_PROVIDER_ORDER_DETAILS/$orderId", token: token)
         .then((value) {
       // print('order id : $orderId');
-      debugPrint('getProviderOrderDetails : ${value.data}');
+   
+      // var rsponse = jsonDecode(value.data);
+      // debugPrint('getProviderOrderDetails : ${value.data}');
       providerOrderDetails = ProviderOrderDetails.fromJson(value.data);
       checkedItemsNumber();
       emit(OrderProviderDetailsSuccessState());
-      if (providerOrderDetails?.images != null) {
-        for (var item in providerOrderDetails!.images!) {
-          networkImages.add(item);
-        }
-        emit(OrderProviderDetailsSuccessState());
-      }
+      // if (providerOrderDetails?.images != null) {
+      //   for (var item in providerOrderDetails!.images!) {
+      //     networkImages.add(item);
+      //   }
+      //   emit(OrderProviderDetailsSuccessState());
+      // }
       for (var i in providerOrderDetails!.items!) {
         initQuantityInPriceList.add(InitQuantityModel(
             initQuantity: i.quantity,
@@ -69,7 +74,8 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     }).catchError((e) {
       debugPrint('details filed $e');
       emit(OrderProviderDetailsFailedState());
-    });
+    }
+    );
   }
 
   void goToNextStatus(

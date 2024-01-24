@@ -22,7 +22,7 @@ class ProviderOrderDetails {
   List<Images>? images;
   String? pickDeliveryMan;
   String? deliverDeliveryMan;
-  List<RemoteImage>? imagesUrl; //! imagesUrl
+  // List<RemoteImage>? imagesUrl; //! imagesUrl
 
   ProviderOrderDetails(
       {this.id,
@@ -43,7 +43,7 @@ class ProviderOrderDetails {
       this.items,
       this.deliverDeliveryMan,
       this.pickDeliveryMan,
-      this.imagesUrl //! imagesUrl  we need to add to from json
+      // this.imagesUrl //! imagesUrl  we need to add to from json
       });
 
   ProviderOrderDetails.fromJson(Map<String, dynamic> json) {
@@ -80,12 +80,7 @@ class ProviderOrderDetails {
       });
     }
 
-    if (json['images'] != null) {
-      images = <Images>[];
-      json['images'].forEach((v) {
-        images?.add(Images.fromJson(v));
-      });
-    }
+   
   }
 
   Map<String, dynamic> toJson() {
@@ -222,7 +217,7 @@ class Items {
         debugPrint('Image URL : ${imagesUrl?.length}');
       });
     }else{
-      itemDetailes = [];
+      imagesUrl = [];
     }
   }
 

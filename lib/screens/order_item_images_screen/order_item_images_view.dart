@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:z_delivery_man/main.dart';
+import 'package:z_delivery_man/screens/home/home_screen.dart';
+import 'package:z_delivery_man/screens/order_details/cubit.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/paint_on_image.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/state.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/upladed_image_model.dart';
@@ -17,8 +20,7 @@ class OrderItemImagesScreen extends StatefulWidget {
   String? statusName;
   int? itemId;
   int? orderId;
-  List<RemoteImage>? images ;
-  
+  List<RemoteImage>? images;
 
   bool? idEdit;
   OrderItemImagesScreen(
@@ -28,8 +30,7 @@ class OrderItemImagesScreen extends StatefulWidget {
       this.statusName,
       this.itemId,
       this.orderId,
-      this.images
-      })
+      this.images})
       : super(key: key);
 
   @override
@@ -43,17 +44,20 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
     final cubit = OrderItemImagesCubit.get(context);
     cubit.imagesLocalFiles.clear();
     cubit.remoteList.clear();
-    widget.images?.forEach((element) { 
+    widget.images?.forEach((element) {
       cubit.remoteList.add(element);
     });
-    cubit.getOrderItemImages(); //* Empty Fun
+    // widget.images?.clear();
+    // cubit.getOrderItemImages(); //* Empty Fun
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     double? screenWidth = MediaQuery.of(context).size.width;
+    double? screenhight = MediaQuery.of(context).size.height;
     var itemsCount = (screenWidth / 190).floor();
+ 
     return BlocConsumer<OrderItemImagesCubit, OrderItemImagesState>(
       listener: (context, state) {
         if (state is OrderItemImagesSuccessState) {
@@ -64,34 +68,51 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
           showToast(
               message: 'يتم رفع الصوره الان ، يمكنك اضافة صور اخري',
               state: ToastStates.ERROR);
-        }
-        else if (state is OrderItemCommentLoadingState) {
+        } else if (state is OrderItemCommentLoadingState) {
+          showToast(message: "يتم اضافة تعليق", state: ToastStates.ERROR);
+        } else if (state is OrderItemCommentSuccessState) {
           showToast(
-              message: "يتم اضافة تعليق",
-              state: ToastStates.ERROR);
-        }
-        else if (state is OrderItemCommentSuccessState) {
+              message: "تم اضافة التعليق بنجاح", state: ToastStates.ERROR);
+        } else if (state is OrderItemRemoveImagesLoadingState) {
           showToast(
-              message: "تم اضافة التعليق بنجاح",
-              state: ToastStates.ERROR);
-        }
-
-        else if (state is OrderItemRemoveImagesLoadingState) {
-          showToast(
-              message: "جاري حذف الصوره من العنصر",
-              state: ToastStates.ERROR);
-        }
-        else if (state is OrderItemRemoveImagesSuccessState) {
-          showToast(
-
-              message: "تم الحذف",
-              state: ToastStates.ERROR);
+              message: "جاري حذف الصوره من العنصر", state: ToastStates.ERROR);
+        } else if (state is OrderItemRemoveImagesSuccessState) {
+          showToast(message: "تم الحذف", state: ToastStates.ERROR);
         }
       },
       builder: (context, state) {
         final cubit = OrderItemImagesCubit.get(context);
+        final orderDetailsCubit = OrderDetailsCubit.get(context);
         return Scaffold(
           appBar: AppBar(
+            leading: InkWell(
+              onTap: () {
+                 Navigator.pop(context);
+                // showDialog(
+                //   context: context,
+                //   builder: (context) => AlertDialog(
+                //         title: Text('هل انت متآكد'),
+                //         actions: [
+                //           TextButton(
+                //               onPressed: () {
+                //                 Navigator.of(context).pop();
+                //                 // Navigator.of(context).pop();
+                //               },
+                //               child: const Text('لا')),
+                //           TextButton(
+                //               onPressed: () {
+                //                 orderDetailsCubit.getProviderOrderDetails(orderId: widget.orderId);
+                                
+                //                 Navigator.pop(context);
+                //                 Navigator.pop(context);
+                //               },
+                //               child: const Text('نعم')),
+                //         ],
+                //       ));
+              // return false;
+            
+              },
+              child: Icon(Icons.arrow_back)),
             centerTitle: true,
             title: Text(
               widget.itemName ?? '',
@@ -132,10 +153,11 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
           body: Padding(
             padding: const EdgeInsets.all(8),
             child:
-                cubit.imagesLocalFiles.isNotEmpty || cubit.remoteList.isNotEmpty
+                cubit.imagesLocalFiles.isNotEmpty ||
+                        cubit.remoteList.isNotEmpty
                     ? GridView(
                         gridDelegate:
-                             SliverGridDelegateWithFixedCrossAxisCount(
+                            SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: itemsCount,
                           mainAxisSpacing: 5,
                           childAspectRatio: 0.7,
@@ -278,16 +300,24 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                       InkWell(
                                           onTap: () {
                                             Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PaintOnImage(url: e.url,itemId: widget.itemId,orderId: widget.orderId),
-                                              ));
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PaintOnImage(
+                                                          url: e.url,
+                                                          itemId:
+                                                              widget.itemId,
+                                                          orderId:
+                                                              widget.orderId,
+                                                              imageId:e.id ,
+                                                              ),
+                                                ));
                                           },
                                           child: e.id != null
                                               ? ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.circular(26),
+                                                      BorderRadius.circular(
+                                                          26),
                                                   child: FadeInImage(
                                                     height: 30.h,
                                                     fit: BoxFit.fill,
@@ -300,7 +330,8 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                                 )
                                               : ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.circular(26),
+                                                      BorderRadius.circular(
+                                                          26),
                                                   child: Image.asset(
                                                     'assets/images/loading.gif',
                                                     fit: BoxFit.fitHeight,
@@ -322,11 +353,10 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                                           yesFun: e.url != ''
                                                               ? () {
                                                                   cubit.deleteAssociateImage(
-                                                                      imageId:
-                                                                          e.id,
+                                                                      imageId: e
+                                                                          .id,
                                                                       orderId:
-                                                                          widget
-                                                                              .orderId);
+                                                                          widget.orderId);
                                                                   Navigator.pop(
                                                                       context);
                                                                 }
@@ -354,10 +384,9 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                           left: 10,
                                           child: ElevatedButton(
                                             style: ButtonStyle(
-                                              
                                                 backgroundColor:
-                                                    MaterialStateProperty.all(primaryColor )
-                                                            ),
+                                                    MaterialStateProperty.all(
+                                                        primaryColor)),
                                             onPressed: state
                                                     is OrderItemImagesLoadingState
                                                 ? () {}
@@ -377,7 +406,8 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                                                       TextFormField(
                                                                     controller:
                                                                         commentController,
-                                                                    maxLines: 2,
+                                                                    maxLines:
+                                                                        2,
                                                                     textDirection:
                                                                         TextDirection
                                                                             .rtl,
@@ -391,13 +421,11 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                                                     TextButton(
                                                                         onPressed:
                                                                             () {
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                          debugPrint(
-                                                                              'Cancel');
+                                                                          Navigator.pop(context);
+                                                                          debugPrint('Cancel');
                                                                         },
-                                                                        child: const Text(
-                                                                            'تراجع')),
+                                                                        child:
+                                                                            const Text('تراجع')),
                                                                     TextButton(
                                                                         onPressed:
                                                                             () async {
@@ -405,14 +433,13 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                                                               imageId: e.id,
                                                                               orderId: widget.orderId,
                                                                               comment: commentController.text);
-                                                                          Navigator.pop(
-                                                                              context);
+                                                                          Navigator.pop(context);
                                                                           // e.comment =
                                                                           //     commentController
                                                                           //         .text;
                                                                         },
-                                                                        child: const Text(
-                                                                            'حفظ')),
+                                                                        child:
+                                                                            const Text('حفظ')),
                                                                   ],
                                                                 ));
                                                   },
@@ -425,7 +452,7 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                     ],
                                   ))
                               .toList(),
-                              // SizedBox(height: 30,)
+                          // SizedBox(height: 30,)
                         ],
                       )
                     : Center(

@@ -1134,25 +1134,33 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         OrderItemImagesScreen(
-                                                            itemName: widget
-                                                                .cubit
-                                                                ?.providerOrderDetails
-                                                                ?.items?[index]
-                                                                .name,
-                                                            statusName: widget
-                                                                .statusName,
-                                                            itemId:widget
-                                                                .cubit
-                                                                ?.providerOrderDetails
-                                                                ?.items?[index]
-                                                                .id ,
-                                                             orderId: widget.orderId,
-                                                             images: widget
-                                                                .cubit
-                                                                ?.providerOrderDetails
-                                                                ?.items?[index].imagesUrl,
-                                                                ),
-                                                  ));
+                                                      itemName: widget
+                                                          .cubit
+                                                          ?.providerOrderDetails
+                                                          ?.items?[index]
+                                                          .name,
+                                                      statusName:
+                                                          widget.statusName,
+                                                      itemId: widget
+                                                          .cubit
+                                                          ?.providerOrderDetails
+                                                          ?.items?[index]
+                                                          .id,
+                                                      orderId: widget.orderId,
+                                                      images: widget
+                                                          .cubit
+                                                          ?.providerOrderDetails
+                                                          ?.items?[index]
+                                                          .imagesUrl,
+                                                    ),
+                                                  )).then((value) async {
+                                                // widget
+                                                //             .cubit
+                                                //             ?.providerOrderDetails
+                                                //             ?.items?[index].imagesUrl?.clear();
+                                                await    widget
+                                                                .cubit?.getProviderOrderDetails(orderId: widget.orderId);
+                                              });
                                             },
                                           ),
                                         ],
@@ -2034,10 +2042,6 @@ class _ProviderSectionState extends State<ProviderSection> {
                                     ),
                                   )),
                             );
-                          } else if (widget.statusName ==
-                                  'provider_received_all' ||
-                              widget.statusName == 'provider_received') {
-                                //! order images validation
                           } else {
                             showCupertinoDialog(
                                 context: context,

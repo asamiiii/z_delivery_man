@@ -45,8 +45,8 @@ class TableAll extends StatelessWidget {
             child: Item(
               chocoItem: ItemModel(
                   label: ' لم يتم استلامه ',
-                  itemCount: '${model?.all?.itemCount.providerAssigned}',
-                  orderCount: '${model?.all?.orderCount.providerAssigned}',
+                  itemCount: '${model?.all?.itemCount.providerAssigned?? '0'}',
+                  orderCount: '${model?.all?.orderCount.providerAssigned?? '0'}',
                   image: 'assets/images/R.png'),
             ),
           ),
@@ -62,8 +62,8 @@ class TableAll extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: '  تم استلامه  ',
-                    itemCount: '${model?.all?.itemCount.providerReceived}',
-                    orderCount: '${model?.all?.orderCount.providerReceived}',
+                    itemCount: '${model?.all?.itemCount.providerReceived?? '0'}',
+                    orderCount: '${model?.all?.orderCount.providerReceived?? '0'}',
                     image: 'assets/images/press.png')),
           ),
 
@@ -79,8 +79,8 @@ class TableAll extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'تم الفحص',
-                    itemCount: '${model?.all?.itemCount.checkUp}',
-                    orderCount: '${model?.all?.orderCount.checkUp}',
+                    itemCount: '${model?.all?.itemCount.checkUp ?? '0'}',
+                    orderCount: '${model?.all?.orderCount.checkUp??'0'}',
                     image: 'assets/images/q.png')),
           ),
 
@@ -96,8 +96,8 @@ class TableAll extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'تم الانتهاء',
-                    itemCount: '${model?.all?.itemCount.finished}',
-                    orderCount: '${model?.all?.orderCount.finished}',
+                    itemCount: '${model?.all?.itemCount.finished?? '0'}',
+                    orderCount: '${model?.all?.orderCount.finished?? '0'}',
                     image: 'assets/images/finished.png')),
           ),
 
@@ -113,8 +113,8 @@ class TableAll extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'تم التسليم',
-                    itemCount: '${model?.all?.itemCount.opened}',
-                    orderCount: '${model?.all?.orderCount.opened}',
+                    itemCount: '${model?.all?.itemCount.opened?? '0'}',
+                    orderCount: '${model?.all?.orderCount.opened?? '0'}',
                     image: 'assets/images/done.png')),
           ),
 
@@ -130,8 +130,8 @@ class TableAll extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'العدد الإجمالي',
-                    itemCount: '${model?.all?.itemCount.opened}',
-                    orderCount: '${model?.all?.orderCount.opened}',
+                    itemCount: '${model?.all?.itemCount.opened??0}',
+                    orderCount: '${model?.all?.orderCount.opened??0}',
                     image: 'assets/images/all.png')),
           ),
           
