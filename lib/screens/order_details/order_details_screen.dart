@@ -10,6 +10,8 @@ import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
+import 'package:my_ui/custom.dart';
+import 'package:my_ui/spaces.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:z_delivery_man/models/order_mode.dart';
 import 'package:z_delivery_man/models/order_per_status_provider.dart';
@@ -53,6 +55,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
     super.initState();
     isDeliveryMan = CacheHelper.getData(key: 'type');
+    debugPrint('isDeliveryMan : $isDeliveryMan');
     isDeliveryMan == true
         ? cubit.getOrderDetails(orderId: widget.orderId)
         : cubit.getProviderOrderDetails(orderId: widget.orderId);
@@ -110,7 +113,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           child: Scaffold(
             floatingActionButton: SizedBox(
               width: 150,
-              child: FloatingActionButton(
+              child: isDeliveryMan ==true ? const SizedBox() : FloatingActionButton(
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -192,6 +195,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const CustomWidget(padding: 2,child: SizedBox(),),
+                     
                     SizedBox(
                       height: 2.h,
                     ),
@@ -232,6 +237,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                
                                 const Text(
                                   'رقم الاوردر',
                                   style: TextStyle(
@@ -255,6 +261,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     SizedBox(
                       height: 2.h,
                     ),
+                    
+                    
                     ConditionalBuilder(
                         condition: state is! OrderDetailsLoadingState &&
                             state is! OrderProviderDetailsLoadingState,

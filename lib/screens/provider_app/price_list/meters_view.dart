@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_ui/my_ui.dart';
 // import 'package:provider/provider.dart';
 import 'package:z_delivery_man/models/price_list_model.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/widget.dart';
@@ -27,6 +28,7 @@ class MetersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     final orderDetailsCubit = OrderDetailsCubit.get(context);
     // var cartViewModel = context.read<CartsViewModel>();
     // var priceListViewModel = context.read<PriceListViewModel>();
@@ -193,6 +195,7 @@ class MetersView extends StatelessWidget {
                         },
                         fontSize: 16,
                         textColor: Colors.white)),
+                       
               ],
             )
           : const Center(child: Text('لايوجد عناصر بالأمتار')),

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../models/status_order_model.dart';
@@ -16,6 +17,7 @@ class DrawerCubit extends Cubit<DrawerStates> {
   Future<void> getStatusOrder() {
     emit(DrawerGetStatusOrdersLoadingState());
     return DioHelper.getData(url: GET_STATUS_ORDER, token: token).then((value) {
+      debugPrint('getStatusOrder : ${value.data}');
       statusOrderModel = StatusOrderModel.fromJson(value.data);
       emit(DrawerGetStatusOrdersSuccessState());
     }).catchError((e) {

@@ -284,11 +284,13 @@ class Item extends StatelessWidget {
   int? index;
   ItemModel? chocoItem;
   String? image;
+  bool? isdelivery;
   Item({
     super.key,
     required this.chocoItem,
     this.index,
     this.image,
+    this.isdelivery=false
   });
 
   @override
@@ -305,8 +307,8 @@ class Item extends StatelessWidget {
                 topLeft: Radius.circular(10)),
             child: Container(
               color: Colors.blueAccent,
-              height: MediaQuery.of(context).size.height*0.25,
-              width: MediaQuery.of(context).size.width*0.45,
+              height: MediaQuery.of(context).size.height * 0.25,
+              width: MediaQuery.of(context).size.width * 0.45,
             ),
           ),
         ),
@@ -330,7 +332,7 @@ class Item extends StatelessWidget {
                   child: Text(
                     chocoItem?.label ?? '',
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                    maxLines:isdelivery == false ? 1 : 2,
                     style: GoogleFonts.cairo(color: Colors.white, fontSize: 17),
                   ),
                 ),
@@ -340,13 +342,13 @@ class Item extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 50,
+                      width:isdelivery==false? 50:70,
                       // height: 50,
                       child: Text('الطلبات',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: GoogleFonts.cairo(
-                              color: Colors.white, fontSize: 10)),
+                              color: Colors.amberAccent, fontSize:isdelivery==false? 10:15)),
                     ),
                     const SizedBox(
                       width: 2,
@@ -358,11 +360,11 @@ class Item extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: GoogleFonts.cairo(
-                              color: Colors.white, fontSize: 20)),
+                              color: Colors.amberAccent, fontSize: 20)),
                     ),
                   ],
                 ),
-                Row(
+                isdelivery==false? Row(
                   children: [
                     SizedBox(
                       width: 50,
@@ -372,7 +374,7 @@ class Item extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: GoogleFonts.cairo(
-                            color: Colors.white, fontSize: 10),
+                            color: Colors.amberAccent, fontSize: 10),
                       ),
                     ),
                     const SizedBox(
@@ -386,11 +388,11 @@ class Item extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         // maxLines: 2,
                         style: GoogleFonts.cairo(
-                            color: Colors.white, fontSize: 20),
+                            color: Colors.amberAccent, fontSize: 20),
                       ),
                     ),
                   ],
-                ),
+                ):const SizedBox(),
                 // SizedBox(height: ,)
               ],
             )),

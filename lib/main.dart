@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:z_delivery_man/core/config/app_theme.dart';
 import 'package:z_delivery_man/core/constants/app_bloc_providers.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
+import 'package:z_delivery_man/screens/home/home_delivery.dart';
 import 'package:z_delivery_man/screens/login/login_screen.dart';
 import '/../screens/home/home_screen.dart';
 import '/../screens/order_details/order_details_screen.dart';
@@ -66,7 +67,12 @@ void main() async {
   // token = null;
   Widget widget;
   if (token != null && token!.isNotEmpty) {
-    widget = const HomeScreen();
+    if(isDeliveryMan==true){
+      widget =  HomeDelivery();
+    }else{
+      widget =  HomeScreen();
+    }
+    
   } else {
     widget = const LoginScreen();
   }

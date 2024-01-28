@@ -12,6 +12,7 @@ import 'package:getwidget/size/gf_size.dart';
 import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_messages.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
+import 'package:z_delivery_man/screens/home/home_delivery.dart';
 
 import '../../../../network/local/cache_helper.dart';
 import '../../../../shared/widgets/components.dart';
@@ -33,27 +34,28 @@ class LoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
+            debugPrint('User Type : ${state.loginModel?.type}');
             CacheHelper.saveData(
                     key: 'token', value: state.loginModel?.token ?? '')
                 .then((value) {
               token = state.loginModel?.token ?? '';
               // debugPrint('token = $token');
-              if(token!.isNotEmpty){
+              if (token!.isNotEmpty) {
                 debugPrint('token 1 = $token');
-                navigateAndReplace(context, const HomeScreen());
-              }else{
-                ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content:
-                                                    Text('من فضلك تأكد من بياناتك'),
-                                                backgroundColor: Colors.red,
-                                              ));
+                navigateAndReplace(context, state.loginModel?.type=='delivery_man'? HomeDelivery(): const HomeScreen());
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('من فضلك تأكد من بياناتك'),
+                  backgroundColor: Colors.red,
+                ));
                 debugPrint('token 2 = $token');
               }
-              
             });
-          }else if(state is LoginFailedState){
-            showToast(message: 'Login Failed', state: ToastStates.ERROR,);
+          } else if (state is LoginFailedState) {
+            showToast(
+              message: 'Login Failed',
+              state: ToastStates.ERROR,
+            );
           }
         },
         builder: (context, state) {
@@ -104,8 +106,7 @@ class LoginScreen extends StatelessWidget {
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 18.sp,
-                                          fontWeight: FontWeight.w600
-                                          ),
+                                          fontWeight: FontWeight.w600),
                                     ),
                                   ],
                                 ),
@@ -161,7 +162,6 @@ class LoginScreen extends StatelessWidget {
                                 Container(
                                   margin: EdgeInsets.symmetric(horizontal: 1.h),
                                   child: defaultFormField(
-                                    
                                     controller: cubit.passwordController,
                                     type: TextInputType.visiblePassword,
                                     isPassword: cubit.isPassword,
@@ -195,30 +195,32 @@ class LoginScreen extends StatelessWidget {
                                       onPressed: () {
                                         if (cubit.formKey.currentState!
                                             .validate()) {
-                                              if(cubit.passwordController.text.isEmpty||cubit.emailController.text.isEmpty){
-                                     ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content:
-                                                    Text('تأكد من ادخالك البريد الالكتروني وكلمه المرور'),
-                                                backgroundColor: Colors.red,
-                                              ));
-                                              }else{
-                         FirebaseMessaging.instance
-                                              .getToken()
-                                              .then((token) {
-                                            debugPrint('fcm token: $token');
-                                            cubit.login(
-                                                email: cubit
-                                                    .emailController.text
-                                                    .trim(),
-                                                password: cubit
-                                                    .passwordController.text
-                                                    .trim(),
-                                                deviceName: 'deviceName',
-                                                fcmToken: token);
-                                          });
-                                              }
-                                          
+                                          if (cubit.passwordController.text
+                                                  .isEmpty ||
+                                              cubit.emailController.text
+                                                  .isEmpty) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content: Text(
+                                                  'تأكد من ادخالك البريد الالكتروني وكلمه المرور'),
+                                              backgroundColor: Colors.red,
+                                            ));
+                                          } else {
+                                            FirebaseMessaging.instance
+                                                .getToken()
+                                                .then((token) {
+                                              debugPrint('fcm token: $token');
+                                              cubit.login(
+                                                  email: cubit
+                                                      .emailController.text
+                                                      .trim(),
+                                                  password: cubit
+                                                      .passwordController.text
+                                                      .trim(),
+                                                  deviceName: 'deviceName',
+                                                  fcmToken: token);
+                                            });
+                                          }
                                         }
                                       },
                                       size: GFSize.LARGE,

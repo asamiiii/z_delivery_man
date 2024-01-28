@@ -1,5 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:z_delivery_man/screens/home/home_delivery.dart';
 import '/../models/orders_per_status_model.dart';
 import '/../screens/drawer/drawer.dart';
 import '/../screens/home/home_screen.dart';
@@ -99,7 +100,7 @@ class _OrderPerStatusScreenState extends State<OrderPerStatusScreen> {
               actions: [
                 IconButton(
                     onPressed: () {
-                      navigateAndReplace(context, const HomeScreen());
+                      navigateAndReplace(context, const HomeDelivery());
                     },
                     icon: const Icon(Icons.home))
               ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:z_delivery_man/screens/drawer/cubit.dart';
 import 'package:z_delivery_man/screens/order_details/cubit.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/cubit.dart';
 import '../../screens/home/cubit.dart';
@@ -15,6 +16,7 @@ class AppProviders {
         create: (BuildContext context) => OrderPerStatusCubit()),
     BlocProvider<LoginCubit>(create: (BuildContext context) => LoginCubit()),
     BlocProvider<HomeCubit>(create: (BuildContext context) => HomeCubit()),
+    BlocProvider<DrawerCubit>(create: (BuildContext context) => DrawerCubit()),
     BlocProvider<OrderDetailsCubit>(
         create: (BuildContext context) => OrderDetailsCubit()),
     BlocProvider<OrderItemImagesCubit>(

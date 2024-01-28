@@ -2,6 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
 import 'package:z_delivery_man/screens/home/all.dart';
@@ -29,17 +30,18 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isDeliveryMan = false;
   String name = '';
   bool isToday = true;
+  bool isTodayDelivery = true;
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     isDeliveryMan = CacheHelper.getData(key: 'type');
     name = CacheHelper.getData(key: 'name');
+    
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return BlocProvider(
       create: isDeliveryMan
           ? (context) => HomeCubit()..getTimeSlots()
@@ -106,7 +108,46 @@ class _HomeScreenState extends State<HomeScreen> {
                                     setState(() {});
                                   },
                                 )
-                              : const SizedBox(),
+                              : DropdownButton<String>(
+                                  iconDisabledColor: Colors.white,
+                                  iconEnabledColor: Colors.white,
+                                  autofocus: true,
+                                  hint: Text(
+                                      isTodayDelivery == true
+                                          ? 'اليوم'
+                                          : 'الكل',
+                                      style: GoogleFonts.cairo(
+                                        color: Colors.white,
+                                      )),
+                                  items: <String>['اليوم', 'الكل', 'الخروج']
+                                      .map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      // enabled: false,
+                                      value: value,
+                                      child: Text(
+                                        value,
+                                        style: GoogleFonts.cairo(),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    if (value == 'اليوم') {
+                                      isTodayDelivery = true;
+                                    } else if (value == 'الكل') {
+                                      isTodayDelivery = false;
+                                    } else {
+                                      showAreYouSureDialoge(
+                                          context: context,
+                                          yesFun: () {
+                                            signOut(context);
+                                          },
+                                          noFun: () {
+                                            Navigator.of(context).pop();
+                                          });
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
                           const SizedBox(
                             width: 15,
                           ),
@@ -136,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   itemCount: homeCubit.timeSlots?.length ?? 0,
                                   itemBuilder: (context, index) {
                                     // if (isDeliveryMan) {
-                                    return BuildCard(
+                                    return  BuildCard(
                                         item: homeCubit.timeSlots?[index]);
                                     // } else {
                                     // return BuildProviderCard(
@@ -186,55 +227,54 @@ class BuildCard extends StatelessWidget {
       },
       child: Container(
         height: 20.h,
+        
         width: double.infinity,
         margin: EdgeInsets.symmetric(horizontal: 2.h),
-        child: Card(
-          elevation: 10,
-          color: item?.type == 1
-              ? Colors.deepOrange.shade50
-              : Colors.blue.shade200,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              item?.type == 1
-                  ? Text(
-                      AppStrings.receive,
-                      style: TextStyle(
-                          fontSize: 14.sp, fontWeight: FontWeight.bold),
-                    )
-                  : Text(
-                      AppStrings.deliver,
-                      style: TextStyle(
-                          fontSize: 14.sp, fontWeight: FontWeight.bold),
-                    ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    "${AppStrings.from} ${item?.from}",
-                    style:
-                        TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
+        decoration: BoxDecoration(
+          color: Colors.blueAccent,
+          borderRadius: BorderRadius.circular(25)
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            item?.type == 1
+                ? Text(
+                    AppStrings.receive,
+                    style: TextStyle(
+                        fontSize: 14.sp, fontWeight: FontWeight.bold,color: Colors.white),
+                  )
+                : Text(
+                    AppStrings.deliver,
+                    style: TextStyle(
+                        fontSize: 14.sp, fontWeight: FontWeight.bold,color: Colors.white),
                   ),
-                  Text(
-                    "${AppStrings.to} ${item?.to}",
-                    style:
-                        TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              Text(
-                '${AppStrings.ordersTotal} ${item?.count}',
-                style: TextStyle(
-                    color: primaryColor,
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 3.h,
-              ),
-            ],
-          ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "${AppStrings.from} ${item?.from}",
+                  style:
+                      TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold,color: Colors.white),
+                ),
+                Text(
+                  "${AppStrings.to} ${item?.to}",
+                  style:
+                      TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold,color: Colors.white),
+                ),
+              ],
+            ),
+            Text(
+              '${AppStrings.ordersTotal} ${item?.count}',
+              style: TextStyle(
+                  color: Colors.amberAccent,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 3.h,
+            ),
+          ],
         ),
       ),
     );
