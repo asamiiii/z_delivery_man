@@ -17,6 +17,7 @@ import 'package:z_delivery_man/models/order_mode.dart';
 import 'package:z_delivery_man/models/order_per_status_provider.dart';
 import 'package:z_delivery_man/models/price_list_model.dart' as pitem;
 import 'package:z_delivery_man/models/provider_order_details.dart';
+import 'package:z_delivery_man/screens/home/home_delivery.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/order_item_images_view.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/meters_view.dart';
 import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
@@ -113,27 +114,29 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           child: Scaffold(
             floatingActionButton: SizedBox(
               width: 150,
-              child: isDeliveryMan ==true ? const SizedBox() : FloatingActionButton(
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('إضافة قطع'),
-                    SizedBox(
-                      width: 10,
+              child: isDeliveryMan == true
+                  ? const SizedBox()
+                  : FloatingActionButton(
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('إضافة قطع'),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(Icons.add)
+                        ],
+                      ),
+                      onPressed: () {
+                        navigateTo(
+                                context,
+                                PriceListScreen(
+                                  orderId: widget.orderId,
+                                ))
+                            .then((value) => cubit.getProviderOrderDetails(
+                                orderId: widget.orderId));
+                      },
                     ),
-                    Icon(Icons.add)
-                  ],
-                ),
-                onPressed: () {
-                  navigateTo(
-                          context,
-                          PriceListScreen(
-                            orderId: widget.orderId,
-                          ))
-                      .then((value) => cubit.getProviderOrderDetails(
-                          orderId: widget.orderId));
-                },
-              ),
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.startFloat,
@@ -195,8 +198,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomWidget(padding: 2,child: SizedBox(),),
-                     
+                    // const CustomWidget(padding: 2,child: SizedBox(),),
+
                     SizedBox(
                       height: 2.h,
                     ),
@@ -237,7 +240,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                
                                 const Text(
                                   'رقم الاوردر',
                                   style: TextStyle(
@@ -261,8 +263,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     SizedBox(
                       height: 2.h,
                     ),
-                    
-                    
+
                     ConditionalBuilder(
                         condition: state is! OrderDetailsLoadingState &&
                             state is! OrderProviderDetailsLoadingState,
@@ -868,16 +869,27 @@ class DeliverySection extends StatelessWidget {
                                 actions: [
                                   CupertinoDialogAction(
                                     child: const Text('نعم'),
-                                    onPressed: () {
+                                    onPressed: () async{
                                       // widget.cubit.deleteCustomer(id: widget.item.id);
-                                      cubit?.goToNextStatus(
-                                          isDeliveryMan: true,
-                                          orderId: orderId,
-                                          itemCount: int.tryParse(
-                                              itemCountController.text),
-                                          comment: commentController.text);
+                                      // if (cubit?.orderDetailsModel?.itemCount !=
+                                      //     int.tryParse(
+                                      //         itemCountController.text)) {
+                                      //           Navigator.of(context).pop();
+                                      //           showToast(message: 'عدد العناصر غير متطابق', state: ToastStates.ERROR);
+                                      // } else {
+                                         await cubit?.goToNextStatus(
+                                            isDeliveryMan: true,
+                                            orderId: orderId,
+                                            itemCount: int.tryParse(
+                                                itemCountController.text),
+                                            comment: commentController.text);
+                                            // Navigator.of(context).pop();
 
-                                      Navigator.of(context).pop();
+                                      // ignore: use_build_context_synchronously
+                                      await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomeDelivery(),));
+                                      // }
+
+                                      
                                     },
                                   ),
                                   CupertinoDialogAction(
@@ -1166,8 +1178,10 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                 //             .cubit
                                                 //             ?.providerOrderDetails
                                                 //             ?.items?[index].imagesUrl?.clear();
-                                                await    widget
-                                                                .cubit?.getProviderOrderDetails(orderId: widget.orderId);
+                                                await widget.cubit
+                                                    ?.getProviderOrderDetails(
+                                                        orderId:
+                                                            widget.orderId);
                                               });
                                             },
                                           ),

@@ -95,11 +95,11 @@ class _PickUpDetailsState extends State<PickUpDetails> {
               centerTitle: true,
               title: const Text('الاوردرات'),
               backgroundColor: primaryColor,
-              leading: IconButton(
-                  onPressed: () {
-                    navigateAndReplace(context, const HomeScreen());
-                  },
-                  icon: const Icon(Icons.home)),
+              // leading: IconButton(
+              //     onPressed: () {
+              //       navigateAndReplace(context, const HomeScreen());
+              //     },
+              //     icon: const Icon(Icons.home)),
             ),
             body: RefreshIndicator(
               onRefresh: () =>

@@ -78,13 +78,13 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     );
   }
 
-  void goToNextStatus(
+  Future <void> goToNextStatus(
       {required int? orderId,
       int? itemCount,
       String? comment,
-      required bool isDeliveryMan}) {
+      required bool isDeliveryMan})async {
     emit(OrderDetailsNextStatusLoadingState());
-    DioHelper.postData(
+    await DioHelper.postData(
         url: isDeliveryMan
             ? "$POST_ORDERS_NEXT_STATUS/$orderId/nextStatus"
             : "$POST_ORDERS_NEXT_STATUS_PROVIDER/$orderId/nextStatus",

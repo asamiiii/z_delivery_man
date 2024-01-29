@@ -68,9 +68,9 @@ void main() async {
   Widget widget;
   if (token != null && token!.isNotEmpty) {
     if(isDeliveryMan==true){
-      widget =  HomeDelivery();
+      widget =  const HomeDelivery();
     }else{
-      widget =  HomeScreen();
+      widget =  const HomeScreen();
     }
     
   } else {

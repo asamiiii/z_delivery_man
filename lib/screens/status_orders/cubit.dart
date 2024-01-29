@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:z_delivery_man/screens/status_orders/status_orders_states.dart';
 
@@ -99,7 +100,13 @@ class OrderPerStatusCubit extends Cubit<OrderPerStatusStates> {
             : "$POST_ORDERS_NEXT_STATUS_PROVIDER/$orderId/nextStatus",
         token: token,
         data: {"item_count": itemCount, "comment": comment}).then((value) {
-      emit(OrderPerStatusNextStatusSuccessState());
+          debugPrint('Response :  ${value.data} ');
+          if(value.data.toString().contains('errors')){
+            emit(OrderPerStatusNextStatusFailedState());
+          }else{
+            emit(OrderPerStatusNextStatusSuccessState());
+          }
+      
     }).catchError((e) {
       print("$e error of next status");
       emit(OrderPerStatusNextStatusFailedState());

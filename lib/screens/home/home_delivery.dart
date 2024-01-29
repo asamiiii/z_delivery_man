@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shimmer/shimmer.dart';
@@ -69,11 +70,16 @@ class _HomeScreenState extends State<HomeDelivery> {
                             text: 'الكل',
                           ),
                           Tab(
-                            icon: Icon(Icons.directions_transit),
+                            icon: Icon(Icons.today),
                             text: 'اليوم',
                           ),
                         ],
                       ),
+                      actions : const [
+                        SizedBox(width: 10,),
+                        CircleAvatar(backgroundImage: AssetImage('assets/images/app_logo.png'),),
+                        SizedBox(width: 10,),
+                        ],
                       title: Text(
                         name,
                         style: GoogleFonts.cairo(
@@ -139,6 +145,11 @@ class _HomeScreenState extends State<HomeDelivery> {
                                         navigateTo(
                                             context,
                                             OrderPerStatusScreen(
+                                              ststusString: drawerCubit
+                                                  .statusOrderModel
+                                                  ?.statuses
+                                                  ?.all![index]
+                                                  .translate,
                                               status: drawerCubit
                                                   .statusOrderModel
                                                   ?.statuses
@@ -189,6 +200,18 @@ String assetsImage({required String? status}) {
   switch (status) {
     case 'delivery_man_assigned':
       imagePath = 'assets/images/new_order.png';
+      break;
+    case 'delivery_man_going':
+      imagePath = 'assets/images/to_customer.png';
+      break;
+    case 'to_provider':
+      imagePath = 'assets/images/not_yet.png';
+      break;
+    case 'from_provider':
+      imagePath = 'assets/images/should.png';
+      break;
+    case 'to_customer':
+      imagePath = 'assets/images/to_customer.png';
       break;
     default:
       imagePath = 'assets/images/R.png';

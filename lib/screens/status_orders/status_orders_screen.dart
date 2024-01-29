@@ -18,9 +18,11 @@ import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OrderPerStatusScreen extends StatefulWidget {
-  const OrderPerStatusScreen({Key? key, this.status, this.isAll})
+  const OrderPerStatusScreen(
+      {Key? key, this.status, this.isAll, this.ststusString})
       : super(key: key);
   final String? status;
+  final String? ststusString;
   final int? isAll;
 
   @override
@@ -95,7 +97,10 @@ class _OrderPerStatusScreenState extends State<OrderPerStatusScreen> {
             drawer: const BuildDrawer(),
             appBar: AppBar(
               // backgroundColor: primaryColor,
-              title: const Text('الاوردرات'),
+              title: Text(
+                widget.ststusString ?? '',
+                style: const TextStyle(color: Colors.white, fontSize: 15),
+              ),
               centerTitle: true,
               actions: [
                 IconButton(
@@ -304,18 +309,16 @@ class _OrdersSectionState extends State<OrdersSection> {
                 Row(
                   // mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Icon(Icons.maps_home_work_sharp),
-                    SizedBox(width: 10),
+                    const Icon(Icons.maps_home_work_sharp),
+                    const SizedBox(width: 10),
                     Text(
-                      'المنطقة: ${widget.order?.zone}',
+                      'الكومباوند : ${widget.order?.address?.compound}',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       softWrap: true,
                       style: const TextStyle(fontSize: 12),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
+                    const SizedBox(width: 20),
                     InkWell(
                         onTap: () async {
                           // final availableMaps =
@@ -346,6 +349,25 @@ class _OrdersSectionState extends State<OrdersSection> {
                         )),
                   ],
                 ),
+
+                const SizedBox(
+                  height: 5,
+                ),
+                // Row(
+                //   // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //   children: [
+                //     const Icon(Icons.maps_home_work_sharp),
+                //     const SizedBox(width: 10),
+                //     Text(
+                //       'رقم العماره :  ${widget.order?.address.}',
+                //       overflow: TextOverflow.ellipsis,
+                //       maxLines: 2,
+                //       softWrap: true,
+                //       style: const TextStyle(fontSize: 12),
+                //     ),
+
+                //   ],
+                // ),
 
                 const SizedBox(
                   height: 5,
@@ -589,6 +611,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                     child: const Text('نعم'),
                                                     onPressed: () {
                                                       // widget.cubit.deleteCustomer(id: widget.item.id);
+
                                                       widget.cubit?.goToNextStatus(
                                                           isDeliveryMan: true,
                                                           orderId:
@@ -808,14 +831,14 @@ class _OrdersSectionState extends State<OrdersSection> {
                   onTap: () {
                     // debugPrint('pref : ${widget.order?.prefrences}');
                     showModalBottomSheet(
-                      context : context,
-                      isScrollControlled : true,
+                      context: context,
+                      isScrollControlled: true,
                       // enableDrag : true,
-                      backgroundColor : Colors.transparent,
-                      builder : (context) => Container(
-                          padding : const EdgeInsets.all(20),
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Container(
+                          padding: const EdgeInsets.all(20),
                           height: MediaQuery.of(context).size.height * 0.50,
-                          width: MediaQuery.of(context).size.width ,
+                          width: MediaQuery.of(context).size.width,
                           decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
