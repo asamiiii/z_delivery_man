@@ -34,45 +34,91 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-#  cupertino_icons: ^1.0.2
   cupertino_icons: ^1.0.5
+
+  # State Managment
   flutter_bloc: ^8.0.1
   bloc: ^8.0.3
+
+  # for Easily make Flutter apps responsive. Automatically adapt UI to different screen
   sizer: ^2.0.13
+
+  # is open source library that come with pre-build 1000+ UI components
   getwidget: ^3.1.1
+
+  # Brings HexColor for your dart and flutter projects, convert material colors to hex colors
   hexcolor: ^3.0.1
+
+  # for reading and writing simple key-value pairs (Local Caching)
   shared_preferences: ^2.2.0
+
+  # HTTP networking package
   dio: ^5.3.0
+
+  # Enabling connecting to multiple Firebase apps.
   firebase_core: ^2.15.0
-  google_maps_flutter: ^2.3.1
-  location: ^5.0.0
-  geolocator: ^9.0.2
-  fluttertoast: ^8.2.2
-  shimmer: ^3.0.0
-  url_launcher: ^6.1.12
-  map_launcher: ^2.5.0+1
-  flutter_svg: ^2.0.7
-  simple_animations: ^5.0.2
-  font_awesome_flutter: ^10.5.0
-  image_picker: ^1.0.5
-  # conditional_builder: ^1.0.2
-  conditional_builder_null_safety: ^0.0.6
-  # fdottedline: ^1.0.1
-  fdottedline_nullsafety: ^2.0.1
   firebase_messaging: ^14.6.7
-  google_fonts: ^6.1.0
-  image_painter: ^0.6.1
-  path_provider: ^2.1.1
   firebase_storage: ^11.5.6
-  path: ^1.8.2
   firebase_app_check: ^0.2.1+8
+
+  # For integrating Google Maps in iOS and Android applications.
+  google_maps_flutter: ^2.3.1
+
+  # for easy access to device's location in real-time.
+  location: ^5.0.0
+
+  # This plugin provides a cross-platform (iOS, Android) API for generic location (GPS etc.) functions.
+  geolocator: ^9.0.2
+
+  # Easily create toast message.
+  fluttertoast: ^8.2.2
+
+  # an easy way to add shimmer effect in Flutter project
+  shimmer: ^3.0.0
+
+  # for launching a URL. Supports web, phone, SMS, and email schemes.
+  url_launcher: ^6.1.12
+
+  # to find available maps installed on a device and launch them with a marker or show directions.
+  map_launcher: ^2.5.0+1
+
+  # An SVG rendering and widget library for Flutter, which allows painting and displaying Scalable Vector Graphics 1.1 files.
+  flutter_svg: ^2.0.7
+
+  # Powerful package to create beautiful custom animations in no time.
+  simple_animations: ^5.0.2
+
+  # The Font Awesome Icon pack available as Flutter Icons. Provides 2000 additional icons to use in your apps.
+  font_awesome_flutter: ^10.5.0
+
+  # for selecting images from the Android and iOS image library, and taking new pictures with the camera.
+  image_picker: ^1.0.5
+
+  # Show UI elements according for conditional type and supports null safety
+  conditional_builder_null_safety: ^0.0.6
+
+  # to create dashed lines. - - - - - - -
+  fdottedline_nullsafety: ^2.0.1
+
+  # to use fonts from fonts.google.com. Supports HTTP fetching, caching, and asset bundling.
+  google_fonts: ^6.1.0
+
+  # for drawing over images. Supports color, strokeWidth, different paintModes and exporting image.
+  image_painter: ^0.6.1
+
+  # for getting commonly used locations on host platform file systems, such as the temp and app data directories.
+  path_provider: ^2.1.1
+  
+  # A string-based path manipulation library. All of the path operations you know and love, 
+  path: ^1.8.2
+
+
+  # Bar indicator made of a series of selected and unselected steps
   step_progress_indicator: ^1.0.2
+
+  # Local Plugin From (Ahmed Sami)
   my_ui:
     path: /Users/mercadoegypt/Documents/my_ui
-  # amplify_flutter: ^1.6.1
-  # amplify_storage_s3: ^1.6.1
-  # amplify_auth_cognito: ^1.6.1
-  # flutter_screenutil: ^5.9.0
 
 dev_dependencies:
   flutter_test:
