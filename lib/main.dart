@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:z_delivery_man/core/config/app_theme.dart';
 import 'package:z_delivery_man/core/constants/app_bloc_providers.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
+import 'package:z_delivery_man/notification_helper.dart';
 import 'package:z_delivery_man/screens/home/home_delivery.dart';
 import 'package:z_delivery_man/screens/login/login_screen.dart';
 import '/../screens/home/home_screen.dart';
@@ -18,18 +19,6 @@ import 'firebase_options.dart';
 import 'network/local/cache_helper.dart';
 import 'network/remote/dio_helper.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp();
-  debugPrint('Handling a background message ${message.messageType}');
-  navigateAndReplace(
-      navState.currentContext!,
-      OrderDetailsScreen(
-        orderId: int.tryParse(message.data['order_id']),
-      ));
-}
-
 final GlobalKey<NavigatorState> navState = GlobalKey<NavigatorState>();
 
 void main() async {
@@ -42,18 +31,18 @@ void main() async {
     androidProvider: AndroidProvider.debug,
   );
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  AppNotification.init();
+
   token = CacheHelper.getData(key: 'token');
   debugPrint('token : $token');
   isDeliveryMan = CacheHelper.getData(key: 'type');
   Widget widget;
   if (token != null && token!.isNotEmpty) {
-    if(isDeliveryMan==true){
-      widget =  const HomeDelivery();
-    }else{
-      widget =  const HomeScreen();
+    if (isDeliveryMan == true) {
+      widget = const HomeDelivery();
+    } else {
+      widget = const HomeScreen();
     }
-    
   } else {
     widget = const LoginScreen();
   }
@@ -72,28 +61,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  void firebaseCloudMessagingListeners() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
-      RemoteNotification? notification = message?.notification;
-      debugPrint("notification on message : ${message?.data.entries}");
-
-      AndroidNotification? androidNotification = message?.notification?.android;
-      debugPrint("androidNotification : ${androidNotification?.tag}");
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      debugPrint('A new onMessageOpenedApp event was published!');
-      // Navigator.pushNamed(context, '/message',
-      //     arguments: MessageArguments(message, true));
-      debugPrint('message : ${message.data['order_id']} ${message.notification?.body}');
-      navigateAndReplace(
-          navState.currentContext!,
-          OrderDetailsScreen(
-            orderId: int.tryParse(message.data['order_id']),
-            fromNotification: true,
-          ));
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -108,7 +75,7 @@ class _MyAppState extends State<MyApp> {
               orderId: int.tryParse(message.data['order_id']),
             ));
       }
-      firebaseCloudMessagingListeners();
+      AppNotification.firebaseCloudMessagingListeners();
     });
   }
 
@@ -117,7 +84,6 @@ class _MyAppState extends State<MyApp> {
     return Sizer(builder: (context, orientation, deviceType) {
       return MultiBlocProvider(
         providers: AppProviders.appProviders,
-        // create: (context) => OrderslistCubit(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           navigatorKey: navState,
