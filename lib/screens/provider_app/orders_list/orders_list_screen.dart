@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
+import 'package:z_delivery_man/screens/home/home_provider.dart/cubit.dart';
 import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
 import '../../../models/order_per_status_provider.dart';
 import '../../../shared/widgets/components.dart';
 import '../../../styles/color.dart';
-import '../../home/cubit.dart';
 import '../../order_details/order_details_screen.dart';
 import 'cubit/orderslist_cubit.dart';
 

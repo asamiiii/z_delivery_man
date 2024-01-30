@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:z_delivery_man/network/local/cache_helper.dart';
-import 'package:z_delivery_man/screens/home/home_delivery.dart';
-import 'package:z_delivery_man/screens/home/home_screen.dart';
+import 'package:z_delivery_man/screens/home/home_delivery/home_delivery.dart';
+import 'package:z_delivery_man/screens/home/home_provider.dart/home_screen.dart';
 import 'package:z_delivery_man/screens/login/login_states.dart';
 import 'package:z_delivery_man/shared/widgets/components.dart';
 import 'package:z_delivery_man/shared/widgets/constants.dart';

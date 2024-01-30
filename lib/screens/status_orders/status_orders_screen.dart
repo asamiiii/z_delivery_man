@@ -1,9 +1,8 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:z_delivery_man/screens/home/home_delivery.dart';
+import 'package:z_delivery_man/screens/home/home_delivery/home_delivery.dart';
 import '/../models/orders_per_status_model.dart';
 import '/../screens/drawer/drawer.dart';
-import '/../screens/home/home_screen.dart';
 import '/../screens/order_details/order_details_screen.dart';
 import '/../screens/status_orders/cubit.dart';
 import '/../screens/status_orders/status_orders_states.dart';

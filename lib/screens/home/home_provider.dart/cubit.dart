@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:z_delivery_man/models/index_model.dart';
+import 'package:z_delivery_man/models/time_slots_model.dart';
+import 'package:z_delivery_man/network/end_points.dart';
+import 'package:z_delivery_man/network/remote/dio_helper.dart';
+import 'package:z_delivery_man/shared/widgets/constants.dart';
 
-import '../../models/index_model.dart';
-import '../../models/time_slots_model.dart';
-import '../../network/end_points.dart';
-import '../../network/remote/dio_helper.dart';
-import '../../shared/widgets/constants.dart';
 import 'home_sates.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
@@ -18,6 +18,13 @@ class HomeCubit extends Cubit<HomeStates> {
   List<TimeSlotsModel>? timeSlots = [];
   List pickupLists = [];
   List deliveryLists = [];
+
+  bool isToday = true;
+
+  isTodayToggle(bool value){
+     isToday = value;
+     emit(state);
+  }
 
   TimeSlotsModel? timeSlotsModel;
 
