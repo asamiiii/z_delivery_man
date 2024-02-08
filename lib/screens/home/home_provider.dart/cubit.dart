@@ -4,6 +4,7 @@ import 'package:z_delivery_man/models/index_model.dart';
 import 'package:z_delivery_man/models/time_slots_model.dart';
 import 'package:z_delivery_man/network/end_points.dart';
 import 'package:z_delivery_man/network/remote/dio_helper.dart';
+import 'package:z_delivery_man/screens/order_details/order_details_state.dart';
 import 'package:z_delivery_man/shared/widgets/constants.dart';
 
 import 'home_sates.dart';
@@ -23,7 +24,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   isTodayToggle(bool value){
      isToday = value;
-     emit(state);
+     emit(HomeuccessStatus());
   }
 
   TimeSlotsModel? timeSlotsModel;

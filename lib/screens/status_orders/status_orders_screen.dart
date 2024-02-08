@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/home_delivery.dart';
+import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
 import '/../models/orders_per_status_model.dart';
 import '/../screens/drawer/drawer.dart';
 import '/../screens/order_details/order_details_screen.dart';
@@ -40,6 +41,8 @@ class _OrderPerStatusScreenState extends State<OrderPerStatusScreen> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<OrderPerStatusCubit>(context, listen: false)
+        .setCurrentPage(isInit: true);
     _scrollController = ScrollController()..addListener(setupScrollController);
     BlocProvider.of<OrderPerStatusCubit>(context, listen: false)
         .getOrderPerStatus(isAll: widget.isAll, status: widget.status, page: 1);
@@ -93,7 +96,7 @@ class _OrderPerStatusScreenState extends State<OrderPerStatusScreen> {
           textDirection: TextDirection.rtl,
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            drawer: const BuildDrawer(),
+            // drawer: const BuildDrawer(),
             appBar: AppBar(
               // backgroundColor: primaryColor,
               title: Text(
@@ -132,23 +135,22 @@ class _OrderPerStatusScreenState extends State<OrderPerStatusScreen> {
                 ),
               ),
               builder: (context) => cubit.allOrders.isNotEmpty
-                  ? Expanded(
-                      child: ListView.separated(
-                        controller: _scrollController,
-                        physics: const BouncingScrollPhysics(),
-                        separatorBuilder: (context, index) => const SizedBox(
-                          height: 5,
-                        ),
-                        shrinkWrap: true,
-                        itemCount: cubit.allOrders.length,
-                        itemBuilder: (context, index) {
-                          return OrdersSection(
-                              order: cubit.allOrders.elementAt(index),
-                              state: state,
-                              cubit: cubit);
-                        },
-                      ),
-                    )
+                  ? ListView.separated(
+                    controller: _scrollController,
+                    physics: const BouncingScrollPhysics(),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(
+                      height: 5,
+                    ),
+                    shrinkWrap: true,
+                    itemCount: cubit.allOrders.length,
+                    itemBuilder: (context, index) {
+                      return OrdersSection(
+                          order: cubit.allOrders.elementAt(index),
+                          state: state,
+                          cubit: cubit);
+                    },
+                  )
                   : Center(
                       child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -448,7 +450,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                       TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  // mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ConditionalBuilder(
                       condition:
@@ -688,12 +690,12 @@ class _OrdersSectionState extends State<OrdersSection> {
               left: 50,
               child: InkWell(
                   onTap: () {
-                    // debugPrint(
-                    //     'customer comment : ${widget.order?.comments?.customerComment}');
-                    // debugPrint(
-                    //     'pick comment : ${widget.order?.comments?.pickComment}');
-                    // debugPrint(
-                    //     'requests comment : ${widget.order?.comments?.requests}');
+                    debugPrint(
+                        'customer comment : ${widget.order?.comments?.customerComment}');
+                    debugPrint(
+                        'pick comment : ${widget.order?.comments?.pickComment}');
+                    debugPrint(
+                        'requests comment : ${widget.order?.comments?.requests}');
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -719,11 +721,11 @@ class _OrdersSectionState extends State<OrdersSection> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                // const Expanded(child: SizedBox()),
-                                // Text(
-                                //   '${widget.order?.comments?.customerComment}',
-                                //   style: const TextStyle(fontSize: 15),
-                                // ),
+                                const Expanded(child: SizedBox()),
+                                Text(
+                                  '${widget.order?.comments?.customerComment}',
+                                  style: const TextStyle(fontSize: 15),
+                                ),
                                 const SizedBox(
                                   width: 20,
                                 ),
@@ -740,10 +742,10 @@ class _OrdersSectionState extends State<OrdersSection> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                // Text(
-                                //   '${widget.order?.comments?.pickComment}',
-                                //   style: const TextStyle(fontSize: 15),
-                                // ),
+                                Text(
+                                  '${widget.order?.comments?.pickComment}',
+                                  style: const TextStyle(fontSize: 15),
+                                ),
                                 const SizedBox(
                                   width: 20,
                                 ),
@@ -772,43 +774,43 @@ class _OrdersSectionState extends State<OrdersSection> {
                             const SizedBox(
                               height: 10,
                             ),
-                            // widget.order?.comments?.requests != null
-                            //     ? ListView.separated(
-                            //         shrinkWrap: true,
-                            //         itemBuilder: (context, index) => Row(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.end,
-                            //               children: [
-                            //                 Text(
-                            //                   '${widget.order?.comments?.requests?[index].comment}',
-                            //                   style:
-                            //                       const TextStyle(fontSize: 15),
-                            //                 ),
-                            //                 // const SizedBox(width: 20,),
-                            //                 widget
-                            //                             .order
-                            //                             ?.comments
-                            //                             ?.requests?[index]
-                            //                             .type ==
-                            //                         'Only'
-                            //                     ? const Text(
-                            //                         ' : الآوردر الحالي',
-                            //                         style:
-                            //                             TextStyle(fontSize: 15),
-                            //                       )
-                            //                     : const Text(
-                            //                         ' : جميع لاوردرات',
-                            //                         style:
-                            //                             TextStyle(fontSize: 15),
-                            //                       ),
-                            //               ],
-                            //             ),
-                            //         separatorBuilder: (context, index) =>
-                            //             const SizedBox(height: 10),
-                            //         itemCount: widget.order?.comments?.requests
-                            //                 ?.length ??
-                            //             0)
-                            //     : const Text('لا يوجد بيانات متوفره حاليا !')
+                            widget.order?.comments?.requests != null
+                                ? ListView.separated(
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) => Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              '${widget.order?.comments?.requests?[index].comment}',
+                                              style:
+                                                  const TextStyle(fontSize: 15),
+                                            ),
+                                            // const SizedBox(width: 20,),
+                                            widget
+                                                        .order
+                                                        ?.comments
+                                                        ?.requests?[index]
+                                                        .type ==
+                                                    'Only'
+                                                ? const Text(
+                                                    ' : الآوردر الحالي',
+                                                    style:
+                                                        TextStyle(fontSize: 15),
+                                                  )
+                                                : const Text(
+                                                    ' : جميع لاوردرات',
+                                                    style:
+                                                        TextStyle(fontSize: 15),
+                                                  ),
+                                          ],
+                                        ),
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(height: 10),
+                                    itemCount: widget.order?.comments?.requests
+                                            ?.length ??
+                                        0)
+                                : const Text('لا يوجد بيانات متوفره حاليا !')
                           ])),
                     );
                   },
@@ -854,67 +856,66 @@ class _OrdersSectionState extends State<OrdersSection> {
                               const SizedBox(
                                 height: 15,
                               ),
-                              // widget.order?.prefrences?.isEmpty ?? false
-                              //     ? Center(
-                              //         child: Text(
-                              //         'لا يوجد تفضيلات',
-                              //         style: GoogleFonts.cairo(
-                              //           fontSize: 30,
-                              //         ),
-                              //       ))
-                              //     : Expanded(
-                              //         child: ListView.separated(
-                              //             // shrinkWrap: true,
-                              //             itemBuilder: (context, index) {
-                              //               return Row(
-                              //                 mainAxisAlignment:
-                              //                     MainAxisAlignment.center,
-                              //                 children: [
-                              //                   const SizedBox(
-                              //                     width: 20,
-                              //                   ),
-                              //                   // ImageAsIcon(
-                              //                   //   image: widget.order
-                              //                   //       ?.prefrences?[index].icon,
-                              //                   //   height: 29.4,
-                              //                   //   width: 32.4,
-                              //                   //   fromNetwork: true,
-                              //                   //   orignalColor: true,
-                              //                   // ),
-                              //                   const SizedBox(
-                              //                     width: 15,
-                              //                   ),
-                              //                   Expanded(
-                              //                     child: Column(
-                              //                       crossAxisAlignment:
-                              //                           CrossAxisAlignment
-                              //                               .start,
-                              //                       children: [
-                              //                         // Text(
-                              //                         //     "${widget.order?.prefrences?[index].name}",
-                              //                         //     style: GoogleFonts
-                              //                         //         .cairo()),
-                              //                       ],
-                              //                     ),
-                              //                   ),
-                              //                   const SizedBox(
-                              //                     width: 10,
-                              //                   ),
-                              //                   Text(
-                              //                     '${widget.order?.prefrences?[index].preference}',
-                              //                     style: GoogleFonts.cairo(),
-                              //                   )
-                              //                 ],
-                              //               );
-                              //             },
-                              //             separatorBuilder: (context, index) =>
-                              //                 const SizedBox(
-                              //                   height: 15,
-                              //                 ),
-                              //             itemCount: widget
-                              //                     .order!.prefrences?.length ??
-                              //                 0),
-                              //       )
+                              widget.order?.pref?.isEmpty ?? false
+                                  ? Center(
+                                      child: Text(
+                                      'لا يوجد تفضيلات',
+                                      style: GoogleFonts.cairo(
+                                        fontSize: 30,
+                                      ),
+                                    ))
+                                  : Expanded(
+                                      child: ListView.separated(
+                                          // shrinkWrap: true,
+                                          itemBuilder: (context, index) {
+                                            return Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const SizedBox(
+                                                  width: 20,
+                                                ),
+                                                ImageAsIcon(
+                                                  image: widget
+                                                      .order?.pref?[index].icon,
+                                                  height: 29.4,
+                                                  width: 32.4,
+                                                  fromNetwork: true,
+                                                  orignalColor: true,
+                                                ),
+                                                const SizedBox(
+                                                  width: 15,
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                          "${widget.order?.pref?[index].name}",
+                                                          style: GoogleFonts
+                                                              .cairo()),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  '${widget.order?.pref?[index].preference}',
+                                                  style: GoogleFonts.cairo(),
+                                                )
+                                              ],
+                                            );
+                                          },
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                          itemCount:
+                                              widget.order!.pref?.length ?? 0),
+                                    )
                             ],
                           )),
                     );

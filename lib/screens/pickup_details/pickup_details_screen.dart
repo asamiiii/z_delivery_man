@@ -89,7 +89,7 @@ class _PickUpDetailsState extends State<PickUpDetails> {
           return Scaffold(
             key: scaffoldKey,
             resizeToAvoidBottomInset: false,
-            endDrawer: const BuildDrawer(),
+            // endDrawer: const BuildDrawer(),
             appBar: AppBar(
               centerTitle: true,
               title: const Text('الاوردرات'),

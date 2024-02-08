@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:z_delivery_man/shared/widgets/components.dart';
+import 'package:z_delivery_man/shared/widgets/constants.dart';
 
-PreferredSizeWidget deliveryHomeAppBar({required String? deliveryManName}) {
+PreferredSizeWidget deliveryHomeAppBar(
+    {required String? deliveryManName, required BuildContext? ctx}) {
   return AppBar(
     bottom: const TabBar(
       labelColor: Colors.white,
@@ -37,6 +40,18 @@ PreferredSizeWidget deliveryHomeAppBar({required String? deliveryManName}) {
         color: Colors.white,
       ),
     ),
+    leading: InkWell(
+        onTap: () {
+          showAreYouSureDialoge(
+              context: ctx!,
+              yesFun: () {
+                signOut(ctx);
+              },
+              noFun: () {
+                Navigator.of(ctx).pop();
+              });
+        },
+        child: const Icon(Icons.logout)),
     centerTitle: true,
   );
 }
@@ -68,7 +83,3 @@ class DeliveryHomeShimmer extends StatelessWidget {
     );
   }
 }
-
-
-
-

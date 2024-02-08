@@ -38,6 +38,7 @@ class OrderItemImagesScreen extends StatefulWidget {
 }
 
 class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
+  bool? preivilageFlag = true;
   @override
   void initState() {
     final cubit = OrderItemImagesCubit.get(context);
@@ -48,6 +49,16 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
     });
     // widget.images?.clear();
     // cubit.getOrderItemImages(); //* Empty Fun
+    if (widget.statusName == 'check_up_all' ||
+        widget.statusName == 'check_up' ||
+        widget.statusName == 'finished_all' ||
+        widget.statusName == 'finished' ||
+        widget.statusName == 'from_provider_all' ||
+        widget.statusName == 'from_provider' ||
+        widget.statusName == 'opened_all' ||
+        widget.statusName == 'opened') {
+      preivilageFlag = false;
+    }
     super.initState();
   }
 
@@ -56,7 +67,7 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
     double? screenWidth = MediaQuery.of(context).size.width;
     double? screenhight = MediaQuery.of(context).size.height;
     var itemsCount = (screenWidth / 190).floor();
- 
+
     return BlocConsumer<OrderItemImagesCubit, OrderItemImagesState>(
       listener: (context, state) {
         if (state is OrderItemImagesSuccessState) {
@@ -85,33 +96,32 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
         return Scaffold(
           appBar: AppBar(
             leading: InkWell(
-              onTap: () {
-                 Navigator.pop(context);
-                // showDialog(
-                //   context: context,
-                //   builder: (context) => AlertDialog(
-                //         title: Text('هل انت متآكد'),
-                //         actions: [
-                //           TextButton(
-                //               onPressed: () {
-                //                 Navigator.of(context).pop();
-                //                 // Navigator.of(context).pop();
-                //               },
-                //               child: const Text('لا')),
-                //           TextButton(
-                //               onPressed: () {
-                //                 orderDetailsCubit.getProviderOrderDetails(orderId: widget.orderId);
-                                
-                //                 Navigator.pop(context);
-                //                 Navigator.pop(context);
-                //               },
-                //               child: const Text('نعم')),
-                //         ],
-                //       ));
-              // return false;
-            
-              },
-              child: Icon(Icons.arrow_back)),
+                onTap: () {
+                  Navigator.pop(context);
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (context) => AlertDialog(
+                  //         title: Text('هل انت متآكد'),
+                  //         actions: [
+                  //           TextButton(
+                  //               onPressed: () {
+                  //                 Navigator.of(context).pop();
+                  //                 // Navigator.of(context).pop();
+                  //               },
+                  //               child: const Text('لا')),
+                  //           TextButton(
+                  //               onPressed: () {
+                  //                 orderDetailsCubit.getProviderOrderDetails(orderId: widget.orderId);
+
+                  //                 Navigator.pop(context);
+                  //                 Navigator.pop(context);
+                  //               },
+                  //               child: const Text('نعم')),
+                  //         ],
+                  //       ));
+                  // return false;
+                },
+                child: const Icon(Icons.arrow_back)),
             centerTitle: true,
             title: Text(
               widget.itemName ?? '',
@@ -151,243 +161,237 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(8),
-            child:
-                cubit.imagesLocalFiles.isNotEmpty ||
-                        cubit.remoteList.isNotEmpty
-                    ? GridView(
-                        gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: itemsCount,
-                          mainAxisSpacing: 5,
-                          childAspectRatio: 0.7,
-                          crossAxisSpacing: 10,
-                        ),
-                        children: [
-                          // ...cubit.imagesLocalFiles
-                          //     .map((e) => Stack(
-                          //           children: [
-                          //             InkWell(
-                          //               onTap: () {
-                          //                 Navigator.push(
-                          //                     context,
-                          //                     MaterialPageRoute(
-                          //                       builder: (context) =>
-                          //                           PaintOnImage(
-                          //                               image: e.imageFile),
-                          //                     ));
-                          //               },
-                          //               child: ClipRRect(
-                          //                 borderRadius:
-                          //                     BorderRadius.circular(26),
-                          //                 child: FadeInImage(
-                          //                   fit: BoxFit.fill,
-                          //                   placeholder: const AssetImage(
-                          //                     'assets/images/q.png',
-                          //                   ),
-                          //                   image: FileImage(
-                          //                     e.imageFile ??
-                          //                         File('dummmy_path'),
-                          //                   ),
-                          //                 ),
-                          //               ),
-                          //             ),
-                          //             widget.statusName ==
-                          //                         'provider_received_all' ||
-                          //                     widget.statusName ==
-                          //                         'provider_received'
-                          //                 ? Positioned(
-                          //                     top: 5,
-                          //                     left: 5,
-                          //                     child: InkWell(
-                          //                       onTap: () {
-                          //                         showAreYouSureDialoge(
-                          //                             context: context,
-                          //                             yesFun: () {
-                          //                               cubit
-                          //                                   .removeImageFromLocalStorageList(
-                          //                                       e.imageFile);
-                          //                               Navigator.pop(
-                          //                                   context);
-                          //                             },
-                          //                             noFun: () {
-                          //                               Navigator.pop(
-                          //                                   context);
-                          //                             });
-                          //                       },
-                          //                       child: CircleAvatar(
-                          //                         radius: 10.sp,
-                          //                         backgroundColor:
-                          //                             primaryColor,
-                          //                         child: const Icon(
-                          //                           Icons.close,
-                          //                           color: Colors.white,
-                          //                         ),
-                          //                       ),
-                          //                     ))
-                          //                 : const SizedBox(),
-                          //             Positioned(
-                          //                 bottom: 20,
-                          //                 left: 10,
-                          //                 child: ElevatedButton(
-                          //                   style: ButtonStyle(
-                          //                       backgroundColor:
-                          //                           MaterialStateProperty.all(
-                          //                               primaryColor)),
-                          //                   onPressed: () {
-                          //                     TextEditingController
-                          //                         commentController =
-                          //                         TextEditingController(
-                          //                             text: e.comment);
-                          //                     showDialog(
-                          //                         context: context,
-                          //                         builder: (context) =>
-                          //                             AlertDialog(
-                          //                               title: const Text(
-                          //                                   'اضافة تعليقات'),
-                          //                               content:
-                          //                                   TextFormField(
-                          //                                 controller:
-                          //                                     commentController,
-                          //                                 maxLines: 2,
-                          //                                 textDirection:
-                          //                                     TextDirection
-                          //                                         .rtl,
-                          //                                 decoration: const InputDecoration(
-                          //                                     hintText:
-                          //                                         'أضف تعليقك ..',
-                          //                                     hintTextDirection:
-                          //                                         TextDirection
-                          //                                             .rtl),
-                          //                               ),
-                          //                               actions: [
-                          //                                 TextButton(
-                          //                                     onPressed: () {
-                          //                                       Navigator.pop(
-                          //                                           context);
-                          //                                       debugPrint(
-                          //                                           'Cancel');
-                          //                                     },
-                          //                                     child: const Text(
-                          //                                         'تراجع')),
-                          //                                 TextButton(
-                          //                                     onPressed:
-                          //                                         () async {
-                          //                                       Navigator.pop(
-                          //                                           context);
-                          //                                       e.comment =
-                          //                                           commentController
-                          //                                               .text;
-                          //                                     },
-                          //                                     child:
-                          //                                         const Text(
-                          //                                             'حفظ')),
-                          //                               ],
-                          //                             ));
-                          //                   },
-                          //                   child: const Text(
-                          //                     'اضافة تعليق',
-                          //                     style: TextStyle(
-                          //                         color: Colors.white),
-                          //                   ),
-                          //                 ))
-                          //           ],
-                          //         ))
-                          //     .toList(),
-                          ...cubit.remoteList
-                              .map((e) => Stack(
-                                    children: [
-                                      InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PaintOnImage(
-                                                          url: e.url,
-                                                          itemId:
-                                                              widget.itemId,
-                                                          orderId:
-                                                              widget.orderId,
-                                                              imageId:e.id ,
-                                                              ),
-                                                ));
-                                          },
-                                          child: e.id != null
-                                              ? ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          26),
-                                                  child: FadeInImage(
-                                                    height: 30.h,
-                                                    fit: BoxFit.fill,
-                                                    placeholder: const AssetImage(
-                                                        'assets/images/q.png'),
-                                                    image: NetworkImage(
-                                                      e.url ?? '',
+            child: cubit.imagesLocalFiles.isNotEmpty ||
+                    cubit.remoteList.isNotEmpty
+                ? GridView(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: itemsCount,
+                      mainAxisSpacing: 5,
+                      childAspectRatio: 0.7,
+                      crossAxisSpacing: 10,
+                    ),
+                    children: [
+                      // ...cubit.imagesLocalFiles
+                      //     .map((e) => Stack(
+                      //           children: [
+                      //             InkWell(
+                      //               onTap: () {
+                      //                 Navigator.push(
+                      //                     context,
+                      //                     MaterialPageRoute(
+                      //                       builder: (context) =>
+                      //                           PaintOnImage(
+                      //                               image: e.imageFile),
+                      //                     ));
+                      //               },
+                      //               child: ClipRRect(
+                      //                 borderRadius:
+                      //                     BorderRadius.circular(26),
+                      //                 child: FadeInImage(
+                      //                   fit: BoxFit.fill,
+                      //                   placeholder: const AssetImage(
+                      //                     'assets/images/q.png',
+                      //                   ),
+                      //                   image: FileImage(
+                      //                     e.imageFile ??
+                      //                         File('dummmy_path'),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //             widget.statusName ==
+                      //                         'provider_received_all' ||
+                      //                     widget.statusName ==
+                      //                         'provider_received'
+                      //                 ? Positioned(
+                      //                     top: 5,
+                      //                     left: 5,
+                      //                     child: InkWell(
+                      //                       onTap: () {
+                      //                         showAreYouSureDialoge(
+                      //                             context: context,
+                      //                             yesFun: () {
+                      //                               cubit
+                      //                                   .removeImageFromLocalStorageList(
+                      //                                       e.imageFile);
+                      //                               Navigator.pop(
+                      //                                   context);
+                      //                             },
+                      //                             noFun: () {
+                      //                               Navigator.pop(
+                      //                                   context);
+                      //                             });
+                      //                       },
+                      //                       child: CircleAvatar(
+                      //                         radius: 10.sp,
+                      //                         backgroundColor:
+                      //                             primaryColor,
+                      //                         child: const Icon(
+                      //                           Icons.close,
+                      //                           color: Colors.white,
+                      //                         ),
+                      //                       ),
+                      //                     ))
+                      //                 : const SizedBox(),
+                      //             Positioned(
+                      //                 bottom: 20,
+                      //                 left: 10,
+                      //                 child: ElevatedButton(
+                      //                   style: ButtonStyle(
+                      //                       backgroundColor:
+                      //                           MaterialStateProperty.all(
+                      //                               primaryColor)),
+                      //                   onPressed: () {
+                      //                     TextEditingController
+                      //                         commentController =
+                      //                         TextEditingController(
+                      //                             text: e.comment);
+                      //                     showDialog(
+                      //                         context: context,
+                      //                         builder: (context) =>
+                      //                             AlertDialog(
+                      //                               title: const Text(
+                      //                                   'اضافة تعليقات'),
+                      //                               content:
+                      //                                   TextFormField(
+                      //                                 controller:
+                      //                                     commentController,
+                      //                                 maxLines: 2,
+                      //                                 textDirection:
+                      //                                     TextDirection
+                      //                                         .rtl,
+                      //                                 decoration: const InputDecoration(
+                      //                                     hintText:
+                      //                                         'أضف تعليقك ..',
+                      //                                     hintTextDirection:
+                      //                                         TextDirection
+                      //                                             .rtl),
+                      //                               ),
+                      //                               actions: [
+                      //                                 TextButton(
+                      //                                     onPressed: () {
+                      //                                       Navigator.pop(
+                      //                                           context);
+                      //                                       debugPrint(
+                      //                                           'Cancel');
+                      //                                     },
+                      //                                     child: const Text(
+                      //                                         'تراجع')),
+                      //                                 TextButton(
+                      //                                     onPressed:
+                      //                                         () async {
+                      //                                       Navigator.pop(
+                      //                                           context);
+                      //                                       e.comment =
+                      //                                           commentController
+                      //                                               .text;
+                      //                                     },
+                      //                                     child:
+                      //                                         const Text(
+                      //                                             'حفظ')),
+                      //                               ],
+                      //                             ));
+                      //                   },
+                      //                   child: const Text(
+                      //                     'اضافة تعليق',
+                      //                     style: TextStyle(
+                      //                         color: Colors.white),
+                      //                   ),
+                      //                 ))
+                      //           ],
+                      //         ))
+                      //     .toList(),
+                      ...cubit.remoteList
+                          .map((e) => Stack(
+                                children: [
+                                  InkWell(
+                                      onTap: preivilageFlag == false
+                                          ? () {}
+                                          : () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PaintOnImage(
+                                                      url: e.url,
+                                                      itemId: widget.itemId,
+                                                      orderId: widget.orderId,
+                                                      imageId: e.id,
                                                     ),
-                                                  ),
-                                                )
-                                              : ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          26),
-                                                  child: Image.asset(
-                                                    'assets/images/loading.gif',
-                                                    fit: BoxFit.fitHeight,
-                                                    height: 30.h,
-                                                  ),
-                                                )),
-                                      widget.statusName ==
-                                                  'provider_received_all' ||
-                                              widget.statusName ==
-                                                  'provider_received'
-                                          ? Positioned(
-                                              top: 5,
-                                              left: 5,
-                                              child: InkWell(
-                                                onTap: () {
-                                                  e.url != ''
-                                                      ? showAreYouSureDialoge(
-                                                          context: context,
-                                                          yesFun: e.url != ''
-                                                              ? () {
-                                                                  cubit.deleteAssociateImage(
-                                                                      imageId: e
-                                                                          .id,
-                                                                      orderId:
-                                                                          widget.orderId);
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                }
-                                                              : () {},
-                                                          noFun: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          })
-                                                      : () {};
-                                                },
-                                                child: CircleAvatar(
-                                                  radius: 10.sp,
-                                                  backgroundColor: e.url != ''
-                                                      ? Colors.green
-                                                      : Colors.grey,
-                                                  child: const Icon(
-                                                    Icons.close,
-                                                    color: Colors.white,
-                                                  ),
+                                                  ));
+                                            },
+                                      child: e.id != null
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(26),
+                                              child: FadeInImage(
+                                                height: 30.h,
+                                                fit: BoxFit.fill,
+                                                placeholder: const AssetImage(
+                                                    'assets/images/q.png'),
+                                                image: NetworkImage(
+                                                  e.url ?? '',
                                                 ),
-                                              ))
-                                          : const SizedBox(),
-                                      Positioned(
-                                          bottom: 10,
-                                          left: 10,
-                                          child: ElevatedButton(
-                                            style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        primaryColor)),
-                                            onPressed: state
-                                                    is OrderItemImagesLoadingState
+                                              ),
+                                            )
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(26),
+                                              child: Image.asset(
+                                                'assets/images/loading.gif',
+                                                fit: BoxFit.fitHeight,
+                                                height: 30.h,
+                                              ),
+                                            )),
+                                  widget.statusName ==
+                                              'provider_received_all' ||
+                                          widget.statusName ==
+                                              'provider_received'
+                                      ? Positioned(
+                                          top: 5,
+                                          left: 5,
+                                          child: InkWell(
+                                            onTap: () {
+                                              e.url != ''
+                                                  ? showAreYouSureDialoge(
+                                                      context: context,
+                                                      yesFun: e.url != ''
+                                                          ? () {
+                                                              cubit.deleteAssociateImage(
+                                                                  imageId: e.id,
+                                                                  orderId: widget
+                                                                      .orderId);
+                                                              Navigator.pop(
+                                                                  context);
+                                                            }
+                                                          : () {},
+                                                      noFun: () {
+                                                        Navigator.pop(context);
+                                                      })
+                                                  : () {};
+                                            },
+                                            child: CircleAvatar(
+                                              radius: 10.sp,
+                                              backgroundColor: e.url != ''
+                                                  ? Colors.green
+                                                  : Colors.grey,
+                                              child: const Icon(
+                                                Icons.close,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ))
+                                      : const SizedBox(),
+                                  Positioned(
+                                      bottom: 10,
+                                      left: 10,
+                                      child: ElevatedButton(
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    primaryColor)),
+                                        onPressed:
+                                            state is OrderItemImagesLoadingState
                                                 ? () {}
                                                 : () {
                                                     TextEditingController
@@ -405,8 +409,7 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                                                       TextFormField(
                                                                     controller:
                                                                         commentController,
-                                                                    maxLines:
-                                                                        2,
+                                                                    maxLines: 2,
                                                                     textDirection:
                                                                         TextDirection
                                                                             .rtl,
@@ -420,11 +423,13 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                                                     TextButton(
                                                                         onPressed:
                                                                             () {
-                                                                          Navigator.pop(context);
-                                                                          debugPrint('Cancel');
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          debugPrint(
+                                                                              'Cancel');
                                                                         },
-                                                                        child:
-                                                                            const Text('تراجع')),
+                                                                        child: const Text(
+                                                                            'تراجع')),
                                                                     TextButton(
                                                                         onPressed:
                                                                             () async {
@@ -432,45 +437,45 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
                                                                               imageId: e.id,
                                                                               orderId: widget.orderId,
                                                                               comment: commentController.text);
-                                                                          Navigator.pop(context);
+                                                                          Navigator.pop(
+                                                                              context);
                                                                           // e.comment =
                                                                           //     commentController
                                                                           //         .text;
                                                                         },
-                                                                        child:
-                                                                            const Text('حفظ')),
+                                                                        child: const Text(
+                                                                            'حفظ')),
                                                                   ],
                                                                 ));
                                                   },
-                                            child: const Text(
-                                              'تعليق',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ))
-                                    ],
-                                  ))
-                              .toList(),
-                          // SizedBox(height: 30,)
-                        ],
-                      )
-                    : Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.image,
-                              size: 100,
-                              color: primaryColor,
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            const Text('لا يوجد صور متاحة'),
-                          ],
+                                        child: const Text(
+                                          'تعليق',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ))
+                                ],
+                              ))
+                          .toList(),
+                      // SizedBox(height: 30,)
+                    ],
+                  )
+                : Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.image,
+                          size: 100,
+                          color: primaryColor,
                         ),
-                      ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        const Text('لا يوجد صور متاحة'),
+                      ],
+                    ),
+                  ),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton: widget.statusName == 'provider_received_all' ||

@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: PageContainer(
                   child: Scaffold(
                     backgroundColor: Colors.white,
-                    drawer: isDeliveryMan ? const BuildDrawer() : null,
+                    // drawer: isDeliveryMan ? const BuildDrawer() : null,
                     appBar: providerAppBar(providerName: name, ctx: context,cubit: homeCubit),
                     body: WillPopScope(
                       onWillPop: () async {

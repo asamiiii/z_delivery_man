@@ -9,6 +9,8 @@ class HomeLoadingState extends HomeStates {}
 
 class HomeFailedState extends HomeStates {}
 
+class NotifyListeners extends HomeStates {}
+
 class HomeSuccessState extends HomeStates {
   final TimeSlotsModel? timeSlotsModel;
   HomeSuccessState({this.timeSlotsModel});

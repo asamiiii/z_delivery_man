@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeDelivery> {
                   child: Scaffold(
                     backgroundColor: Colors.white,
                     // drawer: const BuildDrawer(),
-                    appBar: deliveryHomeAppBar(deliveryManName:name ?? ''),
+                    appBar: deliveryHomeAppBar(deliveryManName:name ?? '',ctx: context),
                     body: TabBarView(
                       children: [
                         DeliveryAll(),

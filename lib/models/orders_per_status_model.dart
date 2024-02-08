@@ -1,3 +1,5 @@
+import 'package:z_delivery_man/models/provider_order_details.dart';
+
 class OrdersPerStatusModel {
   int? lastPage;
   List<Orders>? orders;
@@ -35,6 +37,8 @@ class Orders {
   String? provider;
   Customer? customer;
   Address? address;
+  List<Items>? pref;
+  Comments? comments;
 
   Orders(
       {this.id,
@@ -46,7 +50,10 @@ class Orders {
       this.canCollect,
       this.provider,
       this.customer,
-      this.address});
+      this.address,
+      this.pref,
+      this.comments
+      });
 
   Orders.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -61,7 +68,18 @@ class Orders {
         json['customer'] != null ? Customer.fromJson(json['customer']) : null;
     address =
         json['address'] != null ? Address.fromJson(json['address']) : null;
+  
+  if (json['items'] != null) {
+      pref = <Items>[];
+      json['items'].forEach((v) {
+        pref?.add(Items.fromJson(v));
+      });
+    }else{
+      pref = [];
+    }
+     comments =json['comments'] != null ? Comments.fromJson(json['comments']) : null;
   }
+  
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -129,3 +147,35 @@ class Address {
     return data;
   }
 }
+
+class Comments {
+  String? customerComment;
+  String? pickComment;
+  List<Requests>? requests;
+
+  Comments({this.customerComment, this.pickComment, this.requests});
+
+  Comments.fromJson(Map<String, dynamic> json) {
+    customerComment = json['customer_comment']??'لا يوجد تعليق متاح';
+    pickComment = json['pick_comment']??'لا يوجد تعليق متاح';
+    if (json['requests'] != null) {
+      requests = <Requests>[];
+      json['requests'].forEach((v) {
+        requests!.add(Requests.fromJson(v));
+      });
+    }
+  }
+}
+
+class Requests {
+  String? type;
+  String? comment;
+
+  Requests({this.type, this.comment});
+
+  Requests.fromJson(Map<String, dynamic> json) {
+    type = json['type']??'لا يوجد بيانات متوفره حاليا';
+    comment = json['comment']??'لا يوجد بيانات متوفره حاليا';
+  }
+}
+

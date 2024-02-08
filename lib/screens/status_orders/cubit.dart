@@ -20,8 +20,12 @@ class OrderPerStatusCubit extends Cubit<OrderPerStatusStates> {
   int? _lastPage = 1;
   int? get lastPage => _lastPage;
 
-  void setCurrentPage() {
-    _currentPage++;
+  void setCurrentPage({bool isInit = false}) {
+    if (isInit == true) {
+      _currentPage = 1;
+    } else {
+      _currentPage++;
+    }
     emit(SetterSuccess());
   }
 
@@ -41,6 +45,7 @@ class OrderPerStatusCubit extends Cubit<OrderPerStatusStates> {
         url: GET_ORDERS_PER_STATUS,
         token: token,
         query: {"status": status, "page": page, "all": isAll}).then((value) {
+      debugPrint('getOrderPerStatus Resp : ${value.data}');
       if (page == 1 || page == null) {
         allOrders = [];
         ordersPerStatusModel = OrdersPerStatusModel.fromJson(value.data);
@@ -54,7 +59,7 @@ class OrderPerStatusCubit extends Cubit<OrderPerStatusStates> {
         allOrders.addAll(ordersPerStatusModel!.orders!);
         emit(OrderPerStatusNextPageSuccessState());
       }
-
+       emit(OrderPerStatusSuccessState());
       // if (page <= ordersPerStatusModel.lastPage) {
       //   page++;
 
@@ -100,13 +105,12 @@ class OrderPerStatusCubit extends Cubit<OrderPerStatusStates> {
             : "$POST_ORDERS_NEXT_STATUS_PROVIDER/$orderId/nextStatus",
         token: token,
         data: {"item_count": itemCount, "comment": comment}).then((value) {
-          debugPrint('Response :  ${value.data} ');
-          if(value.data.toString().contains('errors')){
-            emit(OrderPerStatusNextStatusFailedState());
-          }else{
-            emit(OrderPerStatusNextStatusSuccessState());
-          }
-      
+      debugPrint('Response :  ${value.data} ');
+      if (value.data.toString().contains('errors')) {
+        emit(OrderPerStatusNextStatusFailedState());
+      } else {
+        emit(OrderPerStatusNextStatusSuccessState());
+      }
     }).catchError((e) {
       print("$e error of next status");
       emit(OrderPerStatusNextStatusFailedState());

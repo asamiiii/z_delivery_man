@@ -4,6 +4,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:z_delivery_man/models/index_model.dart';
 import 'package:z_delivery_man/screens/provider_app/orders_list/orders_list_screen.dart';
 import 'package:z_delivery_man/shared/widgets/components.dart';
+import 'package:z_delivery_man/styles/color.dart';
 
 // opened --> total order or Itemcount
 // providerAssigned --> لم يتم استلامه
@@ -306,7 +307,7 @@ class Item extends StatelessWidget {
                 bottomRight: Radius.circular(40),
                 topLeft: Radius.circular(10)),
             child: Container(
-              color: Colors.blueAccent,
+              color: primaryColor,
               height: MediaQuery.of(context).size.height * 0.25,
               width: MediaQuery.of(context).size.width * 0.45,
             ),

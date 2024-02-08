@@ -114,7 +114,15 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           child: Scaffold(
             floatingActionButton: SizedBox(
               width: 150,
-              child: isDeliveryMan == true
+              child: isDeliveryMan == true ||
+                      widget.statusName == 'check_up_all' || 
+                      widget.statusName == 'check_up' || 
+                      widget.statusName == 'finished_all' || 
+                      widget.statusName == 'finished' || 
+                      widget.statusName == 'from_provider_all' || 
+                      widget.statusName == 'from_provider' || 
+                      widget.statusName == 'opened_all' || 
+                      widget.statusName == 'opened'
                   ? const SizedBox()
                   : FloatingActionButton(
                       child: const Row(
@@ -869,7 +877,7 @@ class DeliverySection extends StatelessWidget {
                                 actions: [
                                   CupertinoDialogAction(
                                     child: const Text('نعم'),
-                                    onPressed: () async{
+                                    onPressed: () async {
                                       // widget.cubit.deleteCustomer(id: widget.item.id);
                                       // if (cubit?.orderDetailsModel?.itemCount !=
                                       //     int.tryParse(
@@ -877,19 +885,21 @@ class DeliverySection extends StatelessWidget {
                                       //           Navigator.of(context).pop();
                                       //           showToast(message: 'عدد العناصر غير متطابق', state: ToastStates.ERROR);
                                       // } else {
-                                         await cubit?.goToNextStatus(
-                                            isDeliveryMan: true,
-                                            orderId: orderId,
-                                            itemCount: int.tryParse(
-                                                itemCountController.text),
-                                            comment: commentController.text);
-                                            // Navigator.of(context).pop();
+                                      await cubit?.goToNextStatus(
+                                          isDeliveryMan: true,
+                                          orderId: orderId,
+                                          itemCount: int.tryParse(
+                                              itemCountController.text),
+                                          comment: commentController.text);
+                                      // Navigator.of(context).pop();
 
                                       // ignore: use_build_context_synchronously
-                                      await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomeDelivery(),));
+                                      await Navigator.of(context)
+                                          .pushReplacement(MaterialPageRoute(
+                                        builder: (context) =>
+                                            const HomeDelivery(),
+                                      ));
                                       // }
-
-                                      
                                     },
                                   ),
                                   CupertinoDialogAction(
