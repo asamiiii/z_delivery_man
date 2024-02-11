@@ -21,6 +21,10 @@ PreferredSizeWidget deliveryHomeAppBar(
           icon: Icon(Icons.today),
           text: 'اليوم',
         ),
+        Tab(
+          icon: Icon(Icons.today),
+          text: 'تعليمات',
+        ),
       ],
     ),
     actions: const [

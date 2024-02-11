@@ -1,5 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:z_delivery_man/core/main_helpers.dart/navigation_helper.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/home_delivery.dart';
 import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
 import '/../models/orders_per_status_model.dart';
@@ -136,21 +137,20 @@ class _OrderPerStatusScreenState extends State<OrderPerStatusScreen> {
               ),
               builder: (context) => cubit.allOrders.isNotEmpty
                   ? ListView.separated(
-                    controller: _scrollController,
-                    physics: const BouncingScrollPhysics(),
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(
-                      height: 5,
-                    ),
-                    shrinkWrap: true,
-                    itemCount: cubit.allOrders.length,
-                    itemBuilder: (context, index) {
-                      return OrdersSection(
-                          order: cubit.allOrders.elementAt(index),
-                          state: state,
-                          cubit: cubit);
-                    },
-                  )
+                      controller: _scrollController,
+                      physics: const BouncingScrollPhysics(),
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 5,
+                      ),
+                      shrinkWrap: true,
+                      itemCount: cubit.allOrders.length,
+                      itemBuilder: (context, index) {
+                        return OrdersSection(
+                            order: cubit.allOrders.elementAt(index),
+                            state: state,
+                            cubit: cubit);
+                      },
+                    )
                   : Center(
                       child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -610,22 +610,24 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                 actions: [
                                                   CupertinoDialogAction(
                                                     child: const Text('نعم'),
-                                                    onPressed: () {
-                                                      // widget.cubit.deleteCustomer(id: widget.item.id);
-
-                                                      widget.cubit?.goToNextStatus(
-                                                          isDeliveryMan: true,
-                                                          orderId:
-                                                              widget.order?.id,
-                                                          itemCount: int.tryParse(
-                                                              itemCountController
-                                                                  .text),
-                                                          comment:
-                                                              commentController
-                                                                  .text);
-
-                                                      Navigator.of(context)
-                                                          .pop();
+                                                    onPressed: () async {
+                                                      // context.popScreen();
+                                                      await widget.cubit
+                                                          ?.goToNextStatus(
+                                                              isDeliveryMan:
+                                                                  true,
+                                                              orderId: widget
+                                                                  .order?.id,
+                                                              itemCount:
+                                                                  int.tryParse(
+                                                                      itemCountController
+                                                                          .text),
+                                                              comment:
+                                                                  commentController
+                                                                      .text)
+                                                          .then((value) =>
+                                                              context.goReplac(
+                                                                  const HomeDelivery()));
                                                     },
                                                   ),
                                                   CupertinoDialogAction(
@@ -638,10 +640,8 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                 ],
                                               ));
                                     },
-                                    child: Flexible(
-                                      child: Text(
-                                        '${widget.order?.nextStatus}',
-                                      ),
+                                    child: Text(
+                                      '${widget.order?.nextStatus}',
                                     )),
                               ),
                       ),

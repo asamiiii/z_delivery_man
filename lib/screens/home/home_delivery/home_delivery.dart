@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:z_delivery_man/network/local/cache_helper.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/all_delivery.dart';
+import 'package:z_delivery_man/screens/home/home_delivery/instruction_delivery.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/today_delivery.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/widgets.dart';
 import 'package:z_delivery_man/shared/widgets/page_container.dart';
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeDelivery> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-            length: 2,
+            length: 3,
             child: WithSafeArea(
               child: Directionality(
                 textDirection: TextDirection.rtl,
@@ -40,7 +41,8 @@ class _HomeScreenState extends State<HomeDelivery> {
                     body: TabBarView(
                       children: [
                         DeliveryAll(),
-                        DeliveryToday()
+                        DeliveryToday(),
+                        InstructionsDelivery()
                       ],
                     ),
                   ),
