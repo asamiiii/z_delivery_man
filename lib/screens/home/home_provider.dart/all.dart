@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:z_delivery_man/models/index_model.dart';
+import 'package:z_delivery_man/screens/home/home_provider.dart/cubit.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/today.dart';
 import 'package:z_delivery_man/screens/provider_app/orders_list/orders_list_screen.dart';
 import 'package:z_delivery_man/shared/widgets/components.dart';
@@ -18,6 +19,7 @@ class TableAll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeCubit = HomeCubit.get(context);
     return Container(
       padding: const EdgeInsets.all(15),
       key: const Key('all'),
@@ -38,7 +40,7 @@ class TableAll extends StatelessWidget {
                   context,
                   const OrdersListScreen(
                     statusName: 'provider_assigned_all',
-                  ));
+                  )).then((value) => homeCubit.getStatusWithCount());
             },
             child: Item(
               chocoItem: ItemModel(
@@ -55,7 +57,7 @@ class TableAll extends StatelessWidget {
                   context,
                   const OrdersListScreen(
                     statusName: 'provider_received_all',
-                  ));
+                  )).then((value) => homeCubit.getStatusWithCount());
             },
             child: Item(
                 chocoItem: ItemModel(
@@ -72,7 +74,7 @@ class TableAll extends StatelessWidget {
                   context,
                   const OrdersListScreen(
                     statusName: 'check_up_all',
-                  ));
+                  )).then((value) => homeCubit.getStatusWithCount());
             },
             child: Item(
                 chocoItem: ItemModel(

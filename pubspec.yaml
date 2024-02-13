@@ -117,8 +117,8 @@ dependencies:
   step_progress_indicator: ^1.0.2
 
   # Local Plugin From (Ahmed Sami)
-  my_ui:
-    path: /Users/mercadoegypt/Documents/my_ui
+  # my_ui:
+  #   path: /Users/mercadoegypt/Documents/my_ui
 
 dev_dependencies:
   flutter_test:

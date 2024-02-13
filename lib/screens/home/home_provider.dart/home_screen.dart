@@ -27,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isDeliveryMan = false;
   String name = '';
   
-  bool isTodayDelivery = true;
   @override
   void initState() {
 

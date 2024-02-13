@@ -10,14 +10,13 @@ import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
-import 'package:my_ui/custom.dart';
-import 'package:my_ui/spaces.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:z_delivery_man/models/order_mode.dart';
 import 'package:z_delivery_man/models/order_per_status_provider.dart';
 import 'package:z_delivery_man/models/price_list_model.dart' as pitem;
 import 'package:z_delivery_man/models/provider_order_details.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/home_delivery.dart';
+import 'package:z_delivery_man/screens/home/home_provider.dart/cubit.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/home_screen.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/order_item_images_view.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/meters_view.dart';
@@ -65,7 +64,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<OrderDetailsCubit, OrderDetailsState>(
-      listener: (context, state) {
+      listener: (context, state)  {
         if (state is OrderDetailsNextStatusSuccessState) {
           showToast(
               message: 'تم تحديث حالة الاوردر', state: ToastStates.SUCCESS);
@@ -73,7 +72,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             BlocProvider.of<OrderDetailsCubit>(context)
                 .getOrderDetails(orderId: widget.orderId);
           } else {
-            navigateAndReplace(context, const HomeScreen());
+            //  context.read<HomeCubit>().getStatusWithCount();
+              Navigator.pop(context);
+              Navigator.pop(context);
+           
           }
         } else if (state is OrderDetailsNextStatusFailedState) {
           showToast(
@@ -115,13 +117,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             floatingActionButton: SizedBox(
               width: 150,
               child: isDeliveryMan == true ||
-                      widget.statusName == 'check_up_all' || 
-                      widget.statusName == 'check_up' || 
-                      widget.statusName == 'finished_all' || 
-                      widget.statusName == 'finished' || 
-                      widget.statusName == 'from_provider_all' || 
-                      widget.statusName == 'from_provider' || 
-                      widget.statusName == 'opened_all' || 
+                      widget.statusName == 'check_up_all' ||
+                      widget.statusName == 'check_up' ||
+                      widget.statusName == 'finished_all' ||
+                      widget.statusName == 'finished' ||
+                      widget.statusName == 'from_provider_all' ||
+                      widget.statusName == 'from_provider' ||
+                      widget.statusName == 'opened_all' ||
                       widget.statusName == 'opened'
                   ? const SizedBox()
                   : FloatingActionButton(

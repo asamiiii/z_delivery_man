@@ -64,9 +64,9 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
   IndexModel? indexModel;
-  Future<void> getStatusWithCount() {
+  Future<void> getStatusWithCount() async{
     emit(HomeLoadingStatus());
-    return DioHelper.getData(url: Get_STATUS_PROVIDER, token: token)
+    await DioHelper.getData(url: Get_STATUS_PROVIDER, token: token)
         .then((value) {
       // debugPrint('resp $value');
       indexModel = IndexModel.fromJson(value.data);

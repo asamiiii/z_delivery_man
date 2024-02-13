@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:z_delivery_man/models/index_model.dart';
+import 'package:z_delivery_man/screens/home/home_provider.dart/cubit.dart';
 import 'package:z_delivery_man/screens/provider_app/orders_list/orders_list_screen.dart';
 import 'package:z_delivery_man/shared/widgets/components.dart';
 import 'package:z_delivery_man/styles/color.dart';
@@ -21,6 +22,7 @@ class TableToday extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeCubit = HomeCubit.get(context);
     return Container(
       padding: EdgeInsets.all(10),
       key: const Key('today'),
@@ -41,7 +43,7 @@ class TableToday extends StatelessWidget {
                   context,
                   const OrdersListScreen(
                     statusName: 'provider_assigned',
-                  ));
+                  )).then((value) => homeCubit.getStatusWithCount());
             },
             child: Item(
               chocoItem: ItemModel(
@@ -58,7 +60,7 @@ class TableToday extends StatelessWidget {
                   context,
                   const OrdersListScreen(
                     statusName: 'provider_received',
-                  ));
+                  )).then((value) => homeCubit.getStatusWithCount());
             },
             child: Item(
                 chocoItem: ItemModel(
@@ -75,7 +77,7 @@ class TableToday extends StatelessWidget {
                   context,
                   const OrdersListScreen(
                     statusName: 'check_up',
-                  ));
+                  )).then((value) => homeCubit.getStatusWithCount());
             },
             child: Item(
                 chocoItem: ItemModel(
