@@ -31,7 +31,7 @@ void main() async {
     androidProvider: AndroidProvider.debug,
   );
 
-  AppNotification.init();
+  AppNotification().init();
 
   token = CacheHelper.getData(key: 'token');
   debugPrint('token : $token');

@@ -6,8 +6,9 @@ import 'package:z_delivery_man/screens/order_details/order_details_screen.dart';
 import 'package:z_delivery_man/shared/widgets/components.dart';
 
 class AppNotification{
-
-  static Future<void> init()async{
+final _firebaseMessaging = FirebaseMessaging.instance;
+   Future<void> init()async{
+    await _firebaseMessaging.requestPermission();
      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   }
 
@@ -25,7 +26,9 @@ class AppNotification{
 
 static void firebaseCloudMessagingListeners() {
     FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
+
       RemoteNotification? notification = message?.notification;
+      
       debugPrint("notification on message : ${message?.data.entries}");
 
       AndroidNotification? androidNotification = message?.notification?.android;
@@ -44,6 +47,4 @@ static void firebaseCloudMessagingListeners() {
           ));
     });
   }
-
-
 }
