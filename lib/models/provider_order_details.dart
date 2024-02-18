@@ -24,27 +24,27 @@ class ProviderOrderDetails {
   String? deliverDeliveryMan;
   // List<RemoteImage>? imagesUrl; //! imagesUrl
 
-  ProviderOrderDetails(
-      {this.id,
-      this.customerCode,
-      this.type,
-      this.comment,
-      this.pick,
-      this.comments,
-      this.requests,
-      this.deliver,
-      this.currentStatus,
-      this.coreNextStatus,
-      this.nextStatus,
-      this.itemCount,
-      this.pickComment,
-      this.associateImages,
-      this.associateItems,
-      this.items,
-      this.deliverDeliveryMan,
-      this.pickDeliveryMan,
-      // this.imagesUrl //! imagesUrl  we need to add to from json
-      });
+  ProviderOrderDetails({
+    this.id,
+    this.customerCode,
+    this.type,
+    this.comment,
+    this.pick,
+    this.comments,
+    this.requests,
+    this.deliver,
+    this.currentStatus,
+    this.coreNextStatus,
+    this.nextStatus,
+    this.itemCount,
+    this.pickComment,
+    this.associateImages,
+    this.associateItems,
+    this.items,
+    this.deliverDeliveryMan,
+    this.pickDeliveryMan,
+    // this.imagesUrl //! imagesUrl  we need to add to from json
+  });
 
   ProviderOrderDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,8 +65,8 @@ class ProviderOrderDetails {
     pickComment = json['pick_comment'] ?? 'لايوجد';
     associateItems = json['associateItems'];
     associateImages = json['associateImages'];
-    deliverDeliveryMan = json['pick_delivery_man'];
-    pickDeliveryMan = json['deliver_delivery_man'];
+    pickDeliveryMan = json['pick_delivery_man'];
+    deliverDeliveryMan = json['deliver_delivery_man'];
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
@@ -79,8 +79,6 @@ class ProviderOrderDetails {
         images?.add(Images.fromJson(v));
       });
     }
-
-   
   }
 
   Map<String, dynamic> toJson() {
@@ -170,6 +168,7 @@ class Items {
   bool? withDimension;
   List<Items>? itemDetailes;
   dynamic totalMeters;
+  int? serviceId;
   List<RemoteImage>? imagesUrl; //! new value in the model
 
   Items(
@@ -184,29 +183,30 @@ class Items {
       this.itemDetailes,
       this.withDimension,
       this.totalMeters,
-      this.imagesUrl
-      });
+      this.imagesUrl,
+      this.serviceId});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     category = json['category'];
     service = json['service'];
+    serviceId = json['service_id']??0;
     preference = json['preference'];
     quantity = json['quantity'] ?? 0;
-    length = json ['length'];
-    width = json ['width'];
-    totalMeters = json['total_meters'] ;
-    withDimension = json ['with_dimension'] ?? false;
-    categoryItemServiceId =json['category_item_service_id'] ?? 0;
-    icon=json['icon'];
+    length = json['length'];
+    width = json['width'];
+    totalMeters = json['total_meters'];
+    withDimension = json['with_dimension'] ?? false;
+    categoryItemServiceId = json['category_item_service_id'] ?? 0;
+    icon = json['icon'];
     // itemDetailes = json ['item_details'] ?? [];
     if (json['item_details'] != null) {
       itemDetailes = <Items>[];
       json['item_details'].forEach((v) {
         itemDetailes?.add(Items.fromJson(v));
       });
-    }else{
+    } else {
       itemDetailes = [];
     }
 
@@ -216,7 +216,7 @@ class Items {
         imagesUrl?.add(RemoteImage.fromjson(v));
         debugPrint('Image URL : ${imagesUrl?.length}');
       });
-    }else{
+    } else {
       imagesUrl = [];
     }
   }

@@ -8,7 +8,7 @@ import 'package:z_delivery_man/shared/widgets/components.dart';
 class AppNotification{
 final _firebaseMessaging = FirebaseMessaging.instance;
    Future<void> init()async{
-    await _firebaseMessaging.requestPermission();
+     await _firebaseMessaging.requestPermission();
      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   }
 

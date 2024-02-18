@@ -17,6 +17,7 @@ import 'cubit.dart';
 class OrderItemImagesScreen extends StatefulWidget {
   String? itemName;
   String? statusName;
+  int? serviceId;
   int? itemId;
   int? orderId;
   List<RemoteImage>? images;
@@ -29,7 +30,9 @@ class OrderItemImagesScreen extends StatefulWidget {
       this.statusName,
       this.itemId,
       this.orderId,
-      this.images})
+      this.images,
+      this.serviceId
+      })
       : super(key: key);
 
   @override
@@ -49,6 +52,7 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
     });
     // widget.images?.clear();
     // cubit.getOrderItemImages(); //* Empty Fun
+    //!
     if (widget.statusName == 'check_up_all' ||
         widget.statusName == 'check_up' ||
         widget.statusName == 'finished_all' ||
@@ -56,7 +60,9 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
         widget.statusName == 'from_provider_all' ||
         widget.statusName == 'from_provider' ||
         widget.statusName == 'opened_all' ||
-        widget.statusName == 'opened') {
+        widget.statusName == 'opened'||
+        widget.serviceId != 200
+        ) {
       preivilageFlag = false;
     }
     super.initState();
@@ -479,7 +485,7 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton: widget.statusName == 'provider_received_all' ||
-                  widget.statusName == 'provider_received'
+                  widget.statusName == 'provider_received' || widget.serviceId ==200
               ? SizedBox(
                   width: 15.w,
                   // height: 20.h,
