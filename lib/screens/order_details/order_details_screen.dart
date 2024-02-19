@@ -1131,7 +1131,7 @@ class _ProviderSectionState extends State<ProviderSection> {
                               GFAccordion(
                                 contentBackgroundColor: Colors.blue[200],
                                 title:
-                                    'x${widget.cubit?.providerOrderDetails?.items?[index].quantity} ${widget.cubit?.providerOrderDetails?.items?[index].name}',
+                                    'x${widget.cubit?.providerOrderDetails?.items?[index].serviceId == 200 ? '' : widget.cubit?.providerOrderDetails?.items?[index].quantity} ${widget.cubit?.providerOrderDetails?.items?[index].name}',
                                 contentChild: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1165,7 +1165,11 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         OrderItemImagesScreen(
-                                                          serviceId: widget.cubit?.providerOrderDetails?.items?[index].serviceId,
+                                                      serviceId: widget
+                                                          .cubit
+                                                          ?.providerOrderDetails
+                                                          ?.items?[index]
+                                                          .serviceId,
                                                       itemName: widget
                                                           .cubit
                                                           ?.providerOrderDetails
@@ -1205,22 +1209,34 @@ class _ProviderSectionState extends State<ProviderSection> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13.sp),
                                       ),
-                                      Text(
-                                        'التفضيلات: ${widget.cubit?.providerOrderDetails?.items?[index].preference}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 13.sp),
-                                      ),
+                                      widget.cubit?.providerOrderDetails
+                                                  ?.items?[index].serviceId ==
+                                              200
+                                          ? const SizedBox()
+                                          : Text(
+                                              'التفضيلات: ${widget.cubit?.providerOrderDetails?.items?[index].preference}',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13.sp),
+                                            ),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            'العدد: ${widget.cubit?.providerOrderDetails?.items?[index].quantity}',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 13.sp),
-                                          ),
+                                          widget
+                                                      .cubit
+                                                      ?.providerOrderDetails
+                                                      ?.items?[index]
+                                                      .serviceId ==
+                                                  200
+                                              ? const SizedBox()
+                                              : Text(
+                                                  'العدد: ${widget.cubit?.providerOrderDetails?.items?[index].quantity}',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 13.sp),
+                                                ),
                                           // widget
                                           //             .cubit
                                           //             ?.providerOrderDetails
@@ -1427,7 +1443,9 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                   'from_provider' ||
                                               widget.statusName ==
                                                   'opened_all' ||
-                                              widget.statusName == 'opened'
+                                              widget.statusName == 'opened'||
+                                              widget.cubit?.providerOrderDetails?.items?[index].serviceId==200
+                                              
                                           ? const SizedBox()
                                           : Row(
                                               mainAxisAlignment:
