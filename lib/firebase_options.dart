@@ -70,6 +70,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '651189661928',
     projectId: 'deliveryman-e8fa7',
     storageBucket: 'deliveryman-e8fa7.appspot.com',
-    iosBundleId: 'com.example.zDeliveryMan',
+    iosBundleId: 'com.mecradoegypt.z-p-d',
   );
 }

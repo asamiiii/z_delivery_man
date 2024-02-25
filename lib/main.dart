@@ -30,10 +30,11 @@ void main() async {
   await FirebaseAppCheck.instance.activate(
     androidProvider: AndroidProvider.debug,
   );
-
+  
   AppNotification().init();
 
   token = CacheHelper.getData(key: 'token');
+  debugPrint('token : $token');
   debugPrint('token : $token');
   isDeliveryMan = CacheHelper.getData(key: 'type');
   Widget widget;

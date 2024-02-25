@@ -116,6 +116,9 @@ dependencies:
   # Bar indicator made of a series of selected and unselected steps
   step_progress_indicator: ^1.0.2
 
+  # easy to use and extensible logger which prints beautiful logs.
+  logger: ^1.2.0
+
   # Local Plugin From (Ahmed Sami)
   # my_ui:
   #   path: /Users/mercadoegypt/Documents/my_ui
