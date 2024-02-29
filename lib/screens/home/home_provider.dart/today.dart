@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:z_delivery_man/models/index_model.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/cubit.dart';
 import 'package:z_delivery_man/screens/provider_app/orders_list/orders_list_screen.dart';

@@ -1682,8 +1682,7 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                                 },
                                                                 style: ElevatedButton
                                                                     .styleFrom(
-                                                                        primary:
-                                                                            primaryColor),
+                                                                        backgroundColor: primaryColor),
                                                                 child:
                                                                     const Text(
                                                                   'تعديل العدد',
@@ -1759,8 +1758,7 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                     ),
                                                     style: ElevatedButton
                                                         .styleFrom(
-                                                            primary:
-                                                                Colors.red),
+                                                            backgroundColor: Colors.red),
                                                   ),
                                                 ),
                                               ],

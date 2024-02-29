@@ -329,7 +329,7 @@ class _PriceListScreenState extends State<PriceListScreen> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                              primary: primaryColor,
+                              backgroundColor: primaryColor,
                               padding: EdgeInsets.symmetric(horizontal: 15.w)),
                           child: const Text(
                             'متابعة',

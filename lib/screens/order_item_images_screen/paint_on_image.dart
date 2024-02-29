@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_painter/image_painter.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/cubit.dart';
-import 'package:z_delivery_man/screens/order_item_images_screen/order_item_images_view.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/state.dart';
 
 class PaintOnImage extends StatefulWidget {

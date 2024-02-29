@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:z_delivery_man/models/order_details_model.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/upladed_image_model.dart';
 
 class ProviderOrderDetails {

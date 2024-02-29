@@ -1,10 +1,7 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
-import 'package:z_delivery_man/main.dart';
 import 'package:z_delivery_man/screens/order_details/cubit.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/paint_on_image.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/state.dart';

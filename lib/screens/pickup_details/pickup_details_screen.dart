@@ -17,7 +17,6 @@ import 'package:z_delivery_man/screens/pickup_details/pickup_details_states.dart
 import '../../models/order_per_time_slot_model.dart';
 import '../../shared/widgets/components.dart';
 import '../../styles/color.dart';
-import '../drawer/drawer.dart';
 import '../order_details/order_details_screen.dart';
 import 'cubit.dart';
 // import 'dart:typed_data';

@@ -3,17 +3,15 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_painter/image_painter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:z_delivery_man/models/success_model.dart';
 import 'package:z_delivery_man/network/end_points.dart';
 import 'package:z_delivery_man/network/remote/dio_helper.dart';
 import 'package:z_delivery_man/network/remote/fire_storage.dart';
-import 'package:z_delivery_man/screens/order_details/order_details_state.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/state.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/upladed_image_model.dart';
 import 'package:z_delivery_man/shared/widgets/components.dart';

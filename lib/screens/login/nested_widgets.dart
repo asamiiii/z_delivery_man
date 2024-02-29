@@ -136,6 +136,7 @@ class LoginButton extends StatelessWidget {
             } else {
               FirebaseMessaging.instance.getToken().then((token) {
                 debugPrint('fcm token: $token');
+                print('fcm token: $token');
                 cubit.login(
                     email: cubit.emailController.text.trim(),
                     password: cubit.passwordController.text.trim(),

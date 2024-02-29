@@ -33,6 +33,7 @@ class LoginCubit extends Cubit<LoginStates> {
       'fcm_token': fcmToken
     }).then((value) async {
       debugPrint(' FCM : $fcmToken');
+      print('fcm token: $token');
       loginModel = LoginModel.fromJson(value.data);
       debugPrint(' login resp : ${value.data}');
       if(value.data.toString().contains('errors')){
