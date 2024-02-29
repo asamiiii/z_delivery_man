@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/cubit.dart';
@@ -884,7 +885,8 @@ class _OrdersSectionState extends State<OrdersSection> {
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
                       builder: (context) => Container(
-                          height: MediaQuery.of(context).size.height * 0.50,
+                          height: MediaQuery.of(context).size.height * 0.60,
+                          width: MediaQuery.of(context).size.width * 0.97,
                           padding: const EdgeInsets.all(15),
                           decoration: const BoxDecoration(
                             color: Colors.white,
@@ -905,9 +907,18 @@ class _OrdersSectionState extends State<OrdersSection> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 // const Expanded(child: SizedBox()),
-                                Text(
-                                  '${widget.order?.comments?.customerComment}',
-                                  style: const TextStyle(fontSize: 15),
+                                SingleChildScrollView(
+                                  child: SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.60,
+                                    child: Text(
+                                      '${widget.order?.comments?.customerComment}',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.end,
+                                      maxLines: 10,
+                                      style: const TextStyle(fontSize: 15),
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 20,
@@ -925,9 +936,18 @@ class _OrdersSectionState extends State<OrdersSection> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(
-                                  '${widget.order?.comments?.pickComment}',
-                                  style: const TextStyle(fontSize: 15),
+                                SingleChildScrollView(
+                                  child: SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.60,
+                                    child: Text(
+                                      '${widget.order?.comments?.pickComment}',
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.end,
+                                      maxLines: 10,
+                                      style: const TextStyle(fontSize: 15),
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 20,
@@ -964,10 +984,19 @@ class _OrdersSectionState extends State<OrdersSection> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
                                           children: [
-                                            Text(
-                                              '${widget.order?.comments?.requests?[index].comment}',
-                                              style:
-                                                  const TextStyle(fontSize: 15),
+                                            SingleChildScrollView(
+                                              child: SizedBox(
+                                                width: MediaQuery.of(context).size.width *
+                                                                                      0.60,
+                                                child: Text(
+                                                  '${widget.order?.comments?.requests?[index].comment}',
+                                                  overflow: TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.end,
+                                                  maxLines: 10,
+                                                  style: const TextStyle(
+                                                      fontSize: 15),
+                                                ),
+                                              ),
                                             ),
                                             // const SizedBox(width: 20,),
                                             widget
@@ -1005,8 +1034,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                         width: 30,
                       )
                     ],
-                  )
-                  )),
+                  ))),
         ],
       ),
     );
