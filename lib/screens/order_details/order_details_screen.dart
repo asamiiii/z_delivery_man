@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getwidget/components/accordion/gf_accordion.dart';
@@ -20,6 +21,7 @@ import 'package:z_delivery_man/screens/home/home_provider.dart/cubit.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/home_screen.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/order_item_images_view.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/meters_view.dart';
+import 'package:z_delivery_man/screens/provider_app/price_list/widget.dart';
 import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
 
 import '../../network/local/cache_helper.dart';
@@ -1113,6 +1115,97 @@ class _ProviderSectionState extends State<ProviderSection> {
                     ],
                   ),
                   const SizedBox(
+                    height: 10,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        TextEditingController costController =
+                            TextEditingController();
+                        List<String> dropDownList = ['A', 'B', 'C', 'D'];
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          // enableDrag: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => Container(
+                              padding: EdgeInsets.only(
+                                  left: 10,
+                                  right: 10,
+                                  top: 10,
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom),
+                              height: MediaQuery.of(context).size.height * 0.30,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25.0),
+                                  topRight: Radius.circular(25.0),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Text('اضافة تكلفه اضافيه',style: TextStyle(fontSize: 15.sp)),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      DropdownButton<String>(
+                                        items:
+                                            dropDownList.map((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                        onChanged: (_) {},
+                                        hint: Text(dropDownList.first),
+                                      ),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Text('نوع الخدمه',style: TextStyle(fontSize: 15.sp))
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.14,
+                                          // height: ,
+                                          child: CustomTextField(
+                                            onTap: () {},
+                                            isMetersHW: true,
+                                            keyboardType: const TextInputType
+                                                .numberWithOptions(
+                                                decimal: true, signed: true),
+                                            onChange: (value) {},
+                                            controller: costController,
+                                          )),
+                                          const SizedBox(
+                                        width: 15,
+                                      ),
+                                       Text('     التكلفه',style: TextStyle(fontSize: 15.sp)),
+                                      
+                                      
+                                    ],
+                                  ),
+                                   Expanded(child: const SizedBox(height: 50,)),
+                                  CustomButton(onPrss: (){
+                                    
+                                  }, buttonTitle: 'حفظ'),
+                                  const SizedBox(height: 20,)
+                                ],
+                              )),
+                        );
+                      },
+                      child:  Text('اضافة تكلفه اضافيه +',style: TextStyle(fontSize: 20.sp),)),
+                  const SizedBox(
                     height: 15,
                   ),
                   ListView.builder(
@@ -1443,9 +1536,13 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                   'from_provider' ||
                                               widget.statusName ==
                                                   'opened_all' ||
-                                              widget.statusName == 'opened'||
-                                              widget.cubit?.providerOrderDetails?.items?[index].serviceId==200
-                                              
+                                              widget.statusName == 'opened' ||
+                                              widget
+                                                      .cubit
+                                                      ?.providerOrderDetails
+                                                      ?.items?[index]
+                                                      .serviceId ==
+                                                  200
                                           ? const SizedBox()
                                           : Row(
                                               mainAxisAlignment:
@@ -1682,7 +1779,8 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                                 },
                                                                 style: ElevatedButton
                                                                     .styleFrom(
-                                                                        backgroundColor: primaryColor),
+                                                                        backgroundColor:
+                                                                            primaryColor),
                                                                 child:
                                                                     const Text(
                                                                   'تعديل العدد',
@@ -1758,7 +1856,8 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                     ),
                                                     style: ElevatedButton
                                                         .styleFrom(
-                                                            backgroundColor: Colors.red),
+                                                            backgroundColor:
+                                                                Colors.red),
                                                   ),
                                                 ),
                                               ],
