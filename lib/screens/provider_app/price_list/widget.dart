@@ -211,7 +211,7 @@ class _CustomButtonState extends State<CustomButton> {
                       : const SizedBox(),
                   Text(
                     widget.buttonTitle,
-                    style: Theme.of(context).textTheme.headline1!.merge(
+                    style: Theme.of(context).textTheme.displayLarge!.merge(
                           TextStyle(
                               height: 1.3,
                               fontSize: widget.fontSize ?? 14,

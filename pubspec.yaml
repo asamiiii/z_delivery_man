@@ -62,7 +62,8 @@ dependencies:
   firebase_app_check: ^0.2.1+14
 
   # For integrating Google Maps in iOS and Android applications.
-  google_maps_flutter: ^2.5.1
+  # google_maps_flutter: ^2.5.1
+  google_maps_flutter: ^2.5.3
 
   # for easy access to device's location in real-time.
   location: ^5.0.0
@@ -118,6 +119,8 @@ dependencies:
 
   # easy to use and extensible logger which prints beautiful logs.
   logger: ^1.2.0
+
+  
 
   # Local Plugin From (Ahmed Sami)
   # my_ui:

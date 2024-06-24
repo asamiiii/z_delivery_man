@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getwidget/components/accordion/gf_accordion.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as map;
 import 'package:map_launcher/map_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
@@ -422,6 +423,26 @@ class DeliverySection extends StatelessWidget {
             ],
           ),
         ),
+        // ClipRRect(
+        //               borderRadius: BorderRadius.circular(12),
+        //               child: SizedBox(
+        //                 height: 150,
+        //                 width: double.infinity,
+        //                 child: map.GoogleMap(
+        //                   onMapCreated: (controller) {
+        //                     // _mapController = controller;
+        //                   },
+        //                   initialCameraPosition:
+        //                   map.CameraPosition(target: map.LatLng(30.053758,31.200775), zoom: 17),
+        //                   mapType: map.MapType.normal,
+        //                   markers: {
+        //                     map.Marker(
+        //                         markerId: map.MarkerId('selectedPosition'),
+        //                         position: map.LatLng(30.053758,31.200775))
+        //                   },
+        //                 ),
+        //               ),
+        //             ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
