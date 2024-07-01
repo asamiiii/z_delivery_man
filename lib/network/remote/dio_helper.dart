@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-// const String URL = 'http://zdev.z-laundry.com/public/api/v1/'; // for dev
-const String URL = 'http://app.z-laundry.com/public/api/v1/'; // for production
+const String baseUrl = 'http://zdev.z-laundry.com/public/api/v1/'; // for dev
+// const String baseUrl = 'http://app.z-laundry.com/public/api/v1/'; // for production
 
 class DioHelper {
   static Dio? dio;
@@ -10,15 +11,25 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-          baseUrl: URL,
+          baseUrl: baseUrl,
           receiveDataWhenStatusError: true,
           contentType: "application/json",
           followRedirects: false,
+          
           responseType: ResponseType.json,
           validateStatus: (status) {
             return status! < 500;
           }),
+    
     );
+    dio!.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90));
   }
 
   static Future<Response> getData({
@@ -83,7 +94,7 @@ class DioHelper {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
     };
-    debugPrint('req : $data');
+    // debugPrint('req : $data');
     return await dio!.put(url ?? '', data: data, queryParameters: query);
   }
 

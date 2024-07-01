@@ -47,8 +47,9 @@ class TableToday extends StatelessWidget {
             child: Item(
               chocoItem: ItemModel(
                   label: ' لم يتم استلامه ',
-                  itemCount: '${model?.today?.itemCount.providerAssigned??0}',
-                  orderCount: '${model?.today?.orderCount.providerAssigned??0}',
+                  itemCount: '${model?.today?.itemCount.providerAssigned ?? 0}',
+                  orderCount:
+                      '${model?.today?.orderCount.providerAssigned ?? 0}',
                   image: 'assets/images/R.png'),
             ),
           ),
@@ -64,11 +65,13 @@ class TableToday extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: '  تم استلامه  ',
-                    itemCount: '${model?.today?.itemCount.providerReceived??0}',
-                    orderCount: '${model?.today?.orderCount.providerReceived??0}',
+                    itemCount:
+                        '${model?.today?.itemCount.providerReceived ?? 0}',
+                    orderCount:
+                        '${model?.today?.orderCount.providerReceived ?? 0}',
                     image: 'assets/images/press.png')),
           ),
-      
+
           //? تم الفحص
           GestureDetector(
             onTap: () {
@@ -81,11 +84,11 @@ class TableToday extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'تم الفحص',
-                    itemCount: '${model?.today?.itemCount.checkUp??0}',
-                    orderCount: '${model?.today?.orderCount.checkUp??0}',
+                    itemCount: '${model?.today?.itemCount.checkUp ?? 0}',
+                    orderCount: '${model?.today?.orderCount.checkUp ?? 0}',
                     image: 'assets/images/q.png')),
           ),
-      
+
           //? تم الانتهاء
           GestureDetector(
             onTap: () {
@@ -98,11 +101,11 @@ class TableToday extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'تم الانتهاء',
-                    itemCount: '${model?.today?.itemCount.finished??0}',
-                    orderCount: '${model?.today?.orderCount.finished??0}',
+                    itemCount: '${model?.today?.itemCount.finished ?? 0}',
+                    orderCount: '${model?.today?.orderCount.finished ?? 0}',
                     image: 'assets/images/finished.png')),
           ),
-      
+
           //? تم التسليم للمندوب
           GestureDetector(
             onTap: () {
@@ -115,11 +118,11 @@ class TableToday extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'تم التسليم',
-                    itemCount: '${model?.today?.itemCount.opened??0}',
-                    orderCount: '${model?.today?.orderCount.opened??0}',
+                    itemCount: '${model?.today?.itemCount.opened ?? 0}',
+                    orderCount: '${model?.today?.orderCount.opened ?? 0}',
                     image: 'assets/images/done.png')),
           ),
-      
+
           //? العدد الاجمالي
           GestureDetector(
             onTap: () {
@@ -132,12 +135,10 @@ class TableToday extends StatelessWidget {
             child: Item(
                 chocoItem: ItemModel(
                     label: 'العدد الإجمالي',
-                    itemCount: '${model?.today?.itemCount.opened??0}',
-                    orderCount: '${model?.today?.orderCount.opened??0}',
+                    itemCount: '${model?.today?.itemCount.opened ?? 0}',
+                    orderCount: '${model?.today?.orderCount.opened ?? 0}',
                     image: 'assets/images/all.png')),
           ),
-      
-          
         ],
       ),
     );
@@ -276,9 +277,11 @@ class ItemModel {
   String? label;
   String? orderCount;
   String? itemCount;
+  String? total;
   String? image;
 
-  ItemModel({this.itemCount, this.label, this.orderCount, this.image});
+  ItemModel(
+      {this.itemCount, this.label, this.orderCount, this.image, this.total});
 }
 
 // ignore: must_be_immutable
@@ -287,13 +290,12 @@ class Item extends StatelessWidget {
   ItemModel? chocoItem;
   String? image;
   bool? isdelivery;
-  Item({
-    super.key,
-    required this.chocoItem,
-    this.index,
-    this.image,
-    this.isdelivery=false
-  });
+  Item(
+      {super.key,
+      required this.chocoItem,
+      this.index,
+      this.image,
+      this.isdelivery = false});
 
   @override
   Widget build(BuildContext context) {
@@ -334,23 +336,24 @@ class Item extends StatelessWidget {
                   child: Text(
                     chocoItem?.label ?? '',
                     overflow: TextOverflow.ellipsis,
-                    maxLines:isdelivery == false ? 1 : 2,
+                    maxLines: isdelivery == false ? 1 : 2,
                     style: GoogleFonts.cairo(color: Colors.white, fontSize: 17),
                   ),
                 ),
-                
+
                 Row(
                   // mainAxisAlignment: MainAxisAlignment.,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width:isdelivery==false? 50:70,
+                      width: isdelivery == false ? 50 : 70,
                       // height: 50,
                       child: Text('الطلبات',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: GoogleFonts.cairo(
-                              color: Colors.amberAccent, fontSize:isdelivery==false? 10:15)),
+                              color: Colors.amberAccent,
+                              fontSize: isdelivery == false ? 10 : 12)),
                     ),
                     const SizedBox(
                       width: 2,
@@ -362,39 +365,73 @@ class Item extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: GoogleFonts.cairo(
-                              color: Colors.amberAccent, fontSize: 20)),
+                              color: Colors.amberAccent, fontSize: 15)),
                     ),
                   ],
                 ),
-                isdelivery==false? Row(
-                  children: [
-                    SizedBox(
-                      width: 50,
-                      // height: 50,
-                      child: Text(
-                        'القطع',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: GoogleFonts.cairo(
-                            color: Colors.amberAccent, fontSize: 10),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    SizedBox(
-                      width: 50,
-                      // height: 50,
-                      child: Text(
-                        chocoItem?.itemCount ?? '',
-                        overflow: TextOverflow.ellipsis,
-                        // maxLines: 2,
-                        style: GoogleFonts.cairo(
-                            color: Colors.amberAccent, fontSize: 20),
-                      ),
-                    ),
-                  ],
-                ):const SizedBox(),
+                isdelivery == false
+                    ? Row(
+                        children: [
+                          SizedBox(
+                            width: 50,
+                            // height: 50,
+                            child: Text(
+                              'القطع',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: GoogleFonts.cairo(
+                                  color: Colors.amberAccent, fontSize: 10),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 2,
+                          ),
+                          SizedBox(
+                            width: 50,
+                            // height: 50,
+                            child: Text(
+                              chocoItem?.itemCount ?? '',
+                              overflow: TextOverflow.ellipsis,
+                              // maxLines: 2,
+                              style: GoogleFonts.cairo(
+                                  color: Colors.amberAccent, fontSize: 20),
+                            ),
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
+
+                isdelivery == true && chocoItem?.total != null
+                    ? Row(
+                        children: [
+                          SizedBox(
+                            width: 50,
+                            // height: 50,
+                            child: Text(
+                              'الاجمالي',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: GoogleFonts.cairo(
+                                  color: Colors.amberAccent, fontSize: 10),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 2,
+                          ),
+                          SizedBox(
+                            width: 80,
+                            // height: 50,
+                            child: Text(
+                              '${chocoItem?.total} ج' ,
+                              overflow: TextOverflow.ellipsis,
+                              // maxLines: 2,
+                              style: GoogleFonts.cairo(
+                                  color: Colors.red, fontSize: 12,fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
                 // SizedBox(height: ,)
               ],
             )),

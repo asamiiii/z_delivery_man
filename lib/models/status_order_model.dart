@@ -54,13 +54,15 @@ class Today {
   String? status;
   int? count;
   String? translate;
+  String? total;
 
-  Today({this.status, this.count, this.translate});
+  Today({this.status, this.count, this.translate,this.total});
 
   Today.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     count = json['count'];
     translate = json['translate'];
+    total = json['total'];
   }
 
   Map<String, dynamic> toJson() {
@@ -68,6 +70,7 @@ class Today {
     data['status'] = status;
     data['count'] = count;
     data['translate'] = translate;
+    data['total'] = total;
     return data;
   }
 }
@@ -76,13 +79,15 @@ class All {
   String? status;
   int? count;
   String? translate;
+  String? total;
 
-  All({this.status, this.count, this.translate});
+  All({this.status, this.count, this.translate,this.total});
 
   All.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     count = json['count'];
     translate = json['translate'];
+    total = json['total'];
   }
 
   Map<String, dynamic> toJson() {
@@ -90,6 +95,7 @@ class All {
     data['status'] = status;
     data['count'] = count;
     data['translate'] = translate;
+    data['total'] = total;
     return data;
   }
 }

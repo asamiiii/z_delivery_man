@@ -1,50 +1,96 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizer/sizer.dart';
-import 'package:z_delivery_man/screens/home/home_provider.dart/cubit.dart';
-import 'package:z_delivery_man/screens/home/home_provider.dart/home_sates.dart';
-import 'package:z_delivery_man/screens/home/shared/shared_home_widgets.dart';
+import 'package:z_delivery_man/screens/drawer/cubit.dart';
+import 'package:z_delivery_man/screens/drawer/drawer_states.dart';
+import 'package:z_delivery_man/screens/home/home_delivery/helpers.dart';
+import 'package:z_delivery_man/screens/home/home_delivery/widgets.dart';
+import 'package:z_delivery_man/screens/home/home_provider.dart/today.dart';
+import 'package:z_delivery_man/screens/status_orders/status_orders_screen.dart';
+import 'package:z_delivery_man/shared/widgets/components.dart';
+// opened --> total order or Itemcount
+// providerAssigned --> لم يتم استلامه
+// provider_received --> تم استلامه
+// check_up --> تم الفحص
+// finished -- > تم الانتهاء
+// from_provider --> تم التسليم للمندوب
+// remaining --> المتبقي today only
 
+// ignore: must_be_immutable
 class DeliveryToday extends StatefulWidget {
-  DeliveryToday({Key? key}) : super(key: key);
+  // IndexModel? model;
+  DeliveryToday({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _DeliveryTodayState createState() => _DeliveryTodayState();
+  State<DeliveryToday> createState() => _DeliveryAllState();
 }
 
-class _DeliveryTodayState extends State<DeliveryToday> {
+class _DeliveryAllState extends State<DeliveryToday> {
+  DrawerCubit? drawerCubit;
   @override
   void initState() {
-    var homeCubit = HomeCubit.get(context);
-    homeCubit.getTimeSlots();
+    drawerCubit = DrawerCubit.get(context);
+    drawerCubit?.getStatusOrder();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var homeCubit = HomeCubit.get(context);
-    return BlocConsumer<HomeCubit, HomeStates>(
-      listener: (context, state) {},
-      builder: (context, state) => RefreshIndicator(
-        onRefresh: () => homeCubit.getTimeSlots(),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 10,bottom: 5),
-          child: ConditionalBuilder(
-              condition:
-                  state is! HomeLoadingState && state is! HomeLoadingStatus,
-              fallback: (context) =>
-                  const Center(child: CircularProgressIndicator()),
-              builder: (context) => ListView.separated(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => SizedBox(
-                        height: 2.h,
-                      ),
-                  itemCount: homeCubit.timeSlots?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return BuildCard(item: homeCubit.timeSlots?[index]);
-                  })),
+    // final drawerCubit = DrawerCubit.get(context);
+    return RefreshIndicator(
+      onRefresh: () async {
+        drawerCubit?.getStatusOrder();
+      },
+      child: BlocConsumer<DrawerCubit, DrawerStates>(
+        listener: (context, state) {},
+        builder: (context, state) => ConditionalBuilder(
+          condition: state is! DrawerGetStatusOrdersLoadingState,
+          fallback: (context) => const DeliveryHomeShimmer(),
+          builder: (context) => Padding(
+            padding: const EdgeInsets.all(10),
+            child: GridView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                childAspectRatio: 0.7,
+                crossAxisSpacing: 10,
+              ),
+              shrinkWrap: true,
+              // physics: const NeverScrollableScrollPhysics(),
+              itemCount: drawerCubit?.statusOrderModel!.statuses!.today!.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    navigateTo(
+                        context,
+                        OrderPerStatusScreen(
+                          ststusString: drawerCubit!.statusOrderModel?.statuses
+                              ?.today![index].translate,
+                          status: drawerCubit!
+                              .statusOrderModel?.statuses?.today![index].status,
+                          isAll: 1,
+                        ));
+                  },
+                  child: Item(
+                      isdelivery: true,
+                      chocoItem: ItemModel(
+                          label: drawerCubit!.statusOrderModel?.statuses
+                              ?.today?[index].translate,
+                          itemCount: '',
+                          total: drawerCubit!.statusOrderModel?.statuses
+                              ?.today?[index].total,
+                          orderCount:
+                              '${drawerCubit!.statusOrderModel?.statuses?.today?[index].count}',
+                          image: HomeDeliveryHelpers.assetsImage(
+                              status: drawerCubit!.statusOrderModel?.statuses
+                                  ?.today![index].status))),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );

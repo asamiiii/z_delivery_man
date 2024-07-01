@@ -23,6 +23,10 @@ PreferredSizeWidget deliveryHomeAppBar(
         ),
         Tab(
           icon: Icon(Icons.today),
+          text: 'الفترات',
+        ),
+        Tab(
+          icon: Icon(Icons.today),
           text: 'تعليمات',
         ),
       ],

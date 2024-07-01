@@ -3,6 +3,7 @@ import 'package:z_delivery_man/network/local/cache_helper.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/all_delivery.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/instruction_delivery.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/today_delivery.dart';
+import 'package:z_delivery_man/screens/home/home_delivery/today_delivery_with_time_slots.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/widgets.dart';
 import 'package:z_delivery_man/shared/widgets/page_container.dart';
 import 'package:z_delivery_man/shared/widgets/with_safe_area.dart';
@@ -29,7 +30,7 @@ class _HomeScreenState extends State<HomeDelivery> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-            length: 3,
+            length: 4,
             child: WithSafeArea(
               child: Directionality(
                 textDirection: TextDirection.rtl,
@@ -42,6 +43,7 @@ class _HomeScreenState extends State<HomeDelivery> {
                       children: [
                         DeliveryAll(),
                         DeliveryToday(),
+                        DeliveryTodayWithTimeSlots(), //! الفترات
                         InstructionsDelivery()
                       ],
                     ),
