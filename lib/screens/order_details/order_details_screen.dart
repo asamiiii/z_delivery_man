@@ -480,7 +480,7 @@ class DeliverySection extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "كود العميل: ${cubit?.orderDetailsModel?.address?.customerId}",
+                    "كود العميل: ${cubit?.orderDetailsModel?.customer?.customerId}",
                     style:
                         TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
                   ),

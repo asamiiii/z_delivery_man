@@ -79,7 +79,7 @@ class All {
   String? status;
   int? count;
   String? translate;
-  String? total;
+  dynamic total;
 
   All({this.status, this.count, this.translate,this.total});
 

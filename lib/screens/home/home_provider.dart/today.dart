@@ -277,7 +277,7 @@ class ItemModel {
   String? label;
   String? orderCount;
   String? itemCount;
-  String? total;
+  dynamic total;
   String? image;
 
   ItemModel(

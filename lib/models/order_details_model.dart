@@ -125,13 +125,15 @@ class Customer {
   dynamic id;
   String? name;
   String? mobile;
+  int? customerId;
 
-  Customer({this.id, this.name, this.mobile});
+  Customer({this.id, this.name, this.mobile,this.customerId});
 
   Customer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     mobile = json['mobile'];
+    customerId = json['code']??0;
   }
 
   Map<String, dynamic> toJson() {

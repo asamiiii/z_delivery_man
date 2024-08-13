@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 const String baseUrl = 'http://zdev.z-laundry.com/public/api/v1/'; // for dev
-// const String baseUrl = 'http://app.z-laundry.com/public/api/v1/'; // for production
+// const String baseUrl =
+//     'http://app.z-laundry.com/public/api/v1/'; // for production
 
 class DioHelper {
   static Dio? dio;
@@ -15,12 +15,10 @@ class DioHelper {
           receiveDataWhenStatusError: true,
           contentType: "application/json",
           followRedirects: false,
-          
           responseType: ResponseType.json,
           validateStatus: (status) {
             return status! < 500;
           }),
-    
     );
     dio!.interceptors.add(PrettyDioLogger(
         requestHeader: true,
@@ -55,7 +53,7 @@ class DioHelper {
       Map<String, dynamic>? query,
       dynamic data,
       String? token}) async {
-        dio?.options.responseType = ResponseType.json;
+    dio?.options.responseType = ResponseType.json;
     dio?.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
@@ -89,7 +87,7 @@ class DioHelper {
       required Map<String, dynamic>? data,
       Map<String, dynamic>? query,
       String? token}) async {
-        dio?.options.responseType = ResponseType.json;
+    dio?.options.responseType = ResponseType.json;
     dio?.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
@@ -103,7 +101,7 @@ class DioHelper {
       Map<String, dynamic>? data,
       Map<String, dynamic>? query,
       required String? token}) async {
-        dio?.options.responseType = ResponseType.json;
+    dio?.options.responseType = ResponseType.json;
     dio?.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
