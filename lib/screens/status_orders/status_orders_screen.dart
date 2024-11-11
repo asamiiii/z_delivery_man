@@ -449,6 +449,18 @@ class _OrdersSectionState extends State<OrdersSection> {
                   style:
                       TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold),
                 ),
+                if (widget.order?.customer?.newCustomerWithBag == true)
+                SizedBox(
+                  height: 1.h,
+                ),
+                if (widget.order?.customer?.newCustomerWithBag == true)
+                  const Text(
+                    'يجب تسليم شنطه للعميل',
+                    style: TextStyle(
+                        backgroundColor: Colors.green,
+                        color: Colors.white,
+                        fontSize: 16),
+                  ),
                 Row(
                   // mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

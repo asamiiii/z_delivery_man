@@ -52,7 +52,7 @@ class Orders {
       this.customer,
       this.address,
       this.pref,
-      this.comments
+      this.comments,
       });
 
   Orders.fromJson(Map<String, dynamic> json) {
@@ -64,6 +64,7 @@ class Orders {
     nextStatus = json['nextStatus'];
     canCollect = json['can_collect'];
     provider = json['provider'];
+
     customer =
         json['customer'] != null ? Customer.fromJson(json['customer']) : null;
     address =
@@ -105,13 +106,17 @@ class Customer {
   int? id;
   String? name;
   String? mobile;
+  bool? newCustomerWithBag;
 
-  Customer({this.id, this.name, this.mobile});
+
+  Customer({this.id, this.name, this.mobile,this.newCustomerWithBag});
 
   Customer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     mobile = json['mobile'];
+    newCustomerWithBag = json['new_customer_with_bag'];
+
   }
 
   Map<String, dynamic> toJson() {

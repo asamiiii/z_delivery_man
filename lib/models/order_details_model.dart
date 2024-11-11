@@ -16,6 +16,9 @@ class OrderDetailsModel {
   Customer? customer;
   bool? newCustomer;
   bool? isReturn;
+  bool? newCustomerWithBag;
+
+  //new_customer_with_bag
 
   OrderDetailsModel(
       {this.services,
@@ -31,7 +34,9 @@ class OrderDetailsModel {
       this.canCollect,
       this.coreNextStatus,
       this.currentStatus,
-      this.nextStatus});
+      this.nextStatus,
+      this.newCustomerWithBag
+      });
 
   OrderDetailsModel.fromJson(Map<String, dynamic> json) {
     Map<String, dynamic>? servicesMap = json['services'];
@@ -64,6 +69,8 @@ class OrderDetailsModel {
     // }
 
     itemCount = json['item_count'];
+    newCustomerWithBag = json['new_customer_with_bag'];
+
     id = json['id'];
     address =
         json['address'] != null ? Address.fromJson(json['address']) : null;

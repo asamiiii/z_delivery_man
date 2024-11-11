@@ -576,6 +576,17 @@ class DeliverySection extends StatelessWidget {
                         style: TextStyle(
                             color: primaryColor, fontWeight: FontWeight.bold),
                       )),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  if (cubit?.orderDetailsModel?.newCustomerWithBag == true)
+                    const Text(
+                      'يجب تسليم شنطه للعميل',
+                      style: TextStyle(
+                          backgroundColor: Colors.green,
+                          color: Colors.white,
+                          fontSize: 16),
+                    )
                 ],
               ),
               SizedBox(
@@ -1166,13 +1177,13 @@ class _ProviderSectionState extends State<ProviderSection> {
                               ),
                               child: Column(
                                 children: [
-                                  Text('اضافة تكلفه اضافيه',style: TextStyle(fontSize: 15.sp)),
+                                  Text('اضافة تكلفه اضافيه',
+                                      style: TextStyle(fontSize: 15.sp)),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       DropdownButton<String>(
-                                        items:
-                                            dropDownList.map((String value) {
+                                        items: dropDownList.map((String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(value),
@@ -1184,7 +1195,8 @@ class _ProviderSectionState extends State<ProviderSection> {
                                       SizedBox(
                                         width: 20,
                                       ),
-                                      Text('نوع الخدمه',style: TextStyle(fontSize: 15.sp))
+                                      Text('نوع الخدمه',
+                                          style: TextStyle(fontSize: 15.sp))
                                     ],
                                   ),
                                   SizedBox(
@@ -1208,24 +1220,30 @@ class _ProviderSectionState extends State<ProviderSection> {
                                             onChange: (value) {},
                                             controller: costController,
                                           )),
-                                          const SizedBox(
+                                      const SizedBox(
                                         width: 15,
                                       ),
-                                       Text('     التكلفه',style: TextStyle(fontSize: 15.sp)),
-                                      
-                                      
+                                      Text('     التكلفه',
+                                          style: TextStyle(fontSize: 15.sp)),
                                     ],
                                   ),
-                                   Expanded(child: const SizedBox(height: 50,)),
-                                  CustomButton(onPrss: (){
-                                    
-                                  }, buttonTitle: 'حفظ'),
-                                  const SizedBox(height: 20,)
+                                  Expanded(
+                                      child: const SizedBox(
+                                    height: 50,
+                                  )),
+                                  CustomButton(
+                                      onPrss: () {}, buttonTitle: 'حفظ'),
+                                  const SizedBox(
+                                    height: 20,
+                                  )
                                 ],
                               )),
                         );
                       },
-                      child:  Text('اضافة تكلفه اضافيه +',style: TextStyle(fontSize: 20.sp),)),
+                      child: Text(
+                        'اضافة تكلفه اضافيه +',
+                        style: TextStyle(fontSize: 20.sp),
+                      )),
                   const SizedBox(
                     height: 15,
                   ),

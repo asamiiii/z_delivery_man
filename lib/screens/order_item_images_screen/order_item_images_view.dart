@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -28,8 +27,7 @@ class OrderItemImagesScreen extends StatefulWidget {
       this.itemId,
       this.orderId,
       this.images,
-      this.serviceId
-      })
+      this.serviceId})
       : super(key: key);
 
   @override
@@ -57,9 +55,8 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
         widget.statusName == 'from_provider_all' ||
         widget.statusName == 'from_provider' ||
         widget.statusName == 'opened_all' ||
-        widget.statusName == 'opened'||
-        widget.serviceId != 200
-        ) {
+        widget.statusName == 'opened' ||
+        widget.serviceId != 200) {
       preivilageFlag = false;
     }
     super.initState();
@@ -482,7 +479,8 @@ class _OrderItemImagesScreenState extends State<OrderItemImagesScreen> {
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           floatingActionButton: widget.statusName == 'provider_received_all' ||
-                  widget.statusName == 'provider_received' || widget.serviceId ==200
+                  widget.statusName == 'provider_received' ||
+                  widget.serviceId == 200
               ? SizedBox(
                   width: 15.w,
                   // height: 20.h,
