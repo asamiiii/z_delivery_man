@@ -13,6 +13,8 @@ import 'package:map_launcher/map_launcher.dart' as maplauncher;
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:z_delivery_man/screens/pickup_details/pickup_details_states.dart';
+import 'package:z_delivery_man/screens/status_orders/status_orders_screen.dart';
+import 'package:z_delivery_man/shared/widgets/custom_dropdown_menu.dart';
 
 import '../../models/order_per_time_slot_model.dart';
 import '../../shared/widgets/components.dart';
@@ -219,6 +221,8 @@ class OrdersSection extends StatefulWidget {
 }
 
 class _OrdersSectionState extends State<OrdersSection> {
+  CardType? selectedMachinType;
+
   @override
   Widget build(BuildContext context) {
     var commentController = TextEditingController();
@@ -400,21 +404,53 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                                     widget
                                                                         .rebuild!();
                                                                   }),
-                                                              CheckboxListTile(
-                                                                  title: const Text(
-                                                                      'الدفع بالبطاقة الائتمانية'),
-                                                                  value:
-                                                                      checkCollectByMachine,
-                                                                  onChanged:
-                                                                      (value) {
-                                                                    setStatee(
-                                                                        () {
-                                                                      checkCollectByHand =
-                                                                          false;
-                                                                      checkCollectByMachine =
-                                                                          value!;
-                                                                    });
-                                                                  }),
+
+
+                                                                  CustomDropdown<
+                                                                  CardType>(
+                                                                items:
+                                                                    byMachinList,
+                                                                displayText:
+                                                                    (item) {
+                                                                  return item
+                                                                      .name
+                                                                      .toString();
+                                                                },
+                                                                onChanged:
+                                                                    (selectedItem) {
+                                                                  selectedMachinType =
+                                                                      selectedItem;
+                                                                  checkCollectByHand =
+                                                                      false;
+                                                                  checkCollectByMachine =
+                                                                      true;
+
+                                                                  setStatee(
+                                                                    () {},
+                                                                  );
+                                                                },
+                                                                selectedItem:
+                                                                    selectedMachinType,
+                                                                hintText:
+                                                                    'اختر ',
+                                                                mainTitle:
+                                                                    'الدفع بالبطاقة الاتمانية',
+                                                              )
+                                                              // CheckboxListTile(
+                                                              //     title: const Text(
+                                                              //         'الدفع بالبطاقة الائتمانية'),
+                                                              //     value:
+                                                              //         checkCollectByMachine,
+                                                              //     onChanged:
+                                                              //         (value) {
+                                                              //       setStatee(
+                                                              //           () {
+                                                              //         checkCollectByHand =
+                                                              //             false;
+                                                              //         checkCollectByMachine =
+                                                              //             value!;
+                                                              //       });
+                                                              //     }),
                                                             ],
                                                           ),
                                                         );
@@ -430,6 +466,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                               checkCollectByMachine ==
                                                                   true) {
                                                             widget.cubit?.collectOrder(
+                                                              
                                                                 orderId: widget
                                                                     .order?.id,
                                                                 collectMethod:

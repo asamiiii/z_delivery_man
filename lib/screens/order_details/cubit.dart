@@ -101,12 +101,14 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   void collectOrder({
     required int? orderId,
     required String? collectMethod,
+    required String? byMachineOption
+
   }) {
     emit(OrderDetailsCollectOrderStatusLoadingState());
     DioHelper.postData(
         url: '$POST_COLLECT_ORDER/$orderId/collect',
         token: token,
-        data: {'collect_method': collectMethod}).then((value) {
+        data: {'collect_method': collectMethod,'collect_type':byMachineOption}).then((value) {
       emit(OrderDetailsCollectOrderStatusSuccessState());
     }).catchError((e) {
       debugPrint('$e collect error');

@@ -23,6 +23,8 @@ import 'package:z_delivery_man/screens/home/home_provider.dart/home_screen.dart'
 import 'package:z_delivery_man/screens/order_item_images_screen/order_item_images_view.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/meters_view.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/widget.dart';
+import 'package:z_delivery_man/screens/status_orders/status_orders_screen.dart';
+import 'package:z_delivery_man/shared/widgets/custom_dropdown_menu.dart';
 import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
 
 import '../../network/local/cache_helper.dart';
@@ -338,6 +340,8 @@ class DeliverySection extends StatelessWidget {
     bool checkCollectByHand = false;
 
     bool checkCollectByMachine = false;
+
+    CardType? selectedMachinType;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -827,18 +831,27 @@ class DeliverySection extends StatelessWidget {
                                                           value!;
                                                     });
                                                   }),
-                                              CheckboxListTile(
-                                                  title: const Text(
-                                                      'الدفع بالبطاقة الائتمانية'),
-                                                  value: checkCollectByMachine,
-                                                  onChanged: (value) {
-                                                    setStatee(() {
-                                                      checkCollectByHand =
-                                                          false;
-                                                      checkCollectByMachine =
-                                                          value!;
-                                                    });
-                                                  }),
+                                              CustomDropdown<CardType>(
+                                                items: byMachinList,
+                                                displayText: (item) {
+                                                  return item.name.toString();
+                                                },
+                                                onChanged: (selectedItem) {
+                                                  selectedMachinType =
+                                                      selectedItem;
+                                                  checkCollectByHand = false;
+                                                  checkCollectByMachine = true;
+
+                                                  setStatee(
+                                                    () {},
+                                                  );
+                                                },
+                                                selectedItem:
+                                                    selectedMachinType,
+                                                hintText: 'اختر ',
+                                                mainTitle:
+                                                    'الدفع بالبطاقة الاتمانية',
+                                              )
                                             ],
                                           ),
                                         );
@@ -851,6 +864,8 @@ class DeliverySection extends StatelessWidget {
                                           if (checkCollectByHand == true ||
                                               checkCollectByMachine == true) {
                                             cubit?.collectOrder(
+                                                byMachineOption:
+                                                    selectedMachinType?.key,
                                                 orderId: orderId,
                                                 collectMethod: checkCollectByHand
                                                     ? "collected_by_hand"
@@ -1112,11 +1127,13 @@ class _ProviderSectionState extends State<ProviderSection> {
                         TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
                   ),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children:
                         widget.cubit!.providerOrderDetails!.requests!.requests!
                             .map(
                               (e) => Text(
-                                "$e",
+                                "- $e",
+                                textAlign: TextAlign.start,
                                 style: TextStyle(
                                     fontSize: 14.sp,
                                     fontWeight: FontWeight.w500),
