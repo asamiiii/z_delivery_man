@@ -145,7 +145,7 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     });
     remoteList.add(RemoteImage('', null, comment: ''));
     await DioHelper.postDataMultipart(
-            url:"$POST_ASSOCIATE_ITEMS/$orderId/associateImages",
+            url:"${EndPoints.POST_ASSOCIATE_ITEMS}/$orderId/associateImages",
             token: token,
             data: formData)
         .then((value) {
@@ -233,7 +233,7 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
       {required int? orderId, required int? imageId}) {
     emit(OrderItemRemoveImagesLoadingState());
     return DioHelper.deleteData(
-            url: "$DELETE_ASSOCIATE_IMAGE/$orderId/images/$imageId",
+            url: "${EndPoints.DELETE_ASSOCIATE_IMAGE}/$orderId/images/$imageId",
             token: token)
         .then((value) {
       debugPrint(
@@ -259,9 +259,9 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     debugPrint('Order Id $orderId');
     emit(OrderItemCommentLoadingState());
     debugPrint(
-        'addComment EndPoint : $DELETE_ASSOCIATE_IMAGE/$orderId/images/$imageId');
+        'addComment EndPoint : ${EndPoints.DELETE_ASSOCIATE_IMAGE}/$orderId/images/$imageId');
     return DioHelper.updateData(
-            url: "$DELETE_ASSOCIATE_IMAGE/$orderId/images/$imageId",
+            url: "${EndPoints.DELETE_ASSOCIATE_IMAGE}/$orderId/images/$imageId",
             data: {"comment": comment},
             token: token)
         .then((value) {

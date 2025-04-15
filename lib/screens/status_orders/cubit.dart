@@ -42,7 +42,7 @@ class OrderPerStatusCubit extends Cubit<OrderPerStatusStates> {
     emit(OrderPerStatusLoadingState());
 
     DioHelper.getData(
-        url: GET_ORDERS_PER_STATUS,
+        url: EndPoints.GET_ORDERS_PER_STATUS,
         token: token,
         query: {"status": status, "page": page, "all": isAll}).then((value) {
       debugPrint('getOrderPerStatus Resp : ${value.data}');
@@ -84,7 +84,7 @@ class OrderPerStatusCubit extends Cubit<OrderPerStatusStates> {
   }) {
     emit(OrderPerStatusCollectOrderStatusLoadingState());
     DioHelper.postData(
-        url: '$POST_COLLECT_ORDER/$orderId/collect',
+        url: '${EndPoints.POST_COLLECT_ORDER}/$orderId/collect',
         token: token,
         data: {'collect_method': collectMethod,'collect_type':byMachineOption}).then((value) {
       emit(OrderPerStatusCollectOrderStatusSuccessState());
@@ -102,8 +102,8 @@ class OrderPerStatusCubit extends Cubit<OrderPerStatusStates> {
     emit(OrderPerStatusNextStatusLoadingState());
    await  DioHelper.postData(
         url: isDeliveryMan
-            ? "$POST_ORDERS_NEXT_STATUS/$orderId/nextStatus"
-            : "$POST_ORDERS_NEXT_STATUS_PROVIDER/$orderId/nextStatus",
+            ? "${EndPoints.POST_ORDERS_NEXT_STATUS}/$orderId/nextStatus"
+            : "${EndPoints.POST_ORDERS_NEXT_STATUS_PROVIDER}/$orderId/nextStatus",
         token: token,
         data: {"item_count": itemCount, "comment": comment}).then((value) {
       debugPrint('Response :  ${value.data} ');

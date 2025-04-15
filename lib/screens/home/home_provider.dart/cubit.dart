@@ -30,7 +30,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   Future<void> logout() {
     emit(LogoutLoading());
-    return DioHelper.postData(url: LOGOUT, token: token).then((value) {
+    return DioHelper.postData(url: EndPoints.LOGOUT, token: token).then((value) {
       emit(LogoutSuccess());
     }).catchError((e) {
       emit(LogoutFailed());
@@ -39,7 +39,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   Future<void> getTimeSlots() {
     emit(HomeLoadingState());
-    return DioHelper.getData(url: GET_ORDERS, token: token).then((value) {
+    return DioHelper.getData(url: EndPoints.GET_ORDERS, token: token).then((value) {
       timeSlots?.clear();
       pickupLists.clear();
       deliveryLists.clear();
@@ -65,7 +65,7 @@ class HomeCubit extends Cubit<HomeStates> {
   IndexModel? indexModel;
   Future<void> getStatusWithCount() async{
     emit(HomeLoadingStatus());
-    await DioHelper.getData(url: Get_STATUS_PROVIDER, token: token)
+    await DioHelper.getData(url: EndPoints.Get_STATUS_PROVIDER, token: token)
         .then((value) {
       // debugPrint('resp $value');
       indexModel = IndexModel.fromJson(value.data);

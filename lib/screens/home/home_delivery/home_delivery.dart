@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:z_delivery_man/core/global_cubit/global_cubit.dart';
 import 'package:z_delivery_man/network/local/cache_helper.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/all_delivery.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/instruction_delivery.dart';
@@ -25,40 +27,34 @@ class _HomeScreenState extends State<HomeDelivery> {
     super.initState();
     isDeliveryMan = CacheHelper.getData(key: 'type');
     name = CacheHelper.getData(key: 'name');
+    context.read<GlobalCubit>().startUpdateLocation(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-            length: 4,
-            child: WithSafeArea(
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: PageContainer(
-                  child: Scaffold(
-                    backgroundColor: Colors.white,
-                    // drawer: const BuildDrawer(),
-                    appBar: deliveryHomeAppBar(deliveryManName:name ?? '',ctx: context),
-                    body: TabBarView(
-                      children: [
-                        DeliveryAll(),
-                        DeliveryToday(),
-                        DeliveryTodayWithTimeSlots(), //! الفترات
-                        InstructionsDelivery()
-                      ],
-                    ),
-                  ),
-                ),
+      length: 4,
+      child: WithSafeArea(
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: PageContainer(
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              // drawer: const BuildDrawer(),
+              appBar:
+                  deliveryHomeAppBar(deliveryManName: name ?? '', ctx: context),
+              body: TabBarView(
+                children: [
+                  DeliveryAll(),
+                  DeliveryToday(),
+                  DeliveryTodayWithTimeSlots(), //! الفترات
+                  InstructionsDelivery()
+                ],
               ),
             ),
-          );
-        }
+          ),
+        ),
+      ),
+    );
   }
-
-
-
-
-
-
-
-
+}

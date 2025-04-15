@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:z_delivery_man/core/global_cubit/global_cubit.dart';
 import 'package:z_delivery_man/screens/drawer/cubit.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/cubit.dart';
 import 'package:z_delivery_man/screens/order_details/cubit.dart';
@@ -10,6 +11,8 @@ import '../../screens/status_orders/cubit.dart';
 
 class AppProviders {
   static List<BlocProvider> appProviders = [
+    BlocProvider<GlobalCubit>(
+        create: (BuildContext context) => GlobalCubit()),
     BlocProvider<OrderslistCubit>(
         create: (BuildContext context) => OrderslistCubit()),
     BlocProvider<OrderPerStatusCubit>(

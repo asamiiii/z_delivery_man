@@ -1,4 +1,3 @@
-
 class OrderDetailsModel {
   List<Service>? services;
   dynamic itemCount;
@@ -17,6 +16,7 @@ class OrderDetailsModel {
   bool? newCustomer;
   bool? isReturn;
   bool? newCustomerWithBag;
+  String? service;
 
   //new_customer_with_bag
 
@@ -35,8 +35,8 @@ class OrderDetailsModel {
       this.coreNextStatus,
       this.currentStatus,
       this.nextStatus,
-      this.newCustomerWithBag
-      });
+      this.newCustomerWithBag,
+      this.service});
 
   OrderDetailsModel.fromJson(Map<String, dynamic> json) {
     Map<String, dynamic>? servicesMap = json['services'];
@@ -79,6 +79,7 @@ class OrderDetailsModel {
     paymentMethod = json['payment_method'];
     provider = json['provider'];
     cost = json['cost'] != null ? Cost.fromJson(json['cost']) : null;
+    service = json['service'];
   }
 
   // Map<String, dynamic> toJson() {
@@ -134,13 +135,13 @@ class Customer {
   String? mobile;
   int? customerId;
 
-  Customer({this.id, this.name, this.mobile,this.customerId});
+  Customer({this.id, this.name, this.mobile, this.customerId});
 
   Customer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     mobile = json['mobile'];
-    customerId = json['code']??0;
+    customerId = json['code'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -384,19 +385,42 @@ class Pick {
   }
 }
 
+class OldOrder {
+  int? id;
+  dynamic total;
+
+  OldOrder.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    total = json['total'];
+  }
+}
+
 class Cost {
   String? deliveryFees;
   dynamic discount;
   dynamic subtotal;
   String? total;
+  num? totalOldOrders;
+  List<OldOrder>? oldOrders;
 
-  Cost({this.deliveryFees, this.discount, this.subtotal, this.total});
+  Cost(
+      {this.deliveryFees,
+      this.discount,
+      this.subtotal,
+      this.total,
+      this.totalOldOrders,
+      this.oldOrders});
 
   Cost.fromJson(Map<String, dynamic> json) {
+    // Map<String, dynamic>? oldOrdersMap = json['old_orders'];
     deliveryFees = json['delivery_fees'];
     discount = json['discount'];
     subtotal = json['subtotal'];
     total = json['total'];
+    totalOldOrders = json['total_old_orders'];
+    oldOrders = (json['old_orders'] as List<dynamic>?)
+        ?.map((e) => OldOrder.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Map<String, dynamic> toJson() {

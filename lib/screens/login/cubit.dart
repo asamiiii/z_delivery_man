@@ -26,7 +26,7 @@ class LoginCubit extends Cubit<LoginStates> {
     required String? fcmToken,
   }) async {
     emit(LoginLoadingState());
-    await DioHelper.postData(url: LOGIN, data: {
+    await DioHelper.postData(url: EndPoints.LOGIN, data: {
       'email': email,
       'password': password,
       'device_name': deviceName,

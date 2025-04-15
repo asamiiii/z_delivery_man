@@ -34,7 +34,7 @@ class PickupDetailsCubit extends Cubit<PickupDetailsStates> {
 
   Future<void> getOrdersPerTimeSlot({required int? id}) {
     emit(PickupDetailsLoadingState());
-    return DioHelper.getData(url: "$GET_ORDERS_PER_TIMESLOT/$id", token: token)
+    return DioHelper.getData(url: "${EndPoints.GET_ORDERS_PER_TIMESLOT}/$id", token: token)
         .then((value) {
       ordersPerTimeSlots = [];
       ordersPerTimeSlots = orederPerTimeSlotsFromJson(value.data);
@@ -214,8 +214,8 @@ class PickupDetailsCubit extends Cubit<PickupDetailsStates> {
     emit(PickupDetailsNextStatusLoadingState());
     DioHelper.postData(
         url: isDeliveryMan
-            ? "$POST_ORDERS_NEXT_STATUS/$orderId/nextStatus"
-            : "$POST_ORDERS_NEXT_STATUS_PROVIDER/$orderId/nextStatus",
+            ? "${EndPoints.POST_ORDERS_NEXT_STATUS}/$orderId/nextStatus"
+            : "${EndPoints.POST_ORDERS_NEXT_STATUS_PROVIDER}/$orderId/nextStatus",
         token: token,
         data: {"item_count": itemCount, "comment": comment}).then((value) {
       emit(PickupDetailsNextStatusSuccessState());
@@ -231,7 +231,7 @@ class PickupDetailsCubit extends Cubit<PickupDetailsStates> {
   }) {
     emit(PickupDetailsCollectOrderStatusLoadingState());
     DioHelper.postData(
-        url: '$POST_COLLECT_ORDER/$orderId/collect',
+        url: '${EndPoints.POST_COLLECT_ORDER}/$orderId/collect',
         token: token,
         data: {'collect_method': collectMethod}).then((value) {
       emit(PickupDetailsCollectOrderStatusSuccessState());

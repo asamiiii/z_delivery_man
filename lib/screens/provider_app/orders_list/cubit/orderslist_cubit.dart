@@ -38,7 +38,7 @@ class OrderslistCubit extends Cubit<OrderslistState> {
 
     emit(OrdersListLoading());
     DioHelper.getData(
-        url: Get_OrdersPreStatus,
+        url: EndPoints.Get_OrdersPreStatus,
         token: token,
         query: {"status": status, "page": pageIndex}).then((value) {
           debugPrint('orders list : ${value.data}');
@@ -66,8 +66,8 @@ class OrderslistCubit extends Cubit<OrderslistState> {
     emit(OrderNextStatusLoadingState());
      DioHelper.postData(
         url: isDeliveryMan
-            ? "$POST_ORDERS_NEXT_STATUS/$orderId/nextStatus"
-            : "$POST_ORDERS_NEXT_STATUS_PROVIDER/$orderId/nextStatus",
+            ? "${EndPoints.POST_ORDERS_NEXT_STATUS}/$orderId/nextStatus"
+            : "${EndPoints.POST_ORDERS_NEXT_STATUS_PROVIDER}/$orderId/nextStatus",
         token: token,
         data: {"item_count": itemCount ?? 0, "comment": comment?? ''}).then((value) {
       debugPrint("Next status ${value.data}"  );

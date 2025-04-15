@@ -504,6 +504,11 @@ class DeliverySection extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 14.sp, fontWeight: FontWeight.w400),
                         ),
+                  Text(
+                    "نوع الخدمه : ${cubit?.orderDetailsModel?.service}",
+                    style:
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+                  ),
                   InkWell(
                     onTap: () => launch(
                         "tel:${cubit?.orderDetailsModel?.customer?.mobile}"),
@@ -770,6 +775,22 @@ class DeliverySection extends StatelessWidget {
                         ),
                       ],
                     ),
+                    if (cubit?.orderDetailsModel?.paymentMethod != null)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "طريقة الدفع:",
+                            style: TextStyle(
+                                fontSize: 12.sp, fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            "${cubit?.orderDetailsModel?.paymentMethod}",
+                            style: TextStyle(
+                                fontSize: 12.sp, fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -784,7 +805,43 @@ class DeliverySection extends StatelessWidget {
                               fontSize: 14.sp, fontWeight: FontWeight.bold),
                         ),
                       ],
-                    )
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (cubit?.orderDetailsModel?.cost?.oldOrders != null)
+                          Text(
+                            "طلبات سابقة لم يتم دفعها",
+                            style: TextStyle(
+                                fontSize: 14.sp, fontWeight: FontWeight.bold),
+                          ),
+                      ],
+                    ),
+                    if (cubit?.orderDetailsModel?.cost?.oldOrders != null)
+                      ...cubit!.orderDetailsModel!.cost!.oldOrders!.map(
+                        (e) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "ID : ${e.id}",
+                                style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "Total : ${e.total}",
+                                style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          );
+                        },
+                      ).toList(),
                   ],
                 ),
               ),
