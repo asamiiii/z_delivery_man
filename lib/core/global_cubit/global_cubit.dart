@@ -16,7 +16,7 @@ class GlobalCubit extends Cubit<UpdateCurrentLocationStates> {
     Position? position = await LocationService().getCurrentLocation(ctx);
     final lat = position?.latitude;
     final long = position?.longitude;
-UpdateLocationRepo.updateLocation(position);
+    UpdateLocationRepo.updateLocation(position);
     // add logic here
     debugPrint('Lat : $lat');
     debugPrint('Long : $long');
@@ -32,8 +32,8 @@ UpdateLocationRepo.updateLocation(position);
     updateCurrentLocation(ctx);
 
     // Then start update location periodically every 20 seconds
-    _timer = Timer.periodic(const Duration(seconds: 20), (timer) {
-      updateCurrentLocation(ctx);
-    });
+    // _timer = Timer.periodic(const Duration(seconds: 60), (timer) {
+    //   updateCurrentLocation(ctx);
+    // });
   }
 }

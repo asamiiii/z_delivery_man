@@ -1,9 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
-
 import '../../models/price_list_model.dart' as pricelist;
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,7 +23,8 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     emit(OrderDetailsLoadingState());
 
     debugPrint("order ID $orderId");
-    return DioHelper.getData(url: "${EndPoints.GET_ORDER_DETAILS}/$orderId", token: token)
+    return DioHelper.getData(
+            url: "${EndPoints.GET_ORDER_DETAILS}/$orderId", token: token)
         .then((value) {
       debugPrint("Details ${value.data}");
       orderDetailsModel = OrderDetailsModel.fromJson(value.data);
@@ -48,21 +45,12 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     emit(OrderProviderDetailsLoadingState());
     initQuantityInPriceList = [];
     return await DioHelper.getData(
-            url: "${EndPoints.GET_PROVIDER_ORDER_DETAILS}/$orderId", token: token)
+            url: "${EndPoints.GET_PROVIDER_ORDER_DETAILS}/$orderId",
+            token: token)
         .then((value) {
-      // print('order id : $orderId');
-
-      // var rsponse = jsonDecode(value.data);
-      // debugPrint('getProviderOrderDetails : ${value.data}');
       providerOrderDetails = ProviderOrderDetails.fromJson(value.data);
       checkedItemsNumber();
       emit(OrderProviderDetailsSuccessState());
-      // if (providerOrderDetails?.images != null) {
-      //   for (var item in providerOrderDetails!.images!) {
-      //     networkImages.add(item);
-      //   }
-      //   emit(OrderProviderDetailsSuccessState());
-      // }
       for (var i in providerOrderDetails!.items!) {
         initQuantityInPriceList.add(InitQuantityModel(
             initQuantity: i.quantity,
@@ -121,7 +109,8 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   }) async {
     emit(PriceListLoading());
     DioHelper.getData(
-            url: "${EndPoints.Get_STATUS_PROVIDER}/$orderId/priceList", token: token)
+            url: "${EndPoints.Get_STATUS_PROVIDER}/$orderId/priceList",
+            token: token)
         .then((value) {
       debugPrint('price list : $value');
       priceList = pricelist.priceListFromJson(value.data);
@@ -266,65 +255,6 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
     debugPrint('Pref List : $prefereceList');
   }
 
-  // void setItemIsEnabled({
-  //   required Item? preferenceModel,
-  //   required int? itemId,
-  //   bool all = false,
-  // }) {
-  //   int indexLocal = _prefereceList.indexWhere((item) =>
-  //       item['item_id'] == itemId &&
-  //       item['preference_id'] == preferenceModel?.id);
-
-  //   if (all) {
-  //     int prefLength = _prefereceList
-  //         .where((element) => element['preference_id'] == preferenceModel?.id)
-  //         .toList()
-  //         .length;
-  //     int _index =
-  //         _listData.indexWhere((element) => element.id == preferenceModel?.id);
-  //     int listLength = _listData[_index].items!.length;
-  //     if (prefLength != listLength) {
-  //       _prefereceList.removeWhere(
-  //           (element) => element['preference_id'] == preferenceModel?.id);
-  //       for (var element in preferenceModel!.items!) {
-  //         _prefereceList.add(
-  //             {'preference_id': preferenceModel.id!, 'item_id': element.id!});
-  //         emit(NotifyListeners());
-  //       }
-  //     } else {
-  //       _prefereceList.removeWhere(
-  //           (element) => element['preference_id'] == preferenceModel?.id);
-  //       emit(NotifyListeners());
-  //     }
-  //   } else {
-  //     if (indexLocal == -1) {
-  //       _prefereceList
-  //           .add({'preference_id': preferenceModel!.id!, 'item_id': itemId!});
-  //       emit(NotifyListeners());
-
-  //       for (var map in _prefereceList) {
-  //         if (map.containsKey('preference_id')) {
-  //           if (map['preference_id'] != preferenceModel.id &&
-  //               map['item_id'] == itemId) {
-  //             _prefereceList.remove(map);
-  //             emit(NotifyListeners());
-  //           }
-
-  //           // _prefereceList.removeWhere((element) => element["item_id"] == itemId &&element['preference_id'] ==preferenceModel.id);
-  //           //          notifyListeners();
-  //         }
-  //       }
-  //       // _prefereceList
-  //       //     .add({'preference_id': preferenceModel.id, 'item_id': itemId});
-  //       // notifyListeners();
-  //     } else {
-  //       _prefereceList.removeAt(indexLocal);
-  //       emit(NotifyListeners());
-  //     }
-  //     emit(NotifyListeners());
-  //   }
-  // }
-
   bool checkIfEnable(
       {required PreferenceModel preferenceModel,
       required int itemId,
@@ -418,7 +348,8 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
       {required int? orderId, required int? itemId}) {
     emit(AssociateItemsDeleteLoading());
     return DioHelper.deleteData(
-            url: "${EndPoints.POST_ASSOCIATE_ITEMS}/$orderId/items/$itemId", token: token)
+            url: "${EndPoints.POST_ASSOCIATE_ITEMS}/$orderId/items/$itemId",
+            token: token)
         .then((value) {
       successModel = SuccessModel.fromJson(value.data);
       emit(AssociateItemsDeleteSuccess(successModel: successModel));

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-// const String baseUrl = 'http://zdev.z-laundry.com/public/api/v1/'; // for dev
-const String baseUrl =
-    'http://zdev.z-laundry.com/public/api/v1/'; // for production
+const String baseUrl = 'http://zdev.z-laundry.com/public/api/v1/'; // for dev
+// const String baseUrl =
+//     'http://app.z-laundry.com/public/api/v1/'; // for production
 
 class DioHelper {
   static Dio? dio;
