@@ -1,4 +1,4 @@
-import '../../models/success_model.dart';
+import '../../../../../models/success_model.dart';
 
 abstract class OrderDetailsState {}
 

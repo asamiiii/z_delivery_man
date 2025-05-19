@@ -7,8 +7,8 @@ import 'package:z_delivery_man/screens/provider_app/price_list/widget.dart';
 import 'package:z_delivery_man/styles/color.dart';
 
 import '/../models/price_list_model.dart';
-import '/../screens/order_details/cubit.dart';
-import '/../screens/order_details/order_details_state.dart';
+import '../../screens/order_details/presentation/manager/provider_order_details_cubit/provider_order_details_cubit.dart';
+import '../../screens/order_details/presentation/manager/provider_order_details_cubit/provider_order_details_state.dart';
 import '/../shared/widgets/image_as_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

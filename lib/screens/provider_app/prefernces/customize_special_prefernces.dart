@@ -20,9 +20,9 @@ import '../../../shared/widgets/components.dart';
 import '../../../shared/widgets/custom_switch_button.dart';
 import '../../../shared/widgets/with_safe_area.dart';
 import '../../../styles/color.dart';
-import '../../order_details/cubit.dart';
-import '../../order_details/order_details_screen.dart';
-import '../../order_details/order_details_state.dart';
+import '../../order_details/presentation/manager/provider_order_details_cubit/provider_order_details_cubit.dart';
+import '../../order_details/presentation/view/order_details_screen.dart';
+import '../../order_details/presentation/manager/provider_order_details_cubit/provider_order_details_state.dart';
 
 List<String?> keepOneInstance(List<String?> list) {
   final seenItems = <dynamic>{};

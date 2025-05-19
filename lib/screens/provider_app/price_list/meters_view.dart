@@ -7,7 +7,7 @@ import 'package:z_delivery_man/models/price_list_model.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/widget.dart';
 import 'package:z_delivery_man/shared/widgets/price_list_system_order.dart';
 
-import '../../order_details/cubit.dart';
+import '../../order_details/presentation/manager/provider_order_details_cubit/provider_order_details_cubit.dart';
 
 class MetersView extends StatelessWidget {
   final int? areaid;

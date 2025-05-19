@@ -30,7 +30,8 @@ class OrderslistCubit extends Cubit<OrderslistState> {
   }
 
   OrderPerStatusProvider? _orderPerStatusModel;
-  void getOrderserStatus({String? status, int? pageIndex}) {
+  void getOrderserStatus(
+      {String? status, int? pageIndex, required String? filter}) {
     if (pageIndex == 1 || pageIndex == null) {
       _orders = [];
       _orderCurrentPage = 1;
@@ -38,10 +39,11 @@ class OrderslistCubit extends Cubit<OrderslistState> {
 
     emit(OrdersListLoading());
     DioHelper.getData(
-        url: EndPoints.Get_OrdersPreStatus,
-        token: token,
-        query: {"status": status, "page": pageIndex}).then((value) {
-          debugPrint('orders list : ${value.data}');
+            url: EndPoints.Get_OrdersPreStatus,
+            token: token,
+            query: {"status": status, "page": pageIndex, "filter": filter})
+        .then((value) {
+      debugPrint('orders list : ${value.data}');
       _orderPerStatusModel = OrderPerStatusProvider.fromJson(value.data);
       if (_orders!.isNotEmpty) {
         _orderlastPage = _orderPerStatusModel?.lastPage;
@@ -64,13 +66,16 @@ class OrderslistCubit extends Cubit<OrderslistState> {
       String? comment,
       required bool isDeliveryMan}) {
     emit(OrderNextStatusLoadingState());
-     DioHelper.postData(
+    DioHelper.postData(
         url: isDeliveryMan
             ? "${EndPoints.POST_ORDERS_NEXT_STATUS}/$orderId/nextStatus"
             : "${EndPoints.POST_ORDERS_NEXT_STATUS_PROVIDER}/$orderId/nextStatus",
         token: token,
-        data: {"item_count": itemCount ?? 0, "comment": comment?? ''}).then((value) {
-      debugPrint("Next status ${value.data}"  );
+        data: {
+          "item_count": itemCount ?? 0,
+          "comment": comment ?? ''
+        }).then((value) {
+      debugPrint("Next status ${value.data}");
 
       try {
         successModel = SuccessModel.fromJson(value.data);

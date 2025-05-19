@@ -7,10 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:sizer/sizer.dart';
+import 'package:z_delivery_man/core/components/text_components/small_text.dart';
 import 'package:z_delivery_man/models/order_per_status_provider.dart';
 import 'package:z_delivery_man/models/provider_order_details.dart';
-import 'package:z_delivery_man/screens/order_details/cubit.dart';
-import 'package:z_delivery_man/screens/order_details/order_details_state.dart';
+import 'package:z_delivery_man/screens/order_details/presentation/manager/provider_order_details_cubit/provider_order_details_cubit.dart';
+import 'package:z_delivery_man/screens/order_details/presentation/manager/provider_order_details_cubit/provider_order_details_state.dart';
+// import 'package:z_delivery_man/screens/order_details/cubit.dart';
+// import 'package:z_delivery_man/screens/order_details/order_details_state.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/order_item_images_view.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/meters_view.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/widget.dart';
@@ -39,6 +42,12 @@ class ProviderSection extends StatefulWidget {
 
 class _ProviderSectionState extends State<ProviderSection> {
   @override
+  void initState() {
+    // TODO: implement initState
+    widget.cubit?.toggleclientConfirm(null);
+  }
+
+  @override
   Widget build(BuildContext context) {
     var itemCountController = TextEditingController();
     var commentController = TextEditingController();
@@ -61,8 +70,9 @@ class _ProviderSectionState extends State<ProviderSection> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   const Text('وقت الاستلام'),
-                  // SmallText("من: ${widget.cubit?.providerOrderDetails?.pick?.from}"),
-                  
+                  Text("من: ${widget.cubit?.providerOrderDetails?.pick?.from}",
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.w600)),
                   Text(
                     "الي: ${widget.cubit?.providerOrderDetails?.pick?.to}",
                     style:
@@ -621,26 +631,11 @@ class _ProviderSectionState extends State<ProviderSection> {
                                               .itemDetailes
                                               ?.length,
                                         ),
-                                      widget.statusName == 'check_up_all' ||
-                                              widget.statusName == 'check_up' ||
-                                              widget.statusName ==
-                                                  'finished_all' ||
-                                              widget.statusName == 'finished' ||
-                                              widget.statusName ==
-                                                  'from_provider_all' ||
-                                              widget.statusName ==
-                                                  'from_provider' ||
-                                              widget.statusName ==
-                                                  'opened_all' ||
-                                              widget.statusName == 'opened' ||
-                                              widget
-                                                      .cubit
-                                                      ?.providerOrderDetails
-                                                      ?.items?[index]
-                                                      .serviceId ==
-                                                  200
-                                          ? const SizedBox()
-                                          : Row(
+                                      if (widget.statusName != 'in_process')
+                                        if (widget.statusName != 'finished')
+                                          if (widget.statusName !=
+                                              'from_provider')
+                                            Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceAround,
                                               children: [
@@ -1263,16 +1258,25 @@ class _ProviderSectionState extends State<ProviderSection> {
                                               MainAxisAlignment.spaceAround,
                                           children: [
                                             ElevatedButton(
-                                                onPressed: () {
+                                                onPressed: () async {
                                                   Navigator.of(context).pop();
-                                                  widget.cubit?.goToNextStatus(
-                                                      isDeliveryMan: false,
-                                                      orderId: widget.order?.id,
-                                                      itemCount: int.tryParse(
-                                                          itemCountController
-                                                              .text),
-                                                      comment: commentController
-                                                          .text);
+
+                                                  await widget.cubit
+                                                      ?.goToNextStatus(
+                                                          isDeliveryMan: false,
+                                                          orderId:
+                                                              widget.order?.id,
+                                                          itemCount: int.tryParse(
+                                                              itemCountController
+                                                                  .text),
+                                                          comment:
+                                                              commentController
+                                                                  .text);
+                                                  // if (Navigator.of(context)
+                                                  //     .canPop()) {
+                                                  //   Navigator.of(context).pop();
+                                                  // }
+
                                                   debugPrint('goToNextStatus');
                                                 },
                                                 child: const Text('نعم')),
@@ -1320,13 +1324,44 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                 hintText: 'comment',
                                               ),
                                             ),
+                                            const SizedBox(
+                                              height: 16,
+                                            ),
+                                            if (widget
+                                                    .cubit
+                                                    ?.providerOrderDetails
+                                                    ?.coreNextStatus ==
+                                                'items_checked')
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  const SmallText(
+                                                    'هل تحتاج موافقة العميل ؟',
+                                                    size: 10,
+                                                  ),
+                                                  Checkbox(
+                                                      value: context
+                                                              .watch<
+                                                                  OrderDetailsCubit>()
+                                                              .needclientConfirm ??
+                                                          false,
+                                                      onChanged: (v) {
+                                                        debugPrint(
+                                                            'Checkbox value : $v ');
+                                                        widget.cubit
+                                                            ?.toggleclientConfirm(
+                                                                v);
+                                                      }),
+                                                ],
+                                              )
                                           ],
                                         ),
                                       ),
                                       actions: [
                                         CupertinoDialogAction(
                                           child: const Text('نعم'),
-                                          onPressed: () {
+                                          onPressed: () async {
                                             debugPrint(
                                                 'hero ${widget.cubit!.providerOrderDetails!.coreNextStatus}');
                                             // widget.cubit.deleteCustomer(id: widget.item.id);
@@ -1342,14 +1377,18 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                       .cubit!
                                                       .providerOrderDetails!
                                                       .itemCount!) {
-                                                widget.cubit?.goToNextStatus(
-                                                    isDeliveryMan: false,
-                                                    orderId: widget.orderId,
-                                                    itemCount: int.tryParse(
-                                                        itemCountController
-                                                            .text),
-                                                    comment:
-                                                        commentController.text);
+                                                await widget.cubit
+                                                    ?.goToNextStatus(
+                                                        isDeliveryMan: false,
+                                                        orderId: widget.orderId,
+                                                        itemCount: int.tryParse(
+                                                            itemCountController
+                                                                .text),
+                                                        comment:
+                                                            commentController
+                                                                .text);
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
                                               } else {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
@@ -1392,23 +1431,31 @@ class _ProviderSectionState extends State<ProviderSection> {
                                                   backgroundColor: Colors.red,
                                                 ));
                                               } else {
-                                                widget.cubit?.goToNextStatus(
-                                                    isDeliveryMan: false,
-                                                    orderId: widget.orderId,
-                                                    itemCount: int.tryParse(
-                                                        itemCountController
-                                                            .text),
-                                                    comment:
-                                                        commentController.text);
+                                                await widget.cubit
+                                                    ?.goToNextStatus(
+                                                        isDeliveryMan: false,
+                                                        orderId: widget.orderId,
+                                                        itemCount: int.tryParse(
+                                                            itemCountController
+                                                                .text),
+                                                        comment:
+                                                            commentController
+                                                                .text);
+                                                Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
                                               }
                                             } else {
-                                              widget.cubit?.goToNextStatus(
-                                                  isDeliveryMan: false,
-                                                  orderId: widget.orderId,
-                                                  itemCount: int.tryParse(
-                                                      itemCountController.text),
-                                                  comment:
-                                                      commentController.text);
+                                              await widget.cubit
+                                                  ?.goToNextStatus(
+                                                      isDeliveryMan: false,
+                                                      orderId: widget.orderId,
+                                                      itemCount: int.tryParse(
+                                                          itemCountController
+                                                              .text),
+                                                      comment: commentController
+                                                          .text);
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).pop();
                                             }
 
                                             Navigator.of(context).pop();

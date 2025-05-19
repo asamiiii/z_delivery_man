@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:z_delivery_man/core/components/text_components/small_text.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -16,10 +17,10 @@ class CustomTextField extends StatefulWidget {
   final ValueChanged<String>? onChange;
   final bool enabled;
   final bool isMetersHW;
-  Function? onTap = () {};
+  final Function? onTap;
 
-  CustomTextField(
-      {Key? key,
+  const CustomTextField({
+      Key? key,
       required this.controller,
       this.hint,
       this.mulitLine = false,
@@ -35,8 +36,7 @@ class CustomTextField extends StatefulWidget {
       this.onChange,
       this.enabled = true,
       this.isMetersHW = false,
-      this.onTap})
-      : super(key: key);
+      this.onTap}) : super(key: key);
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -53,13 +53,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ? const SizedBox()
             : Container(
                 margin: const EdgeInsets.only(bottom: 8),
-                child: Text(
+                child: SmallText(
                   widget.title!,
-                  style: const TextStyle(
-                    color:  Colors.black,
-                    fontSize: 14,
-                    // fontWeight: FontWeight.w600
-                  ),
+                  color: Colors.black,
                 )),
         TextFormField(
           // onTapOutside: (event) {

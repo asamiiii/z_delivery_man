@@ -12,6 +12,7 @@ import 'package:map_launcher/map_launcher.dart' as maplauncher;
 // import 'package:location/location.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:z_delivery_man/core/components/text_components/small_text.dart';
 import 'package:z_delivery_man/screens/pickup_details/pickup_details_states.dart';
 import 'package:z_delivery_man/screens/status_orders/status_orders_screen.dart';
 import 'package:z_delivery_man/shared/widgets/custom_dropdown_menu.dart';
@@ -19,7 +20,7 @@ import 'package:z_delivery_man/shared/widgets/custom_dropdown_menu.dart';
 import '../../models/order_per_time_slot_model.dart';
 import '../../shared/widgets/components.dart';
 import '../../styles/color.dart';
-import '../order_details/order_details_screen.dart';
+import '../order_details/presentation/view/order_details_screen.dart';
 import 'cubit.dart';
 // import 'dart:typed_data';
 // import 'dart:ui' as ui;
@@ -227,7 +228,6 @@ class _OrdersSectionState extends State<OrdersSection> {
   Widget build(BuildContext context) {
     var commentController = TextEditingController();
     var itemCountController = TextEditingController();
-    var collectTypeController = TextEditingController();
     bool checkCollectByHand = false;
     bool checkCollectByMachine = false;
     return InkWell(
@@ -260,57 +260,51 @@ class _OrdersSectionState extends State<OrdersSection> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        SmallText(
                           'اسم العميل: ${widget.order?.customer?.name}',
                           overflow: TextOverflow.ellipsis,
                           softWrap: true,
                           maxLines: 2,
-                          style: const TextStyle(fontSize: 14),
                         ),
-                        Text(
+                        SmallText(
                           'كود العميل: ${widget.order?.customer?.id}',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           softWrap: true,
-                          style: const TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
                     InkWell(
                       onTap: () =>
                           launch("tel:${widget.order?.customer?.mobile}"),
-                      child: Text(
+                      child: SmallText(
                         'رقم العميل: ${widget.order?.customer?.mobile}',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         softWrap: true,
-                        style: TextStyle(fontSize: 12, color: primaryColor),
+                        color: primaryColor,
                       ),
                     ),
-                    Text(
+                    SmallText(
                       'المنطقة: ${widget.order?.zone}',
-                      style: const TextStyle(fontSize: 12),
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 5.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
+                          SmallText(
                             'الكمباوند: ${widget.order?.address?.compound}',
-                            style: const TextStyle(fontSize: 12),
                           ),
                         ],
                       ),
                     ),
                     widget.order?.provider != null
-                        ? Text(
+                        ? SmallText(
                             'المغسلة: ${widget.order?.provider}',
-                            style: const TextStyle(fontSize: 12),
                           )
-                        : const Text(
+                        : const SmallText(
                             'المغسلة: لايوجد',
-                            style: TextStyle(fontSize: 12),
                           ),
                     InkWell(
                         onTap: () async {
@@ -348,10 +342,9 @@ class _OrdersSectionState extends State<OrdersSection> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        SmallText(
                           'القيمة الكلية: ${widget.order?.total}',
                           textAlign: TextAlign.end,
-                          style: const TextStyle(fontSize: 15),
                           overflow: TextOverflow.ellipsis,
                         ),
                         ConditionalBuilder(
@@ -404,7 +397,6 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                                     widget
                                                                         .rebuild!();
                                                                   }),
-
 
                                                                   CustomDropdown<
                                                                   CardType>(

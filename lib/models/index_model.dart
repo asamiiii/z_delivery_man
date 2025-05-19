@@ -1,202 +1,79 @@
-class IndexModel {
-  IndexModel({
-    required this.today,
-    required this.all,
-  });
-    Today? today;
-    All? all;
-  
-  IndexModel.fromJson(Map<String, dynamic> json){
-    today = Today?.fromJson(json['Today']??{});
-    all = All.fromJson(json['All']??{});
-  }
 
-}
+class HomeProviderModel {
+    List<Today>? today;
+    List<All>? all;
 
-class Today {
-  Today({
-    required this.orderCount,
-    required this.itemCount,
-  });
-  late final OrderCount orderCount;
-  late final ItemCount itemCount;
-  
-  Today.fromJson(Map<String, dynamic> json){
-    orderCount = OrderCount.fromJson(json['order_count']);
-    itemCount = ItemCount.fromJson(json['item_count']);
-  }
+    HomeProviderModel({this.today, this.all});
 
- 
-}
+    HomeProviderModel.fromJson(Map<String, dynamic> json) {
+        today = json["Today"] == null ? null : (json["Today"] as List).map((e) => Today.fromJson(e)).toList();
+        all = json["All"] == null ? null : (json["All"] as List).map((e) => All.fromJson(e)).toList();
+    }
 
-class OrderCount {
-  OrderCount({
-    required this.opened,
-    required this.providerAssigned,
-    required this.providerReceived,
-    required this.checkUp,
-    required this.finished,
-    required this.fromProvider,
-    required this.remaining,
-  });
-  late final int? opened;
-  late final int? providerAssigned;
-  late final int? providerReceived;
-  late final int? checkUp;
-  late final int? finished;
-  late final int? fromProvider;
-  late final int? remaining;
-  
-  OrderCount.fromJson(Map<String, dynamic> json){
-    opened = json['opened'] ?? 0;
-    providerAssigned = json['provider_assigned'] ?? 0;
-    providerReceived = json['provider_received'] ?? 0;
-    checkUp = json['check_up'] ?? 0;
-    finished = json['finished'] ?? 0;
-    fromProvider = json['from_provider'] ?? 0;
-    remaining = json['remaining']??0;
-  }
-
-}
-
-class OrderCountAll {
-  OrderCountAll({
-    required this.opened,
-    required this.providerAssigned,
-    required this.providerReceived,
-    required this.checkUp,
-    required this.finished,
-    required this.fromProvider,
-    required this.remaining,
-  });
-  late final int? opened;
-  late final int? providerAssigned;
-  late final int? providerReceived;
-  late final int? checkUp;
-  late final int? finished;
-  late final int? fromProvider;
-  late final int? remaining;
-  
-  OrderCountAll.fromJson(Map<String, dynamic> json){
-    opened = json['opened_all'] ?? 0;
-    providerAssigned = json['provider_assigned_all'] ?? 0;
-    providerReceived = json['provider_received_all'] ?? 0;
-    checkUp = json['check_up_all'] ?? 0;
-    finished = json['finished_all'] ?? 0;
-    fromProvider = json['from_provider_all'] ?? 0;
-    // remaining = json['remaining']??0;
-  }
-
-}
-
-class ItemCount {
-  ItemCount({
-    required this.opened,
-    required this.providerAssigned,
-    required this.providerReceived,
-    required this.checkUp,
-    required this.finished,
-    required this.fromProvider,
-    required this.remaining,
-  });
-  late final int? opened;
-  late final int? providerAssigned;
-  late final int? providerReceived;
-  late final int? checkUp;
-  late final int? finished;
-  late final int? fromProvider;
-  late final int? remaining;
-  
-  ItemCount.fromJson(Map<String, dynamic> json){
-    opened = json['opened'] ?? 0;
-    providerAssigned = json['provider_assigned'] ?? 0;
-    providerReceived = json['provider_received'] ?? 0;
-    checkUp = json['check_up'] ?? 0;
-    finished = json['finished'] ?? 0;
-    fromProvider = json['from_provider']??0;
-    remaining = json['remaining'] ?? 0;
-  }
-
-}
-
-class ItemCountAll {
-  ItemCountAll({
-    required this.opened,
-    required this.providerAssigned,
-    required this.providerReceived,
-    required this.checkUp,
-    required this.finished,
-    required this.fromProvider,
-    required this.remaining,
-  });
-  late final int? opened;
-  late final int? providerAssigned;
-  late final int? providerReceived;
-  late final int? checkUp;
-  late final int? finished;
-  late final int? fromProvider;
-  late final int? remaining;
-  
-  ItemCountAll.fromJson(Map<String, dynamic> json){
-    opened = json['opened_all'] ?? 0;
-    providerAssigned = json['provider_assigned_all'] ?? 0;
-    providerReceived = json['provider_received_all'] ?? 0;
-    checkUp = json['check_up_all'] ?? 0;
-    finished = json['finished_all'] ?? 0;
-    fromProvider = json['from_provider_all']??0;
-  }
-
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> _data = <String, dynamic>{};
+        if(today != null) {
+            _data["Today"] = today?.map((e) => e.toJson()).toList();
+        }
+        if(all != null) {
+            _data["All"] = all?.map((e) => e.toJson()).toList();
+        }
+        return _data;
+    }
 }
 
 class All {
-  All({
-    required this.orderCount,
-    required this.itemCount,
-  });
-  late final OrderCountAll orderCount;
-  late final ItemCountAll itemCount;
-  
-  All.fromJson(Map<String, dynamic> json){
-    orderCount = OrderCountAll.fromJson(json['order_count']??{});
-    itemCount = ItemCountAll.fromJson(json['item_count']??{});
-  }
+    String? status;
+    String? statusName;
+    int? orderCount;
+    int? itemCount;
+    String? filter;
 
+    All({this.status, this.statusName, this.orderCount, this.itemCount});
+
+    All.fromJson(Map<String, dynamic> json) {
+        status = json["status"];
+        statusName = json["status_name"];
+        orderCount = (json["order_count"] as num).toInt();
+        itemCount = (json["item_count"] as num).toInt();
+        filter = json["filter"];
+    }
+
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> _data = <String, dynamic>{};
+        _data["status"] = status;
+        _data["status_name"] = statusName;
+        _data["order_count"] = orderCount;
+        _data["item_count"] = itemCount;
+        _data["filter"] = filter;
+        return _data;
+    }
 }
 
-// class IndexModel {
-//   List<StatusModel?>? statusModel;
-//   IndexModel(
-//     this.statusModel,
-//   );
+class Today {
+    String? status;
+    String? statusName;
+    int? orderCount;
+    int? itemCount;
+    String? filter;
 
-//   IndexModel.fromJson(Map<String, dynamic> json) {
-//     statusModel = [];
+    Today({this.status, this.statusName, this.orderCount, this.itemCount});
 
-//     for (var ele in json.entries) {
-//       statusModel?.add(StatusModel.fromJson(ele));
-//     }
-//   }
-// }
+    Today.fromJson(Map<String, dynamic> json) {
+        status = json["status"];
+        statusName = json["status_name"];
+        orderCount = (json["order_count"] as num).toInt();
+        itemCount = (json["item_count"] as num).toInt();
+        filter = json["filter"];
+    }
 
-class StatusModel {
-  String? statusName;
-  int? count;
-
-  StatusModel({required this.statusName, required this.count});
-
-  StatusModel.fromJson(MapEntry<String, dynamic> json) {
-    statusName = json.key;
-    count = json.value;
-  }
-
-  // Map<String, dynamic> toJson() => {
-  // 			'new': new,
-  // 			'waiting_deliveryMan': waitingDeliveryMan,
-  // 			'finished': finished,
-  // 			'check_up': checkUp,
-  // 			'deliver_today': deliverToday,
-  // 			'in_progress': inProgress,
-  // 			'ended': ended,
-  // 		};
-
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> _data = <String, dynamic>{};
+        _data["status"] = status;
+        _data["status_name"] = statusName;
+        _data["order_count"] = orderCount;
+        _data["item_count"] = itemCount;
+        _data["filter"] = filter;
+        return _data;
+    }
 }

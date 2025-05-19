@@ -6,7 +6,7 @@ import 'package:z_delivery_man/shared/widgets/custom_dropdown_menu.dart';
 import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
 import '/../models/orders_per_status_model.dart';
 import '/../screens/drawer/drawer.dart';
-import '/../screens/order_details/order_details_screen.dart';
+import '../order_details/presentation/view/order_details_screen.dart';
 import '/../screens/status_orders/cubit.dart';
 import '/../screens/status_orders/status_orders_states.dart';
 import '/../shared/widgets/components.dart';

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
-import 'package:z_delivery_man/screens/order_details/cubit.dart';
+// import 'package:z_delivery_man/screens/order_details/cubit.dart';
+import 'package:z_delivery_man/screens/order_details/presentation/manager/provider_order_details_cubit/provider_order_details_cubit.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/paint_on_image.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/state.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/upladed_image_model.dart';

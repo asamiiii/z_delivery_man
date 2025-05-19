@@ -14,7 +14,7 @@ import 'package:z_delivery_man/shared/widgets/components.dart';
 
 // ignore: must_be_immutable
 class TableAll extends StatelessWidget {
-  IndexModel? model;
+  HomeProviderModel? model;
   TableAll({Key? key, required this.model}) : super(key: key);
 
   @override
@@ -23,7 +23,7 @@ class TableAll extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(15),
       key: const Key('all'),
-      child: GridView(
+      child: GridView.builder(
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -32,110 +32,28 @@ class TableAll extends StatelessWidget {
           childAspectRatio: 0.7,
           crossAxisSpacing: 10,
         ),
-        children: [
-          //? لم يتم استلامه
-          GestureDetector(
+        itemBuilder: (context, index) {
+          var item = model?.all?[index];
+          return GestureDetector(
             onTap: () {
               navigateTo(
                   context,
-                  const OrdersListScreen(
-                    statusName: 'provider_assigned_all',
+                  OrdersListScreen(
+                    statusName: item?.status,
+                    statusText: item?.statusName,
+                    filter: item?.filter,
                   )).then((value) => homeCubit.getStatusWithCount());
             },
             child: Item(
               chocoItem: ItemModel(
-                  label: ' لم يتم استلامه ',
-                  itemCount: '${model?.all?.itemCount.providerAssigned?? '0'}',
-                  orderCount: '${model?.all?.orderCount.providerAssigned?? '0'}',
+                  label: item?.statusName,
+                  itemCount: '${item?.itemCount ?? '0'}',
+                  orderCount: item?.orderCount.toString() ?? '0',
                   image: 'assets/images/R.png'),
             ),
-          ),
-          //? تم استلامه
-          GestureDetector(
-            onTap: () {
-              navigateTo(
-                  context,
-                  const OrdersListScreen(
-                    statusName: 'provider_received_all',
-                  )).then((value) => homeCubit.getStatusWithCount());
-            },
-            child: Item(
-                chocoItem: ItemModel(
-                    label: '  تم استلامه  ',
-                    itemCount: '${model?.all?.itemCount.providerReceived?? '0'}',
-                    orderCount: '${model?.all?.orderCount.providerReceived?? '0'}',
-                    image: 'assets/images/press.png')),
-          ),
-
-          //? تم الفحص
-          GestureDetector(
-            onTap: () {
-              navigateTo(
-                  context,
-                  const OrdersListScreen(
-                    statusName: 'check_up_all',
-                  )).then((value) => homeCubit.getStatusWithCount());
-            },
-            child: Item(
-                chocoItem: ItemModel(
-                    label: 'تم الفحص',
-                    itemCount: '${model?.all?.itemCount.checkUp ?? '0'}',
-                    orderCount: '${model?.all?.orderCount.checkUp??'0'}',
-                    image: 'assets/images/q.png')),
-          ),
-
-          //? تم الانتهاء
-          GestureDetector(
-            onTap: () {
-              navigateTo(
-                  context,
-                  const OrdersListScreen(
-                    statusName: 'finished_all',
-                  ));
-            },
-            child: Item(
-                chocoItem: ItemModel(
-                    label: 'تم الانتهاء',
-                    itemCount: '${model?.all?.itemCount.finished?? '0'}',
-                    orderCount: '${model?.all?.orderCount.finished?? '0'}',
-                    image: 'assets/images/finished.png')),
-          ),
-
-          //? تم التسليم للمندوب
-          GestureDetector(
-            onTap: () {
-              navigateTo(
-                  context,
-                  const OrdersListScreen(
-                    statusName: 'from_provider_all',
-                  ));
-            },
-            child: Item(
-                chocoItem: ItemModel(
-                    label: 'تم التسليم',
-                    itemCount: '${model?.all?.itemCount.opened?? '0'}',
-                    orderCount: '${model?.all?.orderCount.opened?? '0'}',
-                    image: 'assets/images/done.png')),
-          ),
-
-          //? العدد الاجمالي
-          GestureDetector(
-            onTap: () {
-              navigateTo(
-                  context,
-                  const OrdersListScreen(
-                    statusName: 'opened_all',
-                  ));
-            },
-            child: Item(
-                chocoItem: ItemModel(
-                    label: 'العدد الإجمالي',
-                    itemCount: '${model?.all?.itemCount.opened??0}',
-                    orderCount: '${model?.all?.orderCount.opened??0}',
-                    image: 'assets/images/all.png')),
-          ),
-          
-        ],
+          );
+        },
+        itemCount: model?.all?.length ?? 0,
       ),
     );
 

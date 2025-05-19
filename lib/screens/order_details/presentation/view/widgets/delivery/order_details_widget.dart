@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:getwidget/components/accordion/gf_accordion.dart';
 import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/core/components/text_components/small_text.dart';
-import 'package:z_delivery_man/screens/order_details/cubit.dart';
+import 'package:z_delivery_man/screens/order_details/presentation/manager/dm_order_details_cubit/dm_order_details_cubit.dart';
 
 class OrderDetailsWidget extends StatelessWidget {
   const OrderDetailsWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var cubit = context.read<OrderDetailsCubit>();
+    var cubit = context.read<DMOrderDetailsCubit>();
 
     return Column(
       children: [

@@ -1,17 +1,14 @@
-// import 'package:conditional_builder/conditional_builder.dart';
-
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
-import 'package:z_delivery_man/models/order_per_status_provider.dart';
 import 'package:z_delivery_man/models/provider_order_details.dart';
 import 'package:z_delivery_man/screens/provider_app/price_list/meters_view.dart';
 
 import '../../../shared/widgets/components.dart';
 import '../../../styles/color.dart';
-import '../../order_details/cubit.dart';
-import '../../order_details/order_details_state.dart';
+import '../../order_details/presentation/manager/provider_order_details_cubit/provider_order_details_cubit.dart';
+import '../../order_details/presentation/manager/provider_order_details_cubit/provider_order_details_state.dart';
 import '../prefernces/customize_special_prefernces.dart';
 import 'clothes_list.dart';
 import 'clothes_type_list.dart';
@@ -388,9 +385,8 @@ class SearchInput extends StatelessWidget {
         controller: searchController,
         textAlign: TextAlign.center,
         onChanged: onChanged,
-        style: TextStyle(fontSize: 14, color: accentColor),
+        style: TextStyle(color: accentColor),
         decoration: InputDecoration(
-          // prefixIcon: Icon(Icons.email),
           prefixIcon: Icon(Icons.search, size: 20, color: accentColor),
           filled: true,
           fillColor: Colors.transparent,

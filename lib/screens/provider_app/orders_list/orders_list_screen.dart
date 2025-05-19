@@ -9,12 +9,20 @@ import 'package:z_delivery_man/shared/widgets/image_as_icon.dart';
 import '../../../models/order_per_status_provider.dart';
 import '../../../shared/widgets/components.dart';
 import '../../../styles/color.dart';
-import '../../order_details/order_details_screen.dart';
+import '../../order_details/presentation/view/order_details_screen.dart';
 import 'cubit/orderslist_cubit.dart';
 
 class OrdersListScreen extends StatefulWidget {
-  const OrdersListScreen({Key? key, this.statusName}) : super(key: key);
+  const OrdersListScreen(
+      {Key? key,
+      this.statusName,
+      required this.filter,
+      required this.statusText})
+      : super(key: key);
   final String? statusName;
+  final String? statusText;
+
+  final String? filter;
 
   @override
   State<OrdersListScreen> createState() => _OrdersListScreenState();
@@ -27,8 +35,8 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
     debugPrint('statusName : ${widget.statusName}');
     super.initState();
     _controller = ScrollController()..addListener(_scrollListeners);
-    BlocProvider.of<OrderslistCubit>(context, listen: false)
-        .getOrderserStatus(pageIndex: 1, status: widget.statusName);
+    BlocProvider.of<OrderslistCubit>(context, listen: false).getOrderserStatus(
+        pageIndex: 1, status: widget.statusName, filter: widget.filter);
   }
 
   @override
@@ -49,7 +57,9 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
         currentPage! < lastPgae!) {
       BlocProvider.of<OrderslistCubit>(context, listen: false)
           .getOrderserStatus(
-              pageIndex: currentPage + 1, status: widget.statusName);
+              pageIndex: currentPage + 1,
+              status: widget.statusName,
+              filter: widget.filter);
       BlocProvider.of<OrderslistCubit>(context, listen: false).setCurrentPage();
     }
   }
@@ -64,7 +74,10 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
                 message: 'تم تحدث حالة الاوردر بنجاح',
                 state: ToastStates.SUCCESS);
             BlocProvider.of<OrderslistCubit>(context, listen: false)
-                .getOrderserStatus(pageIndex: 1, status: widget.statusName);
+                .getOrderserStatus(
+                    pageIndex: 1,
+                    status: widget.statusName,
+                    filter: widget.filter);
           } else {
             showToast(
                 message: 'مشكلة في تحديث الاوردر بسبب عدد الاصناف',
@@ -83,7 +96,7 @@ class _OrdersListScreenState extends State<OrdersListScreen> {
             appBar: AppBar(
               centerTitle: true,
               title: Text(
-                'حالة: ${BlocProvider.of<HomeCubit>(context).handleStatusName(widget.statusName)}',
+                'حالة: ${widget.statusText}',
                 style: GoogleFonts.cairo(
                   color: Colors.white,
                 ),
@@ -329,13 +342,17 @@ class _OrdersSectionState extends State<OrdersSection> {
                 const SizedBox(
                   height: 5,
                 ),
+                // Container(
+                //   height: 1,
+                //   color: Colors.amber,
+                // ),
                 ConditionalBuilder(
                   condition: widget.state is! OrderNextStatusLoadingState,
                   fallback: (context) => const CupertinoActivityIndicator(),
                   builder: (context) => Container(
                     alignment: Alignment.bottomRight,
                     child: widget.order?.nextStatus == null ||
-                            widget.order?.coreNextStatus == "check_up"
+                            widget.order?.coreNextStatus == "items_checked"
                         ? Container()
                         : ElevatedButton(
                             onPressed: () {
@@ -986,11 +1003,14 @@ class _OrdersSectionState extends State<OrdersSection> {
                                           children: [
                                             SingleChildScrollView(
                                               child: SizedBox(
-                                                width: MediaQuery.of(context).size.width *
-                                                                                      0.60,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.60,
                                                 child: Text(
                                                   '${widget.order?.comments?.requests?[index].comment}',
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   textAlign: TextAlign.end,
                                                   maxLines: 10,
                                                   style: const TextStyle(

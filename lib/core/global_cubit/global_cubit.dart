@@ -32,8 +32,8 @@ class GlobalCubit extends Cubit<UpdateCurrentLocationStates> {
     updateCurrentLocation(ctx);
 
     // Then start update location periodically every 20 seconds
-    // _timer = Timer.periodic(const Duration(seconds: 60), (timer) {
-    //   updateCurrentLocation(ctx);
-    // });
+    _timer = Timer.periodic(const Duration(seconds: 60), (timer) {
+      updateCurrentLocation(ctx);
+    });
   }
 }

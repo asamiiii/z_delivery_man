@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:z_delivery_man/core/components/text_components/small_text.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
 import 'package:z_delivery_man/models/time_slots_model.dart';
 import 'package:z_delivery_man/screens/pickup_details/pickup_details_screen.dart';
@@ -33,15 +34,15 @@ class BuildCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             item?.type == 1
-                ? Text(
+                ? SmallText(
                     AppStrings.receive,
-                    style: TextStyle(
-                        fontSize: 14.sp, fontWeight: FontWeight.bold,color: Colors.white),
+                    weight: FontWeight.bold,
+                    color: Colors.white,
                   )
-                : Text(
+                : SmallText(
                     AppStrings.deliver,
-                    style: TextStyle(
-                        fontSize: 14.sp, fontWeight: FontWeight.bold,color: Colors.white),
+                    weight: FontWeight.bold,
+                    color: Colors.white,
                   ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,

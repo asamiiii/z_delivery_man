@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_painter/image_painter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/cubit.dart';
+// import 'package:z_delivery_man/screens/order_item_images_screen/cubit.dart';
 import 'package:z_delivery_man/screens/order_item_images_screen/state.dart';
 
 class PaintOnImage extends StatefulWidget {
@@ -70,10 +71,12 @@ class _PaintOnImageState extends State<PaintOnImage> {
           widget.url??'',
           key: cubit.imageKey,
           scalable: true,
-          initialStrokeWidth: 5,
+          // initialStrokeWidth: 5,
           textDelegate: TextDelegate(),
-          initialColor: Colors.green,
-          initialPaintMode: PaintMode.freeStyle,
+          // initialColor: ,
+          // initialPaintMode: 
+          
+           controller:cubit.paintController
         ):const Center(child: CircularProgressIndicator()),
       );},
     );

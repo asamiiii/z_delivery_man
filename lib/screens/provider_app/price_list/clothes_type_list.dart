@@ -1,13 +1,13 @@
-// import 'package:fdottedline/fdottedline.dart';
 import 'package:fdottedline_nullsafety/fdottedline__nullsafety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:z_delivery_man/core/components/text_components/small_text.dart';
 
 import '../../../models/price_list_model.dart';
 import '../../../shared/widgets/image_as_icon.dart';
 import '../../../styles/color.dart';
-import '../../order_details/cubit.dart';
-import '../../order_details/order_details_state.dart';
+import '../../order_details/presentation/manager/provider_order_details_cubit/provider_order_details_cubit.dart';
+import '../../order_details/presentation/manager/provider_order_details_cubit/provider_order_details_state.dart';
 
 class ClothesTypeList extends StatefulWidget {
   const ClothesTypeList({Key? key}) : super(key: key);
@@ -41,7 +41,7 @@ class _ClothesTypeListState extends State<ClothesTypeList> {
                             borderRadius: BorderRadius.circular(60),
                           ),
                           onTap: () {
-                            cubit.setSelectedCatId(catList?[index].id);
+                            cubit.setSelectedCatId(catList[index].id);
                             // final cubit = OrderDetailsCubit.get(context);
                             for (var element in cubit.initQuantityInPriceList) {
                               for (int i = 0; i < cubit.itemList!.length; i++) {
@@ -63,7 +63,7 @@ class _ClothesTypeListState extends State<ClothesTypeList> {
                               width: 48,
                               height: 48,
                               child: FDottedLine(
-                                color: cubit.selectedCatId == catList![index].id
+                                color: cubit.selectedCatId == catList[index].id
                                     ? primaryColor
                                     : Colors.transparent,
                                 strokeWidth: 2.5,
@@ -94,15 +94,12 @@ class _ClothesTypeListState extends State<ClothesTypeList> {
                         ),
                         Container(
                             margin: const EdgeInsets.only(top: 12),
-                            child: Text(
+                            child: SmallText(
                               '${catList[index].name}',
-                              style: TextStyle(
-                                  color:
-                                      cubit.selectedCatId == catList[index].id
-                                          ? Colors.black
-                                          : const Color(0xffBDBDBD),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600),
+                              color: cubit.selectedCatId == catList[index].id
+                                  ? Colors.black 
+                                  : const Color(0xffBDBDBD),
+                              weight: FontWeight.w600,
                             ))
                       ],
                     );

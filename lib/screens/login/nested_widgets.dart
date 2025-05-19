@@ -10,7 +10,8 @@ import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
 import 'package:z_delivery_man/screens/login/cubit.dart';
 import 'package:z_delivery_man/shared/widgets/components.dart';
 import 'package:z_delivery_man/styles/color.dart';
-//! 
+
+//!
 class HelloTxt extends StatelessWidget {
   const HelloTxt({Key? key}) : super(key: key);
 
@@ -112,7 +113,6 @@ class PassTextFeild extends StatelessWidget {
   }
 }
 
-
 class LoginButton extends StatelessWidget {
   const LoginButton({Key? key}) : super(key: key);
 
@@ -154,7 +154,6 @@ class LoginButton extends StatelessWidget {
     );
   }
 }
-
 
 //* Image on the top of Login screen.
 class LoginTopImage extends StatelessWidget {

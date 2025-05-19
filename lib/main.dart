@@ -8,7 +8,8 @@ import 'package:z_delivery_man/notification_helper.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/home_delivery.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/home_screen.dart';
 import 'package:z_delivery_man/screens/login/login_screen.dart';
-import '/../screens/order_details/order_details_screen.dart';
+import 'package:z_delivery_man/screens/quality_app/providers_list/presentation/providers_list_view.dart';
+import 'screens/order_details/presentation/view/order_details_screen.dart';
 import '/../shared/widgets/components.dart';
 import '/../shared/widgets/constants.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,7 @@ void main() async {
   } else {
     widget = const LoginScreen();
   }
+  // widget = const AssistantSelectDocView();
 
   runApp(MyApp(
     startWidget: widget,

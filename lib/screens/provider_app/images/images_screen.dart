@@ -7,8 +7,8 @@ import 'package:sizer/sizer.dart';
 
 import '../../../shared/widgets/components.dart';
 import '../../../styles/color.dart';
-import '../../order_details/cubit.dart';
-import '../../order_details/order_details_state.dart';
+import '../../order_details/presentation/manager/provider_order_details_cubit/provider_order_details_cubit.dart';
+import '../../order_details/presentation/manager/provider_order_details_cubit/provider_order_details_state.dart';
 
 class ImagesScreen extends StatelessWidget {
   const ImagesScreen({Key? key, this.orderId}) : super(key: key);

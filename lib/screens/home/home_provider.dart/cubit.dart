@@ -62,13 +62,13 @@ class HomeCubit extends Cubit<HomeStates> {
     });
   }
 
-  IndexModel? indexModel;
+  HomeProviderModel? indexModel;
   Future<void> getStatusWithCount() async{
     emit(HomeLoadingStatus());
     await DioHelper.getData(url: EndPoints.Get_STATUS_PROVIDER, token: token)
         .then((value) {
       // debugPrint('resp $value');
-      indexModel = IndexModel.fromJson(value.data);
+      indexModel = HomeProviderModel.fromJson(value.data);
       debugPrint('resp $value');
       print('index model :$indexModel');
       emit(HomeuccessStatus());

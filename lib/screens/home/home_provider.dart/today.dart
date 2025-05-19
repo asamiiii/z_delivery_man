@@ -16,16 +16,16 @@ import 'package:z_delivery_man/styles/color.dart';
 
 // ignore: must_be_immutable
 class TableToday extends StatelessWidget {
-  IndexModel? model;
-  TableToday({Key? key, required this.model}) : super(key: key);
+  HomeProviderModel? model;
+  TableToday({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
     final homeCubit = HomeCubit.get(context);
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       key: const Key('today'),
-      child: GridView(
+      child: GridView.builder(
         // shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -34,112 +34,119 @@ class TableToday extends StatelessWidget {
           childAspectRatio: 0.7,
           crossAxisSpacing: 10,
         ),
-        children: [
-          //? لم يتم استلامه
-          GestureDetector(
+        itemBuilder: (context, index) {
+          var item = model?.today?[index];
+
+          return //? لم يتم استلامه
+              GestureDetector(
             onTap: () {
               navigateTo(
                   context,
-                  const OrdersListScreen(
-                    statusName: 'provider_assigned',
+                  OrdersListScreen(
+                    statusName: item?.status,
+                    filter: item?.filter,
+                    statusText: item?.statusName,
                   )).then((value) => homeCubit.getStatusWithCount());
             },
             child: Item(
               chocoItem: ItemModel(
-                  label: ' لم يتم استلامه ',
-                  itemCount: '${model?.today?.itemCount.providerAssigned ?? 0}',
-                  orderCount:
-                      '${model?.today?.orderCount.providerAssigned ?? 0}',
+                  label: item?.statusName,
+                  itemCount: '${item?.itemCount ?? 0}',
+                  orderCount: item?.orderCount.toString() ?? '0',
                   image: 'assets/images/R.png'),
             ),
-          ),
-          //? تم استلامه
-          GestureDetector(
-            onTap: () {
-              navigateTo(
-                  context,
-                  const OrdersListScreen(
-                    statusName: 'provider_received',
-                  )).then((value) => homeCubit.getStatusWithCount());
-            },
-            child: Item(
-                chocoItem: ItemModel(
-                    label: '  تم استلامه  ',
-                    itemCount:
-                        '${model?.today?.itemCount.providerReceived ?? 0}',
-                    orderCount:
-                        '${model?.today?.orderCount.providerReceived ?? 0}',
-                    image: 'assets/images/press.png')),
-          ),
+          );
+        },
+        itemCount: model?.today?.length,
+        // children: [
 
-          //? تم الفحص
-          GestureDetector(
-            onTap: () {
-              navigateTo(
-                  context,
-                  const OrdersListScreen(
-                    statusName: 'check_up',
-                  )).then((value) => homeCubit.getStatusWithCount());
-            },
-            child: Item(
-                chocoItem: ItemModel(
-                    label: 'تم الفحص',
-                    itemCount: '${model?.today?.itemCount.checkUp ?? 0}',
-                    orderCount: '${model?.today?.orderCount.checkUp ?? 0}',
-                    image: 'assets/images/q.png')),
-          ),
+        // //? تم استلامه
+        // GestureDetector(
+        //   onTap: () {
+        //     navigateTo(
+        //         context,
+        //         const OrdersListScreen(
+        //           statusName: 'provider_received',
+        //         )).then((value) => homeCubit.getStatusWithCount());
+        //   },
+        //   child: Item(
+        //       chocoItem: ItemModel(
+        //           label: '  تم استلامه  ',
+        //           itemCount:
+        //               '${model?.today?.itemCount.providerReceived ?? 0}',
+        //           orderCount:
+        //               '${model?.today?.orderCount.providerReceived ?? 0}',
+        //           image: 'assets/images/press.png')),
+        // ),
 
-          //? تم الانتهاء
-          GestureDetector(
-            onTap: () {
-              navigateTo(
-                  context,
-                  const OrdersListScreen(
-                    statusName: 'finished',
-                  ));
-            },
-            child: Item(
-                chocoItem: ItemModel(
-                    label: 'تم الانتهاء',
-                    itemCount: '${model?.today?.itemCount.finished ?? 0}',
-                    orderCount: '${model?.today?.orderCount.finished ?? 0}',
-                    image: 'assets/images/finished.png')),
-          ),
+        // //? تم الفحص
+        // GestureDetector(
+        //   onTap: () {
+        //     navigateTo(
+        //         context,
+        //         const OrdersListScreen(
+        //           statusName: 'check_up',
+        //         )).then((value) => homeCubit.getStatusWithCount());
+        //   },
+        //   child: Item(
+        //       chocoItem: ItemModel(
+        //           label: 'تم الفحص',
+        //           itemCount: '${model?.today?.itemCount.checkUp ?? 0}',
+        //           orderCount: '${model?.today?.orderCount.checkUp ?? 0}',
+        //           image: 'assets/images/q.png')),
+        // ),
 
-          //? تم التسليم للمندوب
-          GestureDetector(
-            onTap: () {
-              navigateTo(
-                  context,
-                  const OrdersListScreen(
-                    statusName: 'from_provider',
-                  ));
-            },
-            child: Item(
-                chocoItem: ItemModel(
-                    label: 'تم التسليم',
-                    itemCount: '${model?.today?.itemCount.opened ?? 0}',
-                    orderCount: '${model?.today?.orderCount.opened ?? 0}',
-                    image: 'assets/images/done.png')),
-          ),
+        // //? تم الانتهاء
+        // GestureDetector(
+        //   onTap: () {
+        //     navigateTo(
+        //         context,
+        //         const OrdersListScreen(
+        //           statusName: 'finished',
+        //         ));
+        //   },
+        //   child: Item(
+        //       chocoItem: ItemModel(
+        //           label: 'تم الانتهاء',
+        //           itemCount: '${model?.today?.itemCount.finished ?? 0}',
+        //           orderCount: '${model?.today?.orderCount.finished ?? 0}',
+        //           image: 'assets/images/finished.png')),
+        // ),
 
-          //? العدد الاجمالي
-          GestureDetector(
-            onTap: () {
-              navigateTo(
-                  context,
-                  const OrdersListScreen(
-                    statusName: 'opened',
-                  ));
-            },
-            child: Item(
-                chocoItem: ItemModel(
-                    label: 'العدد الإجمالي',
-                    itemCount: '${model?.today?.itemCount.opened ?? 0}',
-                    orderCount: '${model?.today?.orderCount.opened ?? 0}',
-                    image: 'assets/images/all.png')),
-          ),
-        ],
+        // //? تم التسليم للمندوب
+        // GestureDetector(
+        //   onTap: () {
+        //     navigateTo(
+        //         context,
+        //         const OrdersListScreen(
+        //           statusName: 'from_provider',
+        //         ));
+        //   },
+        //   child: Item(
+        //       chocoItem: ItemModel(
+        //           label: 'تم التسليم',
+        //           itemCount: '${model?.today?.itemCount.opened ?? 0}',
+        //           orderCount: '${model?.today?.orderCount.opened ?? 0}',
+        //           image: 'assets/images/done.png')),
+        // ),
+
+        // //? العدد الاجمالي
+        // GestureDetector(
+        //   onTap: () {
+        //     navigateTo(
+        //         context,
+        //         const OrdersListScreen(
+        //           statusName: 'opened',
+        //         ));
+        //   },
+        //   child: Item(
+        //       chocoItem: ItemModel(
+        //           label: 'العدد الإجمالي',
+        //           itemCount: '${model?.today?.itemCount.opened ?? 0}',
+        //           orderCount: '${model?.today?.orderCount.opened ?? 0}',
+        //           image: 'assets/images/all.png')),
+        // ),
+        // ],
       ),
     );
     // return Column(
@@ -336,7 +343,9 @@ class Item extends StatelessWidget {
                   child: Text(
                     chocoItem?.label ?? '',
                     overflow: TextOverflow.ellipsis,
-                    maxLines: isdelivery == false ? 1 : 2,
+                    // maxLines: isdelivery == false ? 1 : 2,
+                    maxLines: 2,
+                    // maxLines: ,
                     style: GoogleFonts.cairo(color: Colors.white, fontSize: 17),
                   ),
                 ),
@@ -422,11 +431,13 @@ class Item extends StatelessWidget {
                             width: 80,
                             // height: 50,
                             child: Text(
-                              '${chocoItem?.total} ج' ,
+                              '${chocoItem?.total} ج',
                               overflow: TextOverflow.ellipsis,
                               // maxLines: 2,
                               style: GoogleFonts.cairo(
-                                  color: Colors.red, fontSize: 12,fontWeight: FontWeight.bold),
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],

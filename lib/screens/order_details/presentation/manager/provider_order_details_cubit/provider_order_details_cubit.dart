@@ -1,44 +1,33 @@
 import 'dart:io';
-import '../../models/price_list_model.dart' as pricelist;
+import '../../../../../models/price_list_model.dart' as pricelist;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../models/order_details_model.dart';
-import '../../models/perferences_model.dart';
-import '../../models/provider_order_details.dart';
-import '../../models/success_model.dart';
-import '../../network/end_points.dart';
-import '../../network/remote/dio_helper.dart';
-import '../../shared/widgets/constants.dart';
-import 'order_details_state.dart';
+import '../../../../../models/order_details_model.dart';
+import '../../../../../models/perferences_model.dart';
+import '../../../../../models/provider_order_details.dart';
+import '../../../../../models/success_model.dart';
+import '../../../../../network/end_points.dart';
+import '../../../../../network/remote/dio_helper.dart';
+import '../../../../../shared/widgets/constants.dart';
+import 'provider_order_details_state.dart';
 
 class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   OrderDetailsCubit() : super(OrderDetailsInitialState());
 
   static OrderDetailsCubit get(context) => BlocProvider.of(context);
 
-  OrderDetailsModel? orderDetailsModel;
-
-  Future<void> getOrderDetails({required int? orderId}) {
-    emit(OrderDetailsLoadingState());
-
-    debugPrint("order ID $orderId");
-    return DioHelper.getData(
-            url: "${EndPoints.GET_ORDER_DETAILS}/$orderId", token: token)
-        .then((value) {
-      debugPrint("Details ${value.data}");
-      orderDetailsModel = OrderDetailsModel.fromJson(value.data);
-      debugPrint("$orderDetailsModel  order datails model");
-      emit(OrderDetailsSuccessState());
-    }).catchError((e) {
-      debugPrint('details filed $e');
-      emit(OrderDetailsFailedState());
-    });
-  }
-
   List<InitQuantityModel> initQuantityInPriceList = [];
 
   ProviderOrderDetails? providerOrderDetails;
+
+  bool? needclientConfirm;
+
+  toggleclientConfirm(bool? value) {
+    needclientConfirm = value;
+    emit(OrderDetailsInitialState());
+  }
+
   Future<void> getProviderOrderDetails({required int? orderId}) async {
     // ProviderOrderDetails? providerOrderDetails;
     debugPrint('Order Id : $orderId');
@@ -75,31 +64,16 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
             ? "${EndPoints.POST_ORDERS_NEXT_STATUS}/$orderId/nextStatus"
             : "${EndPoints.POST_ORDERS_NEXT_STATUS_PROVIDER}/$orderId/nextStatus",
         token: token,
-        data: {"item_count": itemCount, "comment": comment}).then((value) {
+        data: {
+          "item_count": itemCount,
+          "comment": comment,
+          'client_confirmed': needclientConfirm
+        }).then((value) {
       debugPrint('Go to next : ${value.data}');
       emit(OrderDetailsNextStatusSuccessState());
     }).catchError((e) {
       debugPrint("$e error of next status");
       emit(OrderDetailsNextStatusFailedState());
-    });
-  }
-
-  void collectOrder(
-      {required int? orderId,
-      required String? collectMethod,
-      required String? byMachineOption}) {
-    emit(OrderDetailsCollectOrderStatusLoadingState());
-    DioHelper.postData(
-        url: '${EndPoints.POST_COLLECT_ORDER}/$orderId/collect',
-        token: token,
-        data: {
-          'collect_method': collectMethod,
-          'collect_type': byMachineOption
-        }).then((value) {
-      emit(OrderDetailsCollectOrderStatusSuccessState());
-    }).catchError((e) {
-      debugPrint('$e collect error');
-      emit(OrderDetailsCollectOrderStatusFailedState());
     });
   }
 

@@ -56,10 +56,10 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     }
     debugPrint('imagesLocalFiles : $imagesLocalFiles');
   }
-
+ImagePainterController paintController= ImagePainterController(color:Colors.green,mode: PaintMode.freeStyle, strokeWidth: 5,);
   Future<void> saveImage({int? orderId, int? itemId,int? imageId}) async {
     emit(PaintLoading());
-    final image = await imageKey.currentState?.exportImage();
+    final image = await paintController.exportImage();
     final directory = (await getApplicationDocumentsDirectory()).path;
     await Directory('$directory/sample').create(recursive: true);
     final fullPath =

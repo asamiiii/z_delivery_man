@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/src/bloc_provider.dart';
-import 'package:z_delivery_man/screens/order_details/cubit.dart';
+import 'package:z_delivery_man/screens/order_details/presentation/manager/provider_order_details_cubit/provider_order_details_cubit.dart';
 
 class WithSafeArea extends StatelessWidget {
   final bool withSafeArea;

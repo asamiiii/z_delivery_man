@@ -5,15 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/core/components/text_components/small_text.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/home_delivery.dart';
-import 'package:z_delivery_man/screens/order_details/cubit.dart';
-import 'package:z_delivery_man/screens/order_details/order_details_state.dart';
+import 'package:z_delivery_man/screens/order_details/presentation/manager/dm_order_details_cubit/dm_conditions.dart';
+import 'package:z_delivery_man/screens/order_details/presentation/manager/dm_order_details_cubit/dm_order_details_cubit.dart';
+import 'package:z_delivery_man/screens/order_details/presentation/manager/dm_order_details_cubit/dm_order_details_state.dart';
+import 'package:z_delivery_man/screens/order_details/presentation/manager/provider_order_details_cubit/provider_order_details_state.dart';
 import 'package:z_delivery_man/screens/status_orders/status_orders_screen.dart';
 import 'package:z_delivery_man/shared/widgets/custom_dropdown_menu.dart';
 
 // ignore: must_be_immutable
 class DmActionsSection extends StatelessWidget {
   DmActionsSection({Key? key, this.state, this.orderId}) : super(key: key);
-  final OrderDetailsState? state;
+  final DMOrderDetailsState? state;
   final int? orderId;
 
   var commentController = TextEditingController();
@@ -23,7 +25,7 @@ class DmActionsSection extends StatelessWidget {
   CardType? selectedMachinType;
   @override
   Widget build(BuildContext context) {
-    var cubit = context.read<OrderDetailsCubit>();
+    var cubit = context.read<DMOrderDetailsCubit>();
 
     return ConditionalBuilder(
       condition: state is! OrderDetailsNextStatusLoadingState &&
@@ -124,10 +126,8 @@ class DmActionsSection extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  if (cubit.orderDetailsModel?.coreNextStatus ==
-                                          'picked' ||
-                                      cubit.orderDetailsModel?.coreNextStatus ==
-                                          'from_provider')
+                                  if (DmConditions.showItemCountTextField(
+                                      cubit.orderDetailsModel?.coreNextStatus))
                                     TextField(
                                       controller: itemCountController,
                                       decoration: const InputDecoration(
@@ -148,7 +148,6 @@ class DmActionsSection extends StatelessWidget {
                                 child: const SmallText('نعم'),
                                 onPressed: () async {
                                   await cubit.goToNextStatus(
-                                      isDeliveryMan: true,
                                       orderId: orderId,
                                       itemCount: int.tryParse(
                                           itemCountController.text),
