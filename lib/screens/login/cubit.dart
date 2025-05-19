@@ -36,21 +36,18 @@ class LoginCubit extends Cubit<LoginStates> {
       print('fcm token: $token');
       loginModel = LoginModel.fromJson(value.data);
       debugPrint(' login resp : ${value.data}');
-      if(value.data.toString().contains('errors')){
-      emit(LoginFailedState());
-      }else{
-       isDeliveyMan = loginModel?.type == deliveryMan;
-      
-      debugPrint('user token : ${loginModel?.token}');
-      await CacheHelper.saveData(key: 'name', value:loginModel?.name );
-      await CacheHelper.saveData(
-              key: 'type', value: (loginModel?.type == 'delivery_man'))
-          .then((value) {
-        
-      });
-      emit(LoginSuccessState(loginModel: loginModel));
+      if (value.data.toString().contains('errors')) {
+        emit(LoginFailedState());
+      } else {
+        isDeliveyMan = loginModel?.type == deliveryMan;
+
+        debugPrint('user token : ${loginModel?.token}');
+        await CacheHelper.saveData(key: 'name', value: loginModel?.name);
+        await CacheHelper.saveData(
+                key: 'type', value: (loginModel?.type == 'delivery_man'))
+            .then((value) {});
+        emit(LoginSuccessState(loginModel: loginModel));
       }
-      
     }).catchError((e) {
       print(e);
       emit(LoginFailedState());
@@ -69,4 +66,10 @@ class LoginCubit extends Cubit<LoginStates> {
     emit(ChangePasswordVisibilityState());
     debugPrint('isPassword : $isPassword');
   }
+}
+
+enum UserType {
+  delivery_man,
+  provider,
+  quality_manager,
 }
