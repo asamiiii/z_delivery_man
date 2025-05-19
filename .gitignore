@@ -42,3 +42,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+amplify/\#current-cloud-backend/amplify-meta.json
+/amplify/\#current-cloud-backend/auth/zdeliverymanff63aa62/build
+/amplify/\#current-cloud-backend/auth/zdeliverymanff63aa62
+/amplify/\#current-cloud-backend/awscloudformation/build/auth/zdeliverymanff63aa62
+/amplify/\#current-cloud-backend/awscloudformation/build/awscloudformation/build
+/amplify/\#current-cloud-backend/awscloudformation
+/amplify/\#current-cloud-backend
+/amplify/.config
+/amplify/backend
+/amplify
