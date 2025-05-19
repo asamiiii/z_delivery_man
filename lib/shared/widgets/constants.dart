@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:z_delivery_man/screens/login/cubit.dart';
 
 import '../../network/local/cache_helper.dart';
 import '../../screens/login/login_screen.dart';
@@ -19,7 +20,7 @@ void printFullText(String text) {
 }
 
 String? token = '';
-bool? isDeliveryMan = false;
+UserType? userType = UserType.delivery_man;
 
 // enum VisitTime { AM, PM }
 

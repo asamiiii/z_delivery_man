@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
+import 'package:z_delivery_man/screens/order_details/presentation/manager/provider_order_details_cubit/provider_order_details_cubit.dart';
+import 'package:z_delivery_man/screens/order_details/presentation/manager/provider_order_details_cubit/provider_order_details_state.dart';
 
 import '../../../shared/widgets/components.dart';
 import '../../../styles/color.dart';
-import '../../order_details/presentation/manager/provider_order_details_cubit/provider_order_details_cubit.dart';
-import '../../order_details/presentation/manager/provider_order_details_cubit/provider_order_details_state.dart';
+// import '../../order_details/cubit.dart';
+// import '../../order_details/order_details_state.dart';
 
 class ImagesScreen extends StatelessWidget {
   const ImagesScreen({Key? key, this.orderId}) : super(key: key);
@@ -244,14 +246,15 @@ class ImagesScreen extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             print("orderid :$orderId");
-                            // cubit.postAssociateImage(orderId: orderId,itemId: );
+                            // cubit.postAssociateImage(orderId: orderId);
                           },
                           child: const Text(
                             'الموافقة علي الصور',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: primaryColor, padding: EdgeInsets.zero),
+                              // : primaryColor,
+                               padding: EdgeInsets.zero),
                         ),
                       ),
                     ),

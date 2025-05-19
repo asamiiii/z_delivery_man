@@ -43,8 +43,7 @@ class LoginCubit extends Cubit<LoginStates> {
 
         debugPrint('user token : ${loginModel?.token}');
         await CacheHelper.saveData(key: 'name', value: loginModel?.name);
-        await CacheHelper.saveData(
-                key: 'type', value: (loginModel?.type == 'delivery_man'))
+        await CacheHelper.saveData(key: 'type', value: loginModel?.type)
             .then((value) {});
         emit(LoginSuccessState(loginModel: loginModel));
       }

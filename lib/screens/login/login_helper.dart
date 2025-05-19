@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:z_delivery_man/network/local/cache_helper.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/home_delivery.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/home_screen.dart';
+import 'package:z_delivery_man/screens/login/condition_navigator.dart';
 import 'package:z_delivery_man/screens/login/login_states.dart';
 import 'package:z_delivery_man/shared/widgets/components.dart';
 import 'package:z_delivery_man/shared/widgets/constants.dart';
@@ -17,11 +18,7 @@ class LoginHelper {
         // debugPrint('token = $token');
         if (token!.isNotEmpty) {
           debugPrint('token 1 = $token');
-          navigateAndReplace(
-              context,
-              state.loginModel?.type == 'delivery_man'
-                  ? const HomeDelivery()
-                  : const HomeScreen());
+          navigateAndReplace(context, userHome(state.loginModel?.type ?? ''));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('من فضلك تأكد من بياناتك'),

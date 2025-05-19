@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:z_delivery_man/screens/quality_app/providers_list/presentation/widgets/assistant_select_doc_view_body.dart';
 import 'package:z_delivery_man/styles/color.dart';
 
-class AssistantSelectDocView extends StatelessWidget {
-  const AssistantSelectDocView({super.key});
+class QualityManagerSelectView extends StatelessWidget {
+  const QualityManagerSelectView({super.key});
 
   @override
   Widget build(BuildContext context) {
