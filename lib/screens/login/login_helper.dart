@@ -18,7 +18,7 @@ class LoginHelper {
         // debugPrint('token = $token');
         if (token!.isNotEmpty) {
           debugPrint('token 1 = $token');
-          navigateAndReplace(context, userHome(state.loginModel?.type ?? ''));
+          navigateAndReplace(context, userHome(state.loginModel?.type ?? '')!);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text('من فضلك تأكد من بياناتك'),

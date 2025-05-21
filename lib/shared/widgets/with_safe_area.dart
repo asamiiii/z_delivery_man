@@ -4,11 +4,13 @@ import 'package:z_delivery_man/screens/order_details/presentation/manager/provid
 
 class WithSafeArea extends StatelessWidget {
   final bool withSafeArea;
-  final  Widget child;
+  final Widget child;
 
-  const WithSafeArea({Key? key, this.withSafeArea = false,required this.child, })
-      : super(key: key);
-  
+  const WithSafeArea({
+    Key? key,
+    this.withSafeArea = false,
+    required this.child,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:z_delivery_man/models/time_slots_model.dart';
 
-
 abstract class HomeStates {}
 
 class HomeInitalState extends HomeStates {}

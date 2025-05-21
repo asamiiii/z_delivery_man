@@ -4,12 +4,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:z_delivery_man/core/config/app_theme.dart';
 import 'package:z_delivery_man/core/constants/app_bloc_providers.dart';
 import 'package:z_delivery_man/core/constants/app_strings/app_strings.dart';
+import 'package:z_delivery_man/core/service_locator.dart';
+import 'package:z_delivery_man/network/local/user_helper.dart';
 import 'package:z_delivery_man/notification_helper.dart';
-import 'package:z_delivery_man/screens/home/home_delivery/home_delivery.dart';
-import 'package:z_delivery_man/screens/home/home_provider.dart/home_screen.dart';
 import 'package:z_delivery_man/screens/login/condition_navigator.dart';
 import 'package:z_delivery_man/screens/login/login_screen.dart';
-import 'package:z_delivery_man/screens/quality_app/providers_list/presentation/providers_list_view.dart';
 import 'screens/order_details/presentation/view/order_details_screen.dart';
 import '/../shared/widgets/components.dart';
 import '/../shared/widgets/constants.dart';
@@ -34,14 +33,14 @@ void main() async {
   );
 
   AppNotification().init();
-
+  setupServiceLocator();
   token = CacheHelper.getData(key: 'token');
   debugPrint('token : $token');
   debugPrint('token : $token');
-  userType = ;
+  userType = UserHelper.getUserType();
   Widget widget;
-  if (token != null && token!.isNotEmpty) {
-    userHome(userType);
+  if (token?.isNotEmpty == true) {
+    widget = userHome(userType?.name ?? '');
   } else {
     widget = const LoginScreen();
   }
@@ -95,6 +94,3 @@ class _MyAppState extends State<MyApp> {
     });
   }
 }
-
-
-UserType? getUserType

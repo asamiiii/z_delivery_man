@@ -13,7 +13,13 @@ class PaintOnImage extends StatefulWidget {
   int? orderId;
   int? itemId;
   int? imageId;
-  PaintOnImage({Key? key, required this.url, required this.itemId, required this.orderId,required this.imageId}) : super(key: key);
+  PaintOnImage(
+      {Key? key,
+      required this.url,
+      required this.itemId,
+      required this.orderId,
+      required this.imageId})
+      : super(key: key);
 
   @override
   _PaintOnImageState createState() => _PaintOnImageState();
@@ -23,8 +29,8 @@ class _PaintOnImageState extends State<PaintOnImage> {
   bool isloading = false;
 
   File? imageFile;
-  
-@override
+
+  @override
   void initState() {
     // final cubit = OrderItemImagesCubit.get(context);
     //     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -33,52 +39,61 @@ class _PaintOnImageState extends State<PaintOnImage> {
 
     super.initState();
   }
- 
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<OrderItemImagesCubit,OrderItemImagesState>(
-      listener: (context, state) {
-        
-      },
-      builder:(context, state) {
+    return BlocConsumer<OrderItemImagesCubit, OrderItemImagesState>(
+      listener: (context, state) {},
+      builder: (context, state) {
         final cubit = OrderItemImagesCubit.get(context);
-      return Scaffold(
-        appBar: AppBar(
-          actions: [
-            SizedBox(width: 1.w,),
-            InkWell(
-              onTap: state is OrderItemImagesLoadingState? (){} : () async{
-                Navigator.pop(context);
-                await cubit.saveImage(itemId:widget.itemId,orderId:  widget.orderId,imageId: widget.imageId);
-              // ignore: use_build_context_synchronously
-              
-              },
-              child: Row(
-                children: [
-                  const Text('Save changes',style: TextStyle(color: Colors.white),),
-                      SizedBox(width: 2.w,),
-            const Icon(Icons.save_alt),
-                ],
+        return Scaffold(
+          appBar: AppBar(
+            actions: [
+              SizedBox(
+                width: 1.w,
               ),
-            ),
-        
-          SizedBox(width: 3.w,),
-          ],
-        ),
-        body: 
-        state is !PaintLoading  ? ImagePainter.network(
-          widget.url??'',
-          key: cubit.imageKey,
-          scalable: true,
-          // initialStrokeWidth: 5,
-          textDelegate: TextDelegate(),
-          // initialColor: ,
-          // initialPaintMode: 
-          
-           controller:cubit.paintController
-        ):const Center(child: CircularProgressIndicator()),
-      );},
+              InkWell(
+                onTap: state is OrderItemImagesLoadingState
+                    ? () {}
+                    : () async {
+                        Navigator.pop(context);
+                        await cubit.saveImage(
+                            itemId: widget.itemId,
+                            orderId: widget.orderId,
+                            imageId: widget.imageId);
+                        // ignore: use_build_context_synchronously
+                      },
+                child: Row(
+                  children: [
+                    const Text(
+                      'Save changes',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(
+                      width: 2.w,
+                    ),
+                    const Icon(Icons.save_alt),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 3.w,
+              ),
+            ],
+          ),
+          body: state is! PaintLoading
+              ? ImagePainter.network(widget.url ?? '',
+                  key: cubit.imageKey,
+                  scalable: true,
+                  // initialStrokeWidth: 5,
+                  textDelegate: TextDelegate(),
+                  // initialColor: ,
+                  // initialPaintMode:
+
+                  controller: cubit.paintController)
+              : const Center(child: CircularProgressIndicator()),
+        );
+      },
     );
   }
 }

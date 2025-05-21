@@ -1,4 +1,4 @@
-class AppStrings{
+class AppStrings {
   static const String appName = 'Z-laundry-DM';
   static const String login = 'تسجيل الدخول';
   static const String password = 'كلمة المرور';
@@ -9,11 +9,7 @@ class AppStrings{
   static const String receive = "استلام";
   static const String deliver = "تسليم";
   static const String from = 'من';
-  static const String to  = "الي";
+  static const String to = "الي";
   static const String ordersTotal = 'مجموع الاوردرات:';
   // static const String deliver = "تسليم";
-  
-  
-  
-  
 }

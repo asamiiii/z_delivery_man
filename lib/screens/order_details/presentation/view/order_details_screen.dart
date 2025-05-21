@@ -7,7 +7,9 @@ import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:z_delivery_man/models/order_per_status_provider.dart';
+import 'package:z_delivery_man/network/local/user_helper.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/home_screen.dart';
+import 'package:z_delivery_man/screens/login/cubit.dart';
 import 'package:z_delivery_man/screens/order_details/presentation/manager/dm_order_details_cubit/dm_order_details_cubit.dart';
 import 'package:z_delivery_man/screens/order_details/presentation/manager/dm_order_details_cubit/dm_order_details_state.dart';
 import 'package:z_delivery_man/screens/order_details/presentation/manager/provider_order_details_cubit/provider_conditions.dart';
@@ -49,7 +51,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     dmCubit = context.read<DMOrderDetailsCubit>();
 
     super.initState();
-    isDeliveryMan = CacheHelper.getData(key: 'type');
+    isDeliveryMan =
+        UserHelper.getUserType()?.name == UserType.delivery_man.name;
     debugPrint('isDeliveryMan : $isDeliveryMan');
     isDeliveryMan == true
         ? dmCubit.getOrderDetails(orderId: widget.orderId)
@@ -115,8 +118,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 child: ProviderConditions.showAddItemButton(
                         isDeliveyMan: isDeliveryMan,
                         status: widget.statusName ?? '')
-                    
-                    ?FloatingActionButton(
+                    ? FloatingActionButton(
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -137,7 +139,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                   providerCubit.getProviderOrderDetails(
                                       orderId: widget.orderId));
                         },
-                      ): const SizedBox(),
+                      )
+                    : const SizedBox(),
               ),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.startFloat,

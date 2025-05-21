@@ -10,7 +10,7 @@ class ClothesListWithPrice extends StatefulWidget {
   final int? index;
   final bool? isSearch;
   final List<Items>? itemsInOrder;
-   ClothesListWithPrice({Key? key, this.index, this.isSearch,this.itemsInOrder})
+  ClothesListWithPrice({Key? key, this.index, this.isSearch, this.itemsInOrder})
       : super(key: key);
 
   @override
@@ -18,20 +18,19 @@ class ClothesListWithPrice extends StatefulWidget {
 }
 
 class _ClothesListWithPriceState extends State<ClothesListWithPrice> {
-
-@override
+  @override
   void initState() {
     //  WidgetsBinding.instance.addPostFrameCallback((_) {
-      final cubit = OrderDetailsCubit.get(context);
-      for (var element in cubit.initQuantityInPriceList) {
-        for(int i = 0 ; i<cubit.itemList!.length;i++){
-          if (element.catItemServiceId == cubit.itemList![i]?.categoryItemServiceId) {
+    final cubit = OrderDetailsCubit.get(context);
+    for (var element in cubit.initQuantityInPriceList) {
+      for (int i = 0; i < cubit.itemList!.length; i++) {
+        if (element.catItemServiceId ==
+            cubit.itemList![i]?.categoryItemServiceId) {
           cubit.itemList![i]?.selectedQuantityFromOrder = element.initQuantity;
           debugPrint('init : $i');
         }
-        }
-        
       }
+    }
     // });
     super.initState();
   }

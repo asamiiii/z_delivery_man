@@ -24,7 +24,6 @@ class OrderItemImagesFailedState extends OrderItemImagesState {}
 
 class OrderItemCommentFailedState extends OrderItemImagesState {}
 
-
 class PaintLoading extends OrderItemImagesState {}
 
 class PaintSuccess extends OrderItemImagesState {}

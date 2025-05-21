@@ -16,7 +16,8 @@ class DrawerCubit extends Cubit<DrawerStates> {
 
   Future<void> getStatusOrder() {
     emit(DrawerGetStatusOrdersLoadingState());
-    return DioHelper.getData(url: EndPoints.GET_STATUS_ORDER, token: token).then((value) {
+    return DioHelper.getData(url: EndPoints.GET_STATUS_ORDER, token: token)
+        .then((value) {
       debugPrint('getStatusOrder : ${value.data}');
       statusOrderModel = StatusOrderModel.fromJson(value.data);
       emit(DrawerGetStatusOrdersSuccessState());

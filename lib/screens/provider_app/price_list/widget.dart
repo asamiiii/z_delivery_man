@@ -19,8 +19,8 @@ class CustomTextField extends StatefulWidget {
   final bool isMetersHW;
   final Function? onTap;
 
-  const CustomTextField({
-      Key? key,
+  const CustomTextField(
+      {Key? key,
       required this.controller,
       this.hint,
       this.mulitLine = false,
@@ -36,11 +36,13 @@ class CustomTextField extends StatefulWidget {
       this.onChange,
       this.enabled = true,
       this.isMetersHW = false,
-      this.onTap}) : super(key: key);
+      this.onTap})
+      : super(key: key);
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
+
 class _CustomTextFieldState extends State<CustomTextField> {
   bool _obsecureText = true;
   @override
@@ -85,9 +87,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           minLines: widget.mulitLine ? 5 : 1,
           maxLines: widget.mulitLine ? null : 1,
           style: const TextStyle(
-              color:  Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w600),
+              color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
           validator: widget.validator,
           controller: widget.controller,
           maxLength: widget.maxLen,
@@ -112,9 +112,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: Colors.red)),
             hintText: widget.hint,
-            hintStyle: TextStyle(
-                fontSize: 16.0,
-                color: const Color(0xffD6D6D6)),
+            hintStyle:
+                TextStyle(fontSize: 16.0, color: const Color(0xffD6D6D6)),
             prefixIcon: widget.prefixIcon,
             suffix: widget.isPassword
                 ? GestureDetector(
@@ -242,14 +241,12 @@ class SharedMethods {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       duration: const Duration(seconds: 3),
       elevation: 6.0,
-      content:  Text(
-              message ?? '',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
-            
+      content: Text(
+        message ?? '',
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
       backgroundColor: bgColor ?? Colors.redAccent,
     ));
-  }}
+  }
+}

@@ -254,7 +254,7 @@ class ImagesScreen extends StatelessWidget {
                           ),
                           style: ElevatedButton.styleFrom(
                               // : primaryColor,
-                               padding: EdgeInsets.zero),
+                              padding: EdgeInsets.zero),
                         ),
                       ),
                     ),

@@ -29,7 +29,7 @@ class _DeliveryTodayState extends State<DeliveryTodayWithTimeSlots> {
       builder: (context, state) => RefreshIndicator(
         onRefresh: () => homeCubit.getTimeSlots(),
         child: Padding(
-          padding: const EdgeInsets.only(top: 10,bottom: 5),
+          padding: const EdgeInsets.only(top: 10, bottom: 5),
           child: ConditionalBuilder(
               condition:
                   state is! HomeLoadingState && state is! HomeLoadingStatus,

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:simple_animations/animation_builder/custom_animation_builder.dart';
 import 'package:simple_animations/animation_mixin/animation_mixin.dart';
@@ -61,36 +60,35 @@ class _CustomSwitchButton2State extends State<CustomSwitchButton2>
   @override
   Widget build(BuildContext context) {
     return CustomAnimationBuilder<double>(
-        control: control, // bind variable with control instruction
-        tween: Tween<double>(begin: 20.0, end: 0.0),
-        duration: widget.animationDuration,
-        builder: (context, value, child) {
-          debugPrint("value = $value");
-          if (widget.checked) {
-            value =  0;
+      control: control, // bind variable with control instruction
+      tween: Tween<double>(begin: 20.0, end: 0.0),
+      duration: widget.animationDuration,
+      builder: (context, value, child) {
+        debugPrint("value = $value");
+        if (widget.checked) {
+          value = 0;
 
-            ///for english
-            if (value == 20) {
-              debugPrint("im here");
+          ///for english
+          if (value == 20) {
+            debugPrint("im here");
 
-              ///control = Control.playReverse;
-              control = Control.playReverseFromEnd;
-            }
-
-            ///for arabic
-            if (value == 0) {
-              debugPrint("im here2");
-
-              ///control = Control.playReverse;
-              control = Control.playReverseFromEnd;
-            }
-          } else {
-            control = Control.stop;
+            ///control = Control.playReverse;
+            control = Control.playReverseFromEnd;
           }
-          return _buildCheckbox(context, value);
-        },
-      );
-    
+
+          ///for arabic
+          if (value == 0) {
+            debugPrint("im here2");
+
+            ///control = Control.playReverse;
+            control = Control.playReverseFromEnd;
+          }
+        } else {
+          control = Control.stop;
+        }
+        return _buildCheckbox(context, value);
+      },
+    );
   }
 
   Widget _buildCheckbox(context, animation) {
@@ -126,6 +124,6 @@ class _CustomSwitchButton2State extends State<CustomSwitchButton2>
   BoxDecoration _outerBoxDecoration(color) => BoxDecoration(
         borderRadius:
             BorderRadius.all(Radius.circular(widget.backgroundBorderRadius)),
-        color: widget.checked ?  Colors.blue : Colors.grey[200],
+        color: widget.checked ? Colors.blue : Colors.grey[200],
       );
 }

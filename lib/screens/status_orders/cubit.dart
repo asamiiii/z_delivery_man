@@ -59,7 +59,7 @@ class OrderPerStatusCubit extends Cubit<OrderPerStatusStates> {
         allOrders.addAll(ordersPerStatusModel!.orders!);
         emit(OrderPerStatusNextPageSuccessState());
       }
-       emit(OrderPerStatusSuccessState());
+      emit(OrderPerStatusSuccessState());
       // if (page <= ordersPerStatusModel.lastPage) {
       //   page++;
 
@@ -77,16 +77,18 @@ class OrderPerStatusCubit extends Cubit<OrderPerStatusStates> {
     });
   }
 
-  void collectOrder({
-    required int? orderId,
-    required String? collectMethod,
-    required String? byMachineOption
-  }) {
+  void collectOrder(
+      {required int? orderId,
+      required String? collectMethod,
+      required String? byMachineOption}) {
     emit(OrderPerStatusCollectOrderStatusLoadingState());
     DioHelper.postData(
         url: '${EndPoints.POST_COLLECT_ORDER}/$orderId/collect',
         token: token,
-        data: {'collect_method': collectMethod,'collect_type':byMachineOption}).then((value) {
+        data: {
+          'collect_method': collectMethod,
+          'collect_type': byMachineOption
+        }).then((value) {
       emit(OrderPerStatusCollectOrderStatusSuccessState());
     }).catchError((e) {
       print('$e collect error');
@@ -98,9 +100,9 @@ class OrderPerStatusCubit extends Cubit<OrderPerStatusStates> {
       {required int? orderId,
       int? itemCount,
       String? comment,
-      required bool isDeliveryMan}) async{
+      required bool isDeliveryMan}) async {
     emit(OrderPerStatusNextStatusLoadingState());
-   await  DioHelper.postData(
+    await DioHelper.postData(
         url: isDeliveryMan
             ? "${EndPoints.POST_ORDERS_NEXT_STATUS}/$orderId/nextStatus"
             : "${EndPoints.POST_ORDERS_NEXT_STATUS_PROVIDER}/$orderId/nextStatus",

@@ -16,10 +16,12 @@ class DMOrderDetailsNextStatusLoadingState extends DMOrderDetailsState {}
 
 class DMOrderDetailsNextStatusFailedState extends DMOrderDetailsState {}
 
-class DMOrderDetailsCollectOrderStatusLoadingState extends DMOrderDetailsState {}
+class DMOrderDetailsCollectOrderStatusLoadingState
+    extends DMOrderDetailsState {}
 
 class DMOrderDetailsCollectOrderStatusFailedState extends DMOrderDetailsState {}
 
-class DMOrderDetailsCollectOrderStatusSuccessState extends DMOrderDetailsState {}
+class DMOrderDetailsCollectOrderStatusSuccessState
+    extends DMOrderDetailsState {}
 
 class DMOrderDetailsChangeCheckBoxSuccessState extends DMOrderDetailsState {}

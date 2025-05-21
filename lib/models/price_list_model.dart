@@ -78,8 +78,8 @@ class Items {
   String? icon;
   int? categoryItemServiceId;
   int? selectedQuantity = 0;
-  int? selectedQuantityFromOrder=0;
-  bool? withDimension ;
+  int? selectedQuantityFromOrder = 0;
+  bool? withDimension;
   dynamic lenght;
   dynamic width;
   int? localId;
@@ -93,18 +93,17 @@ class Items {
       this.categoryItemServiceId,
       this.txtController,
       this.selectedQuantity,
-      this.selectedQuantityFromOrder=0,
+      this.selectedQuantityFromOrder = 0,
       this.withDimension,
       this.localId,
       this.lenght,
-      this.width
-      });
+      this.width});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'] ?? '';
     price = json['price'] ?? '';
-    icon = json['icon'] ;
+    icon = json['icon'];
     categoryItemServiceId = json['category_item_service_id'];
     withDimension = json['with_dimension'] ?? false;
     localId = 0;

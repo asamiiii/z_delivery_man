@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 import 'package:z_delivery_man/network/local/cache_helper.dart';
+import 'package:z_delivery_man/network/local/user_helper.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/all.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/today.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/widgets.dart';
 import 'package:z_delivery_man/screens/home/shared/shared_home_widgets.dart';
+import 'package:z_delivery_man/screens/login/cubit.dart';
+import 'package:z_delivery_man/screens/quality_app/providers_list/presentation/view/providers_list_view.dart';
 import 'package:z_delivery_man/shared/widgets/page_container.dart';
 import 'package:z_delivery_man/shared/widgets/with_safe_area.dart';
 import 'cubit.dart';
@@ -22,14 +25,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isDeliveryMan = false;
   String name = '';
-  
+
   @override
   void initState() {
-
     super.initState();
-    isDeliveryMan = CacheHelper.getData(key: 'type');
+    isDeliveryMan =
+        UserHelper.getUserType()?.name == UserType.delivery_man.name;
     name = CacheHelper.getData(key: 'name');
-    
   }
 
   @override
@@ -50,7 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Scaffold(
                     backgroundColor: Colors.white,
                     // drawer: isDeliveryMan ? const BuildDrawer() : null,
-                    appBar: providerAppBar(providerName: name, ctx: context,cubit: homeCubit),
+                    appBar: providerAppBar(
+                        providerName: name, ctx: context, cubit: homeCubit),
                     body: WillPopScope(
                       onWillPop: () async {
                         return false;
@@ -76,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   itemCount: homeCubit.timeSlots?.length ?? 0,
                                   itemBuilder: (context, index) {
                                     // if (isDeliveryMan) {
-                                    return  BuildCard(
+                                    return BuildCard(
                                         item: homeCubit.timeSlots?[index]);
                                     // } else {
                                     // return BuildProviderCard(
@@ -101,6 +104,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
+                    floatingActionButton: FloatingActionButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const QualityManagerSelectView(),
+                          ),
+                        ).then((value) {
+                          if (value == true) {
+                            homeCubit.getStatusWithCount();
+                          }
+                        });
+                      },
+                      child: const Icon(Icons.change_circle_outlined),
+                    ),
                   ),
                 ),
               ),
@@ -109,4 +126,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

@@ -21,7 +21,7 @@ class BuildDrawer extends StatefulWidget {
 }
 
 class _BuildDrawerState extends State<BuildDrawer> {
-@override
+  @override
   void initState() {
     final drawerCubit = DrawerCubit.get(context);
     drawerCubit.getStatusOrder();
@@ -111,14 +111,13 @@ class _BuildDrawerState extends State<BuildDrawer> {
                               builder: (context) => ListView.separated(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                itemCount: drawerCubit.statusOrderModel!
-                                    .statuses!.today!.length,
+                                itemCount: drawerCubit
+                                    .statusOrderModel!.statuses!.today!.length,
                                 itemBuilder: (context, index) {
                                   return Container(
                                     padding: const EdgeInsets.all(0),
                                     decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(20),
                                         color: HexColor('#ECEEF8')),
                                     child: ListTile(
                                       title: Text(
@@ -204,16 +203,12 @@ class _BuildDrawerState extends State<BuildDrawer> {
                                   return Container(
                                     padding: const EdgeInsets.all(0),
                                     decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(20),
                                         color: HexColor('#ECEEF8')),
                                     child: ListTile(
                                       title: Text(
-                                        drawerCubit
-                                                .statusOrderModel!
-                                                .statuses!
-                                                .all?[index]
-                                                .translate ??
+                                        drawerCubit.statusOrderModel!.statuses!
+                                                .all?[index].translate ??
                                             '',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),

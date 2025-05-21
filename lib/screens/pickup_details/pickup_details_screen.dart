@@ -324,8 +324,8 @@ class _OrdersSectionState extends State<OrdersSection> {
                             await maplauncher.MapLauncher.showMarker(
                               mapType: maplauncher.MapType.google,
                               coords: maplauncher.Coords(
-                                  widget.order?.address?.lat??0,
-                                  widget.order?.address?.long??0),
+                                  widget.order?.address?.lat ?? 0,
+                                  widget.order?.address?.long ?? 0),
                               title: "عنوان العميل",
                             );
                           }
@@ -398,7 +398,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                                         .rebuild!();
                                                                   }),
 
-                                                                  CustomDropdown<
+                                                              CustomDropdown<
                                                                   CardType>(
                                                                 items:
                                                                     byMachinList,
@@ -458,7 +458,6 @@ class _OrdersSectionState extends State<OrdersSection> {
                                                               checkCollectByMachine ==
                                                                   true) {
                                                             widget.cubit?.collectOrder(
-                                                              
                                                                 orderId: widget
                                                                     .order?.id,
                                                                 collectMethod:

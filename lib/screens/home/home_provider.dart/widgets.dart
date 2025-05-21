@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:z_delivery_man/network/end_points.dart';
 import 'package:z_delivery_man/network/remote/dio_helper.dart';
 import 'package:z_delivery_man/screens/home/home_provider.dart/cubit.dart';
 import 'package:z_delivery_man/shared/widgets/components.dart';
@@ -65,12 +66,12 @@ PreferredSizeWidget? providerAppBar(
           width: 15,
         ),
         const CircleAvatar(
-        radius: 5,
-        backgroundColor: baseUrl == "http://zdev.z-laundry.com/public/api/v1/"
-            ? Colors.red
-            : Colors.green,
-      ),
-      const SizedBox(
+          radius: 5,
+          backgroundColor: EndPoints.baseUrl == "http://zdev.z-laundry.com/public/api/v1/"
+              ? Colors.red
+              : Colors.green,
+        ),
+        const SizedBox(
           width: 15,
         ),
       ]);

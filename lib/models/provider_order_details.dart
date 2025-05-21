@@ -190,12 +190,12 @@ class Items {
     name = json['name'];
     category = json['category'];
     service = json['service'];
-    serviceId = json['service_id']??0;
+    serviceId = json['service_id'] ?? 0;
     preference = json['preference'];
-    if(serviceId==200){
-      quantity =  0;
-    }else{
-     quantity = json['quantity'] ?? 0;
+    if (serviceId == 200) {
+      quantity = 0;
+    } else {
+      quantity = json['quantity'] ?? 0;
     }
     length = json['length'];
     width = json['width'];

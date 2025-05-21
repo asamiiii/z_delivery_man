@@ -12,8 +12,7 @@ import '../../screens/status_orders/cubit.dart';
 
 class AppProviders {
   static List<BlocProvider> appProviders = [
-    BlocProvider<GlobalCubit>(
-        create: (BuildContext context) => GlobalCubit()),
+    BlocProvider<GlobalCubit>(create: (BuildContext context) => GlobalCubit()),
     BlocProvider<OrderslistCubit>(
         create: (BuildContext context) => OrderslistCubit()),
     BlocProvider<OrderPerStatusCubit>(

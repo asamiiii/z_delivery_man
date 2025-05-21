@@ -47,7 +47,7 @@ class Item {
   String? icon;
   int? categoryItemServiceId;
   String? category;
-   String catIcon;
+  String catIcon;
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
       id: json["item_id"],

@@ -56,33 +56,33 @@ class _CustomizeSpecalPreferencesState
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-   debugPrint('cat : $cat');
-    debugPrint('catImageUrl : $catImageUrl');
-    cat.clear();
-            catImageUrl.clear();
-    // Provider.of<CustomizeSpecalPreferencesViewModel>(context, listen: false)
-    //     .getPreference({'items': widget.items},
-    //         Provider.of<UserViewModel>(context, listen: false).userToken());
+      debugPrint('cat : $cat');
+      debugPrint('catImageUrl : $catImageUrl');
+      cat.clear();
+      catImageUrl.clear();
+      // Provider.of<CustomizeSpecalPreferencesViewModel>(context, listen: false)
+      //     .getPreference({'items': widget.items},
+      //         Provider.of<UserViewModel>(context, listen: false).userToken());
 
-    await BlocProvider.of<OrderDetailsCubit>(context, listen: false)
-        .getPreferences(data: widget.items ?? []);
+      await BlocProvider.of<OrderDetailsCubit>(context, listen: false)
+          .getPreferences(data: widget.items ?? []);
 
-    List<PreferenceModel> data =
+      List<PreferenceModel> data =
           // ignore: use_build_context_synchronously
           context.read<OrderDetailsCubit>().listData;
-    for (var element in data) {
-      for (var e in element.items) {
-        cat.add(e.category);
-        catImageUrl.add(e.catIcon);
+      for (var element in data) {
+        for (var e in element.items) {
+          cat.add(e.category);
+          catImageUrl.add(e.catIcon);
+        }
+        break;
       }
-      break;
-    }
-    debugPrint('cat : $cat');
-    debugPrint('catImageUrl : $catImageUrl');
-    cat = keepOneInstance(cat);
-    catImageUrl = keepOneInstance(catImageUrl);
+      debugPrint('cat : $cat');
+      debugPrint('catImageUrl : $catImageUrl');
+      cat = keepOneInstance(cat);
+      catImageUrl = keepOneInstance(catImageUrl);
     });
-    
+
     super.initState();
   }
 
@@ -169,7 +169,10 @@ class _CustomizeSpecalPreferencesState
     return WithSafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('تفضيلات ',style: TextStyle(color:Colors.white),),
+          title: const Text(
+            'تفضيلات ',
+            style: TextStyle(color: Colors.white),
+          ),
           centerTitle: true,
           iconTheme: const IconThemeData(color: Colors.white),
         ),
@@ -180,90 +183,71 @@ class _CustomizeSpecalPreferencesState
               return ElevatedButton(
                 onPressed: () {
                   final cubit = OrderDetailsCubit.get(context);
-                                      List<Map<String, dynamic>> dataApi = [];
-                                      List<Map<String, dynamic>> details = [];
-                                      // List<Map<String, dynamic>> itemDetails =
-                                      //     [];
-                                      for (var element in 
-                                          cubit.selectedItems) {
-                                        if (element.withDimension == true) {
-                                          details.add({
-                                            'category_item_service_id':
-                                                element.categoryItemServiceId!,
-                                            'quantity': 1,
-                                            'width': element.width,
-                                            'length': element.lenght,
-                                          });
+                  List<Map<String, dynamic>> dataApi = [];
+                  List<Map<String, dynamic>> details = [];
+                  // List<Map<String, dynamic>> itemDetails =
+                  //     [];
+                  for (var element in cubit.selectedItems) {
+                    if (element.withDimension == true) {
+                      details.add({
+                        'category_item_service_id':
+                            element.categoryItemServiceId!,
+                        'quantity': 1,
+                        'width': element.width,
+                        'length': element.lenght,
+                      });
 
-                                          dataApi.add({
-                                            'category_item_service_id':
-                                                element.categoryItemServiceId!,
-                                            'quantity': 1,
-                                            'width': element.width,
-                                            'length': element.lenght,
-                                            'item_details':
-                                                jsonEncode([details.last]),
-                                          });
-                                        } else {
-                                          dataApi.add({
-                                            'category_item_service_id':
-                                                element.categoryItemServiceId!,
-                                            'quantity': element.selectedQuantity!,
-                                            'width': element.width,
-                                            'length': element.lenght,
-                                            'item_details': null,
-                                          });
-                                        }
-                                      }
+                      dataApi.add({
+                        'category_item_service_id':
+                            element.categoryItemServiceId!,
+                        'quantity': 1,
+                        'width': element.width,
+                        'length': element.lenght,
+                        'item_details': jsonEncode([details.last]),
+                      });
+                    } else {
+                      dataApi.add({
+                        'category_item_service_id':
+                            element.categoryItemServiceId!,
+                        'quantity': element.selectedQuantity!,
+                        'width': element.width,
+                        'length': element.lenght,
+                        'item_details': null,
+                      });
+                    }
+                  }
 
-                                      for (int i = 0;
-                                          i < dataApi.length - 1;
-                                          i++) {
-                                        for (int j = i + 1;
-                                            j < dataApi.length;
-                                            j++) {
-                                          if (dataApi[j][
-                                                  'category_item_service_id'] ==
-                                              dataApi[i][
-                                                  'category_item_service_id']) {
-                                            dataApi[i]
-                                                ['length'] = (double.parse(
-                                                        dataApi[i]['length']) +
-                                                    double.parse(
-                                                        dataApi[j]['length']))
-                                                .toString();
-                                            dataApi[i]['width'] = (double.parse(
-                                                        dataApi[i]['width']) +
-                                                    double.parse(
-                                                        dataApi[j]['width']))
-                                                .toString();
-                                            dataApi[i]['quantity'] +=
-                                                dataApi[j]['quantity'];
+                  for (int i = 0; i < dataApi.length - 1; i++) {
+                    for (int j = i + 1; j < dataApi.length; j++) {
+                      if (dataApi[j]['category_item_service_id'] ==
+                          dataApi[i]['category_item_service_id']) {
+                        dataApi[i]['length'] =
+                            (double.parse(dataApi[i]['length']) +
+                                    double.parse(dataApi[j]['length']))
+                                .toString();
+                        dataApi[i]['width'] =
+                            (double.parse(dataApi[i]['width']) +
+                                    double.parse(dataApi[j]['width']))
+                                .toString();
+                        dataApi[i]['quantity'] += dataApi[j]['quantity'];
 
-                                            if (dataApi[i]['item_details'] !=
-                                                null) {
-                                              List<Map<String, dynamic>>
-                                                  currentDetails = List<
-                                                          Map<String,
-                                                              dynamic>>.from(
-                                                      jsonDecode(dataApi[i]
-                                                          ['item_details']));
-                                              currentDetails.addAll(List<
-                                                  Map<String,
-                                                      dynamic>>.from(jsonDecode(
-                                                  dataApi[j]['item_details'])));
-                                              dataApi[i]['item_details'] =
-                                                  jsonEncode(currentDetails);
-                                            } else {
-                                              dataApi[i]['item_details'] =
-                                                  jsonEncode(details);
-                                            }
+                        if (dataApi[i]['item_details'] != null) {
+                          List<Map<String, dynamic>> currentDetails =
+                              List<Map<String, dynamic>>.from(
+                                  jsonDecode(dataApi[i]['item_details']));
+                          currentDetails.addAll(List<Map<String, dynamic>>.from(
+                              jsonDecode(dataApi[j]['item_details'])));
+                          dataApi[i]['item_details'] =
+                              jsonEncode(currentDetails);
+                        } else {
+                          dataApi[i]['item_details'] = jsonEncode(details);
+                        }
 
-                                            dataApi.removeAt(j);
-                                            j--;
-                                          }
-                                        }
-                                      }
+                        dataApi.removeAt(j);
+                        j--;
+                      }
+                    }
+                  }
                   // print('Pref List ${cubit.prefereceList}');
                   //  OrderDetailsCubit.get(context);
                   // List<Map<String, dynamic>> itemsList = [];
@@ -285,7 +269,7 @@ class _CustomizeSpecalPreferencesState
                   //     "width":ele.width
                   //   });
                   //   }
-                    
+
                   // }
                   // List<Map<String, dynamic>> prefList = [];
                   // for (var ele in cubit.prefereceList!) {
@@ -307,7 +291,10 @@ class _CustomizeSpecalPreferencesState
                 style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
                     padding: const EdgeInsets.symmetric(horizontal: 10)),
-                child: const Text('انتهاء',style: TextStyle(color: Colors.white),),
+                child: const Text(
+                  'انتهاء',
+                  style: TextStyle(color: Colors.white),
+                ),
               );
             }),
         body: BlocConsumer<OrderDetailsCubit, OrderDetailsState>(
@@ -319,7 +306,6 @@ class _CustomizeSpecalPreferencesState
                 showToast(
                     message: 'تم الاضافةالقطع بنجاح',
                     state: ToastStates.SUCCESS);
-                
               }
             }
             if (state is AssociateItemsPostFailed) {
@@ -328,8 +314,8 @@ class _CustomizeSpecalPreferencesState
           },
           builder: (context, state) {
             final cubit = OrderDetailsCubit.get(context);
-    //         cat.clear();
-    // catImageUrl.clear();
+            //         cat.clear();
+            // catImageUrl.clear();
             debugPrint('cat : $cat');
             debugPrint('catImageUrl : $catImageUrl');
             return ConditionalBuilder(

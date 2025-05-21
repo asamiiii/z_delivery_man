@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:z_delivery_man/network/local/user_helper.dart';
 
 class CacheHelper {
   static SharedPreferences? sharedPreferences;
@@ -15,7 +16,7 @@ class CacheHelper {
       return await sharedPreferences?.setString(key!, value);
     }
     if (value is int || value is int?) {
-      return await sharedPreferences?.setInt(key !, value);
+      return await sharedPreferences?.setInt(key!, value);
     }
     if (value is bool || value is bool?) {
       return await sharedPreferences?.setBool(key!, value);
@@ -29,6 +30,7 @@ class CacheHelper {
   }
 
   static Future<bool> removeData({required String key}) async {
+    UserHelper.saveProviderEntity(null);
     return await sharedPreferences!.remove(key);
   }
 }

@@ -134,7 +134,7 @@ class LoginButton extends StatelessWidget {
                 backgroundColor: Colors.red,
               ));
             } else {
-              FirebaseMessaging.instance.getToken().then((token) {
+              FirebaseMessaging.instance.getAPNSToken().then((token) {
                 debugPrint('fcm token: $token');
                 print('fcm token: $token');
                 cubit.login(

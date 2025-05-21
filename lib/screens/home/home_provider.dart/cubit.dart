@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:z_delivery_man/models/index_model.dart';
 import 'package:z_delivery_man/models/time_slots_model.dart';
 import 'package:z_delivery_man/network/end_points.dart';
+import 'package:z_delivery_man/network/local/user_helper.dart';
 import 'package:z_delivery_man/network/remote/dio_helper.dart';
 import 'package:z_delivery_man/shared/widgets/constants.dart';
 
@@ -21,16 +22,18 @@ class HomeCubit extends Cubit<HomeStates> {
 
   bool isToday = true;
 
-  isTodayToggle(bool value){
-     isToday = value;
-     emit(HomeuccessStatus());
+  isTodayToggle(bool value) {
+    isToday = value;
+    emit(HomeuccessStatus());
   }
 
   TimeSlotsModel? timeSlotsModel;
 
   Future<void> logout() {
     emit(LogoutLoading());
-    return DioHelper.postData(url: EndPoints.LOGOUT, token: token).then((value) {
+    return DioHelper.postData(url: EndPoints.LOGOUT, token: token)
+        .then((value) {
+      
       emit(LogoutSuccess());
     }).catchError((e) {
       emit(LogoutFailed());
@@ -39,7 +42,8 @@ class HomeCubit extends Cubit<HomeStates> {
 
   Future<void> getTimeSlots() {
     emit(HomeLoadingState());
-    return DioHelper.getData(url: EndPoints.GET_ORDERS, token: token).then((value) {
+    return DioHelper.getData(url: EndPoints.GET_ORDERS, token: token)
+        .then((value) {
       timeSlots?.clear();
       pickupLists.clear();
       deliveryLists.clear();
@@ -63,7 +67,7 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
   HomeProviderModel? indexModel;
-  Future<void> getStatusWithCount() async{
+  Future<void> getStatusWithCount() async {
     emit(HomeLoadingStatus());
     await DioHelper.getData(url: EndPoints.Get_STATUS_PROVIDER, token: token)
         .then((value) {
@@ -86,10 +90,10 @@ class HomeCubit extends Cubit<HomeStates> {
       case 'waiting_deliveryMan':
         return 'في انتظار تسليم الاوردر للمندوب';
 
-      case 'finished'||'finished_all':
+      case 'finished' || 'finished_all':
         return 'تم الانتهاء من الطلب عند المغسلة';
 
-      case 'check_up'||'check_up_all':
+      case 'check_up' || 'check_up_all':
         return 'مطلوب فحص الاوردر';
 
       case 'deliver_today':
@@ -101,20 +105,19 @@ class HomeCubit extends Cubit<HomeStates> {
       case 'ended':
         return 'عرض الاوردرات المنتهية';
 
-      case 'opened'||'opened_all':
+      case 'opened' || 'opened_all':
         return 'العدد الاجمالي';
 
-        case 'provider_assigned'||'provider_assigned_all':
+      case 'provider_assigned' || 'provider_assigned_all':
         return 'لم يتم استلامه';
 
-        case 'provider_received'||'provider_received_all':
+      case 'provider_received' || 'provider_received_all':
         return 'تم استلامه';
 
-
-        case 'remaining'||'remaining_all':
+      case 'remaining' || 'remaining_all':
         return 'المتبقي';
 
-        case 'from_provider'||'from_provider_all':
+      case 'from_provider' || 'from_provider_all':
         return 'تم التسليم للمندوب';
       default:
         return '';

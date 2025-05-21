@@ -37,7 +37,7 @@ class LocationService {
       builder: (context) => AlertDialog(
         title: Text('الاذن مرفوض'),
         content: Text(
-         'تم رفض الاذن',
+          'تم رفض الاذن',
         ),
         actions: [
           if (!isMandatory)

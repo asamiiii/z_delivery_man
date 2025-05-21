@@ -97,7 +97,7 @@ class _ClothesTypeListState extends State<ClothesTypeList> {
                             child: SmallText(
                               '${catList[index].name}',
                               color: cubit.selectedCatId == catList[index].id
-                                  ? Colors.black 
+                                  ? Colors.black
                                   : const Color(0xffBDBDBD),
                               weight: FontWeight.w600,
                             ))

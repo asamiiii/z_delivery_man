@@ -57,8 +57,7 @@ class CustomerDetailsWidget extends StatelessWidget {
                       ? SmallText(
                           "المغسلة: ${cubit.orderDetailsModel?.provider}")
                       : const SmallText("المغسلة: لايوجد"),
-                  SmallText(
-                      "نوع الخدمه : ${cubit.orderDetailsModel?.service}"),
+                  SmallText("نوع الخدمه : ${cubit.orderDetailsModel?.service}"),
                   InkWell(
                     onTap: () => launch(
                         "tel:${cubit.orderDetailsModel?.customer?.mobile}"),
@@ -82,8 +81,7 @@ class CustomerDetailsWidget extends StatelessWidget {
                       "عمارة: ${cubit.orderDetailsModel?.address?.building}"),
                   SmallText(
                       "الدور: ${cubit.orderDetailsModel?.address?.floor}"),
-                  SmallText(
-                      "الشقة: ${cubit.orderDetailsModel?.address?.flat}"),
+                  SmallText("الشقة: ${cubit.orderDetailsModel?.address?.flat}"),
                   InkWell(
                       onTap: () async {
                         if (await MapLauncher.isMapAvailable(MapType.google) ??
@@ -106,7 +104,7 @@ class CustomerDetailsWidget extends StatelessWidget {
                   if (cubit.orderDetailsModel?.newCustomerWithBag == true)
                     const SmallText(
                       'يجب تسليم شنطه للعميل',
-                      style:  TextStyle(backgroundColor: Colors.green),
+                      style: TextStyle(backgroundColor: Colors.green),
                       color: Colors.white,
                     )
                 ],

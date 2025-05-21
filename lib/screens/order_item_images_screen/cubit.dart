@@ -56,8 +56,13 @@ class OrderItemImagesCubit extends Cubit<OrderItemImagesState> {
     }
     debugPrint('imagesLocalFiles : $imagesLocalFiles');
   }
-ImagePainterController paintController= ImagePainterController(color:Colors.green,mode: PaintMode.freeStyle, strokeWidth: 5,);
-  Future<void> saveImage({int? orderId, int? itemId,int? imageId}) async {
+
+  ImagePainterController paintController = ImagePainterController(
+    color: Colors.green,
+    mode: PaintMode.freeStyle,
+    strokeWidth: 5,
+  );
+  Future<void> saveImage({int? orderId, int? itemId, int? imageId}) async {
     emit(PaintLoading());
     final image = await paintController.exportImage();
     final directory = (await getApplicationDocumentsDirectory()).path;
@@ -69,7 +74,7 @@ ImagePainterController paintController= ImagePainterController(color:Colors.gree
       try {
         imgFile.writeAsBytesSync(image);
         var imageLength =
-          (await imgFile.length() / (1024 * 1024)).toStringAsFixed(3);
+            (await imgFile.length() / (1024 * 1024)).toStringAsFixed(3);
         debugPrint('Save Image Size : $imageLength');
         emit(PaintLoading());
         await updateAssociateImage(
@@ -122,8 +127,7 @@ ImagePainterController paintController= ImagePainterController(color:Colors.gree
       {required UploadedImageModel imageFile,
       required int? orderId,
       required int? itemId,
-      bool? isUpdate =false
-      }) async {
+      bool? isUpdate = false}) async {
     var totalImagesSize = 0.0;
     debugPrint('orderId : $orderId');
     debugPrint('itemId : $itemId');
@@ -145,7 +149,7 @@ ImagePainterController paintController= ImagePainterController(color:Colors.gree
     });
     remoteList.add(RemoteImage('', null, comment: ''));
     await DioHelper.postDataMultipart(
-            url:"${EndPoints.POST_ASSOCIATE_ITEMS}/$orderId/associateImages",
+            url: "${EndPoints.POST_ASSOCIATE_ITEMS}/$orderId/associateImages",
             token: token,
             data: formData)
         .then((value) {
@@ -172,12 +176,10 @@ ImagePainterController paintController= ImagePainterController(color:Colors.gree
     });
   }
 
-
-    Future<void> updateAssociateImage(
+  Future<void> updateAssociateImage(
       {required UploadedImageModel imageFile,
       required int? orderId,
-      required int? imageId
-      }) async {
+      required int? imageId}) async {
     var totalImagesSize = 0.0;
     debugPrint('orderId : $orderId');
     // debugPrint('itemId : $itemId');
@@ -197,12 +199,10 @@ ImagePainterController paintController= ImagePainterController(color:Colors.gree
           filename: fileName),
     });
     // remoteList.add(RemoteImage('', null, comment: ''));
-    int usedIndex = remoteList
-          .indexWhere((element) => element.id == imageId);
-      remoteList[usedIndex] =
-          RemoteImage('', null);
+    int usedIndex = remoteList.indexWhere((element) => element.id == imageId);
+    remoteList[usedIndex] = RemoteImage('', null);
     await DioHelper.postDataMultipart(
-            url:"provider/orders/$orderId/images/$imageId/update",
+            url: "provider/orders/$orderId/images/$imageId/update",
             token: token,
             data: formData)
         .then((value) {
@@ -210,12 +210,11 @@ ImagePainterController paintController= ImagePainterController(color:Colors.gree
       dynamic response = jsonDecode(value.data);
       debugPrint('response type : ${response.runtimeType}');
       debugPrint('postAssociateImage Response : $response');
-      RemoteImage remoteImages =  RemoteImage.fromjson(response);
+      RemoteImage remoteImages = RemoteImage.fromjson(response);
 
       // int usedIndex = remoteList
       //     .indexWhere((element) => element.id == imageId);
-      remoteList[usedIndex] =
-          RemoteImage(remoteImages.url, remoteImages.id);
+      remoteList[usedIndex] = RemoteImage(remoteImages.url, remoteImages.id);
       debugPrint('remoteList.length : ${remoteList.length}');
       emit(OrderItemImagesSuccessState());
       // imageFile.imageFile?.delete();

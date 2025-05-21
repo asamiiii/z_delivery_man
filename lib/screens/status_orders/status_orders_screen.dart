@@ -225,12 +225,13 @@ class CardType {
   final String? key;
   CardType({required this.name, required this.key});
 }
-  List<CardType> byMachinList = [
-    CardType(name: ' انستا باي', key: 'InstaPay'),
-    CardType(name: 'ماكينة', key: 'POS')
-  ];
-class _OrdersSectionState extends State<OrdersSection> {
 
+List<CardType> byMachinList = [
+  CardType(name: ' انستا باي', key: 'InstaPay'),
+  CardType(name: 'ماكينة', key: 'POS')
+];
+
+class _OrdersSectionState extends State<OrdersSection> {
   CardType? selectedMachinType;
   @override
   Widget build(BuildContext context) {

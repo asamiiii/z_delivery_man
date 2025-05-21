@@ -34,7 +34,8 @@ class PickupDetailsCubit extends Cubit<PickupDetailsStates> {
 
   Future<void> getOrdersPerTimeSlot({required int? id}) {
     emit(PickupDetailsLoadingState());
-    return DioHelper.getData(url: "${EndPoints.GET_ORDERS_PER_TIMESLOT}/$id", token: token)
+    return DioHelper.getData(
+            url: "${EndPoints.GET_ORDERS_PER_TIMESLOT}/$id", token: token)
         .then((value) {
       ordersPerTimeSlots = [];
       ordersPerTimeSlots = orederPerTimeSlotsFromJson(value.data);

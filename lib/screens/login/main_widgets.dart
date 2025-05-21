@@ -9,8 +9,6 @@ import 'package:z_delivery_man/screens/login/login_helper.dart';
 import 'package:z_delivery_man/screens/login/login_states.dart';
 import 'package:z_delivery_man/screens/login/nested_widgets.dart';
 
-
-
 //* This is login form , contains userName & Password textField.
 class LoginForm extends StatelessWidget {
   const LoginForm({Key? key}) : super(key: key);

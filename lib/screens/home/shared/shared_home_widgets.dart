@@ -22,13 +22,10 @@ class BuildCard extends StatelessWidget {
       },
       child: Container(
         height: 20.h,
-        
         width: double.infinity,
         margin: EdgeInsets.symmetric(horizontal: 2.h),
         decoration: BoxDecoration(
-          color: Colors.blueAccent,
-          borderRadius: BorderRadius.circular(25)
-        ),
+            color: Colors.blueAccent, borderRadius: BorderRadius.circular(25)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,13 +46,17 @@ class BuildCard extends StatelessWidget {
               children: [
                 Text(
                   "${AppStrings.from} ${item?.from}",
-                  style:
-                      TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold,color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 Text(
                   "${AppStrings.to} ${item?.to}",
-                  style:
-                      TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold,color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
               ],
             ),

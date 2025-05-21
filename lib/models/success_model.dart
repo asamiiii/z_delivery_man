@@ -2,7 +2,9 @@ class SuccessModel {
   bool? status;
   // List<Errors>? errors;
 
-  SuccessModel({required this.status,});
+  SuccessModel({
+    required this.status,
+  });
 
   SuccessModel.fromJson(dynamic json) {
     if (json['status'] != null) {

@@ -27,7 +27,6 @@ class MetersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     final orderDetailsCubit = OrderDetailsCubit.get(context);
     // var cartViewModel = context.read<CartsViewModel>();
     // var priceListViewModel = context.read<PriceListViewModel>();
@@ -194,7 +193,6 @@ class MetersView extends StatelessWidget {
                         },
                         fontSize: 16,
                         textColor: Colors.white)),
-                       
               ],
             )
           : const Center(child: Text('لايوجد عناصر بالأمتار')),

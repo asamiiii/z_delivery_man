@@ -40,20 +40,20 @@ class Orders {
   List<Items>? pref;
   Comments? comments;
 
-  Orders(
-      {this.id,
-      this.total,
-      this.zone,
-      this.currentStatus,
-      this.coreNextStatus,
-      this.nextStatus,
-      this.canCollect,
-      this.provider,
-      this.customer,
-      this.address,
-      this.pref,
-      this.comments,
-      });
+  Orders({
+    this.id,
+    this.total,
+    this.zone,
+    this.currentStatus,
+    this.coreNextStatus,
+    this.nextStatus,
+    this.canCollect,
+    this.provider,
+    this.customer,
+    this.address,
+    this.pref,
+    this.comments,
+  });
 
   Orders.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -69,18 +69,18 @@ class Orders {
         json['customer'] != null ? Customer.fromJson(json['customer']) : null;
     address =
         json['address'] != null ? Address.fromJson(json['address']) : null;
-  
-  if (json['items'] != null) {
+
+    if (json['items'] != null) {
       pref = <Items>[];
       json['items'].forEach((v) {
         pref?.add(Items.fromJson(v));
       });
-    }else{
+    } else {
       pref = [];
     }
-     comments =json['comments'] != null ? Comments.fromJson(json['comments']) : null;
+    comments =
+        json['comments'] != null ? Comments.fromJson(json['comments']) : null;
   }
-  
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -108,15 +108,13 @@ class Customer {
   String? mobile;
   bool? newCustomerWithBag;
 
-
-  Customer({this.id, this.name, this.mobile,this.newCustomerWithBag});
+  Customer({this.id, this.name, this.mobile, this.newCustomerWithBag});
 
   Customer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     mobile = json['mobile'];
     newCustomerWithBag = json['new_customer_with_bag'];
-
   }
 
   Map<String, dynamic> toJson() {
@@ -161,8 +159,8 @@ class Comments {
   Comments({this.customerComment, this.pickComment, this.requests});
 
   Comments.fromJson(Map<String, dynamic> json) {
-    customerComment = json['customer_comment']??'لا يوجد تعليق متاح';
-    pickComment = json['pick_comment']??'لا يوجد تعليق متاح';
+    customerComment = json['customer_comment'] ?? 'لا يوجد تعليق متاح';
+    pickComment = json['pick_comment'] ?? 'لا يوجد تعليق متاح';
     if (json['requests'] != null) {
       requests = <Requests>[];
       json['requests'].forEach((v) {
@@ -179,8 +177,7 @@ class Requests {
   Requests({this.type, this.comment});
 
   Requests.fromJson(Map<String, dynamic> json) {
-    type = json['type']??'لا يوجد بيانات متوفره حاليا';
-    comment = json['comment']??'لا يوجد بيانات متوفره حاليا';
+    type = json['type'] ?? 'لا يوجد بيانات متوفره حاليا';
+    comment = json['comment'] ?? 'لا يوجد بيانات متوفره حاليا';
   }
 }
-

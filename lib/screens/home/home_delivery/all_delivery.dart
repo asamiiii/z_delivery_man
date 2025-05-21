@@ -80,8 +80,8 @@ class _DeliveryAllState extends State<DeliveryAll> {
                           label: drawerCubit!.statusOrderModel?.statuses
                               ?.all?[index].translate,
                           itemCount: '',
-                          total: drawerCubit!.statusOrderModel?.statuses
-                              ?.all?[index].total,
+                          total: drawerCubit!
+                              .statusOrderModel?.statuses?.all?[index].total,
                           orderCount:
                               '${drawerCubit!.statusOrderModel?.statuses?.all?[index].count}',
                           image: HomeDeliveryHelpers.assetsImage(

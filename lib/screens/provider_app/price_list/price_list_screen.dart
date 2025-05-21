@@ -18,7 +18,6 @@ class PriceListScreen extends StatefulWidget {
   PriceListScreen({Key? key, this.orderId, this.orderItems}) : super(key: key);
   List<Items>? orderItems = [];
   final int? orderId;
-  
 
   @override
   State<PriceListScreen> createState() => _PriceListScreenState();
@@ -94,8 +93,8 @@ class _PriceListScreenState extends State<PriceListScreen> {
           ),
           body: WillPopScope(
             // canPop: goBack!,
-            onWillPop: () async{
-               showDialog(
+            onWillPop: () async {
+              showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
                         title: Text('هل انت متآكد'),
@@ -113,9 +112,8 @@ class _PriceListScreenState extends State<PriceListScreen> {
                               },
                               child: const Text('نعم')),
                         ],
-                        
                       ));
-                      return  false;
+              return false;
             },
             child: Directionality(
               textDirection: TextDirection.rtl,

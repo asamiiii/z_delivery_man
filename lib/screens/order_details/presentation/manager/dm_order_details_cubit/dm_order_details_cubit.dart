@@ -66,6 +66,4 @@ class DMOrderDetailsCubit extends Cubit<DMOrderDetailsState> {
       emit(DMOrderDetailsCollectOrderStatusFailedState());
     });
   }
-
-
 }

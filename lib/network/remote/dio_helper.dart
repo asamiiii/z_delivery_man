@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:z_delivery_man/network/end_points.dart';
 
-const String baseUrl = 'http://zdev.z-laundry.com/public/api/v1/'; // for dev
-// const String baseUrl =
-//     'http://app.z-laundry.com/public/api/v1/'; // for production
+
 
 class DioHelper {
   static Dio? dio;
@@ -11,7 +10,7 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-          baseUrl: baseUrl,
+          baseUrl: EndPoints.baseUrl,
           receiveDataWhenStatusError: true,
           contentType: "application/json",
           followRedirects: false,

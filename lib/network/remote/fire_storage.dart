@@ -2,8 +2,9 @@ import 'dart:io';
 
 // import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
 class FireStorage {
- static Future<String> uploadImageOnFirebaseStorage(
+  static Future<String> uploadImageOnFirebaseStorage(
       File imageFile, String path) async {
     String? url;
 // Create a storage reference from our app

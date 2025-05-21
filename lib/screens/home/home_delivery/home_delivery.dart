@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:z_delivery_man/core/global_cubit/global_cubit.dart';
 import 'package:z_delivery_man/network/local/cache_helper.dart';
+import 'package:z_delivery_man/network/local/user_helper.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/all_delivery.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/instruction_delivery.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/today_delivery.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/today_delivery_with_time_slots.dart';
 import 'package:z_delivery_man/screens/home/home_delivery/widgets.dart';
+import 'package:z_delivery_man/screens/login/cubit.dart';
 import 'package:z_delivery_man/shared/widgets/page_container.dart';
 import 'package:z_delivery_man/shared/widgets/with_safe_area.dart';
 
@@ -25,7 +27,8 @@ class _HomeScreenState extends State<HomeDelivery> {
   @override
   void initState() {
     super.initState();
-    isDeliveryMan = CacheHelper.getData(key: 'type');
+    isDeliveryMan =
+        UserHelper.getUserType()?.name == UserType.delivery_man.name;
     name = CacheHelper.getData(key: 'name');
     context.read<GlobalCubit>().startUpdateLocation(context);
   }

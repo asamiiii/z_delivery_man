@@ -1,10 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 
-  //? --> Fill All Avillable Space 
+//? --> Fill All Avillable Space
 class ExSpace extends StatelessWidget {
-  /// Fill All Avillable Space 
+  /// Fill All Avillable Space
   const ExSpace({
     Key? key,
   }) : super(key: key);
@@ -19,9 +17,10 @@ class ExSpace extends StatelessWidget {
 // ignore: must_be_immutable
 class HSpace extends StatelessWidget {
   double? space;
+
   /// Add Space Horizontally .
   HSpace(
-     this.space,
+    this.space,
     Key? key,
   ) : super(key: key);
 
@@ -37,11 +36,12 @@ class HSpace extends StatelessWidget {
 // ignore: must_be_immutable
 class VSpace extends StatelessWidget {
   double? space;
+
   /// Add Space Vertically .
   VSpace(
-    this.space,
-    {Key? key,}
-  ) : super(key: key);
+    this.space, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
