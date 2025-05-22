@@ -1,8 +1,8 @@
 // ignore_for_file: constant_identifier_names
 class EndPoints {
-    static const String baseUrl = 'http://zdev.z-laundry.com/public/api/v1/'; // for dev
-// const String baseUrl =
-//     'http://app.z-laundry.com/public/api/v1/'; // for production
+    // static const String baseUrl = 'http://zdev.z-laundry.com/public/api/v1/'; // for dev
+ static String baseUrl =
+    'http://app.z-laundry.com/public/api/v1/'; // for production
   static const LOGIN = 'dm/login';
   static const LOGOUT = 'dm/logout';
   static const GET_ORDERS = 'dm/orders';

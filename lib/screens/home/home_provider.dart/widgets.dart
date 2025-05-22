@@ -65,7 +65,7 @@ PreferredSizeWidget? providerAppBar(
         const SizedBox(
           width: 15,
         ),
-        const CircleAvatar(
+         CircleAvatar(
           radius: 5,
           backgroundColor: EndPoints.baseUrl == "http://zdev.z-laundry.com/public/api/v1/"
               ? Colors.red

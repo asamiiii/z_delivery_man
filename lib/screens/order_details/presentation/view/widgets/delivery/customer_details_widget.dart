@@ -46,8 +46,8 @@ class CustomerDetailsWidget extends StatelessWidget {
               ),
               Row(
                 children: [
-                  SmallText(
-                      "كود العميل: ${cubit.orderDetailsModel?.customer?.customerId}"),
+                  // SmallText(
+                  //     "كود العميل: ${cubit.orderDetailsModel?.address?.customerId}"),
                 ],
               ),
               Column(

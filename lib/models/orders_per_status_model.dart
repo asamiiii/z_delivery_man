@@ -104,6 +104,7 @@ class Orders {
 
 class Customer {
   int? id;
+  int? customerId;
   String? name;
   String? mobile;
   bool? newCustomerWithBag;
@@ -113,6 +114,7 @@ class Customer {
   Customer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    customerId = json['code'];
     mobile = json['mobile'];
     newCustomerWithBag = json['new_customer_with_bag'];
   }
@@ -120,6 +122,7 @@ class Customer {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['code'] = customerId;
     data['name'] = name;
     data['mobile'] = mobile;
     return data;

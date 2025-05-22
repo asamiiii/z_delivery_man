@@ -455,7 +455,7 @@ class _OrdersSectionState extends State<OrdersSection> {
                   height: 1.h,
                 ),
                 Text(
-                  'كود العميل: ${widget.order?.customer?.id}',
+                  'كود العميل: ${widget.order?.customer?.customerId}',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   softWrap: true,
